@@ -8,14 +8,6 @@ from win32con import VK_CAPITAL
 
 
 def program():
-    # Minimiza o Tkinter
-    window.iconify()
-
-    # Minimiza todas as abas
-    pg.hotkey('winleft', 'd')
-
-    pyautogui.FAILSAFE = False
-
     nome_info = nome.get()
     codigo_info = codigo.get()
     ean_info = ean.get()
@@ -24,6 +16,34 @@ def program():
     largura_info = largura.get()
     comprimento_info = comprimento.get()
     ncm_info = ncm.get()
+
+    if len(nome_info) == 0:
+        validation = Label(text="Nome do produto é obrigatório!", bg="red", bd="5", font=24, width=45)
+        validation.place(x=15, y=530)
+        return
+
+    if len(codigo_info) == 0:
+        validation = Label(text="Código do produto é obrigatório!", bg="red", bd="5", font=24, width=45)
+        validation.place(x=15, y=530)
+        return
+
+    if len(ean_info) != 13:
+        validation = Label(text="EAN deve conter 13 dígitos.", bg="red", bd="5", font=24, width=45)
+        validation.place(x=15, y=530)
+        return
+
+    if len(ncm_info) != 8:
+        validation = Label(text="NCM deve conter 8 dígitos.", bg="red", bd="5", font=24, width=45)
+        validation.place(x=15, y=530)
+        return
+
+    # Minimiza o Tkinter
+    window.iconify()
+
+    # Minimiza todas as abas
+    pg.hotkey('winleft', 'd')
+
+    pyautogui.FAILSAFE = False
 
     # Icone do Aton
     pg.moveTo(36, 100)
@@ -69,14 +89,13 @@ def program():
     pg.moveTo(681, 261)
     pg.click()
     pg.typewrite(['backspace', 'backspace', 'backspace', 'backspace'])
-    pyperclip.copy(codigo_info.upper())
+    pyperclip.copy(codigo_info)
     pyautogui.hotkey('ctrl', 'v')
-
 
     # Nome do Produto
     pg.moveTo(905, 316)
     pg.click()
-    pyperclip.copy(nome_info.upper())
+    pyperclip.copy(nome_info)
     pyautogui.hotkey('ctrl', 'v')
 
     # Ean
