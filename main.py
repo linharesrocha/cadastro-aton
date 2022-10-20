@@ -1,4 +1,4 @@
-import tkinter
+import os
 from tkinter import *
 import pyperclip
 import pyautogui
@@ -7,6 +7,10 @@ from time import sleep
 
 
 def program():
+    # Kill Ambar
+    os.system("taskkill /im Ambar.exe")
+
+    # Pega informações do Cadastro
     nome_info = nome.get()
     codigo_info = codigo.get()
     ean_info = ean.get()
@@ -17,6 +21,7 @@ def program():
     ncm_info = ncm.get()
     descricao_info = descricao_entry.get("1.0", END)
 
+    # Validação
     if len(nome_info) == 0:
         validation = Label(text="Nome do produto é obrigatório!", bg="red", bd="5", font=24, width=100)
         validation.place(x=0, y=0)
