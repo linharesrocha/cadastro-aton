@@ -1,10 +1,9 @@
+import tkinter
 from tkinter import *
 import pyperclip
 import pyautogui
 import pyautogui as pg
 from time import sleep
-from win32api import GetKeyState
-from win32con import VK_CAPITAL
 
 
 def program():
@@ -16,25 +15,26 @@ def program():
     largura_info = largura.get()
     comprimento_info = comprimento.get()
     ncm_info = ncm.get()
+    descricao_info = descricao_entry.get("1.0", END)
 
     if len(nome_info) == 0:
-        validation = Label(text="Nome do produto é obrigatório!", bg="red", bd="5", font=24, width=45)
-        validation.place(x=15, y=530)
+        validation = Label(text="Nome do produto é obrigatório!", bg="red", bd="5", font=24, width=100)
+        validation.place(x=0, y=0)
         return
 
     if len(codigo_info) == 0:
-        validation = Label(text="Código do produto é obrigatório!", bg="red", bd="5", font=24, width=45)
-        validation.place(x=15, y=530)
+        validation = Label(text="Código do produto é obrigatório!", bg="red", bd="5", font=24, width=100)
+        validation.place(x=0, y=0)
         return
 
     if len(ean_info) != 13:
-        validation = Label(text="EAN deve conter 13 dígitos.", bg="red", bd="5", font=24, width=45)
-        validation.place(x=15, y=530)
+        validation = Label(text="EAN deve conter 13 dígitos.", bg="red", bd="5", font=24, width=100)
+        validation.place(x=0, y=0)
         return
 
     if len(ncm_info) != 8:
-        validation = Label(text="NCM deve conter 8 dígitos.", bg="red", bd="5", font=24, width=45)
-        validation.place(x=15, y=530)
+        validation = Label(text="NCM deve conter 8 dígitos.", bg="red", bd="5", font=24, width=100)
+        validation.place(x=0, y=0)
         return
 
     # Minimiza o Tkinter
@@ -81,10 +81,6 @@ def program():
     pg.moveTo(519, 853)
     pg.click()
 
-    # # Active Capslock
-    # if GetKeyState(VK_CAPITAL) == 1:
-    #     pyautogui.press('capslock')
-
     # Código Interno
     pg.moveTo(681, 261)
     pg.click()
@@ -128,6 +124,12 @@ def program():
     pg.click()
     pg.typewrite(ncm_info)
 
+    # Descrição
+    pg.moveTo(633, 684)
+    pg.click()
+    pyperclip.copy(descricao_info)
+    pyautogui.hotkey('ctrl', 'v')
+
     # Botao Salvar
     pg.moveTo(1283, 855)
     # pg.click()
@@ -136,7 +138,7 @@ def program():
 if __name__ == '__main__':
     # Tkinter Config
     window = Tk()
-    window.geometry("450x700")
+    window.geometry("1000x900")
     window.title("Cadastro")
 
     nome = StringVar()
@@ -159,6 +161,7 @@ if __name__ == '__main__':
     largura_text = Label(text="Largura")
     comprimento_text = Label(text="Comprimento")
     ncm_text = Label(text="NCM")
+    descricao_text = Label(text="Descricao")
 
     nome_text.place(x=15, y=70)
     codigo_texto.place(x=15, y=120)
@@ -168,6 +171,7 @@ if __name__ == '__main__':
     largura_text.place(x=15, y=320)
     comprimento_text.place(x=15, y=370)
     ncm_text.place(x=15, y=420)
+    descricao_text.place(x=15, y=470)
 
     nome_entry = Entry(textvariable=nome, width=70)
     codigo_entry = Entry(textvariable=codigo)
@@ -177,6 +181,7 @@ if __name__ == '__main__':
     largura_entry = Entry(textvariable=largura)
     comprimento_entry = Entry(textvariable=comprimento)
     ncm_entry = Entry(textvariable=ncm)
+    descricao_entry = Text()
 
     nome_entry.place(x=15, y=90)
     codigo_entry.place(x=15, y=140)
@@ -186,8 +191,9 @@ if __name__ == '__main__':
     largura_entry.place(x=15, y=340)
     comprimento_entry.place(x=15, y=390)
     ncm_entry.place(x=15, y=440)
+    descricao_entry.place(x=15, y=500)
 
     register = Button(window, text='Cadastrar', bg="gray", fg="black", command=program)
-    register.place(x=15, y=490)
+    register.place(x=205, y=450)
 
     window.mainloop()
