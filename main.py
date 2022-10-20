@@ -8,6 +8,13 @@ from time import sleep
 
 def cadastro_basico():
     def program():
+        NOME_DO_PRODUTO = '[NOME DO PRODUTO]'
+
+        DESCRICAO_INICIAL = 'Receba em sua casa o melhor em qualidade e preço de materiais fitness e academia, ' \
+                            'garrafa de água, marmiteiras, bolsas térmicas, Garrafa Termica, e muito mais. Pedidos ' \
+                            'realizados antes de 11 horas, serão despachados no mesmo dia! Nós somos excelência em ' \
+                            'atendimentos aos nossos clientes, mande suas dúvidas ou perguntas, vamos responder ' \
+                            'rápidamente. '
         try:
             # Kill Ambar
             os.system("taskkill /im Ambar.exe")
@@ -23,28 +30,30 @@ def cadastro_basico():
         largura_info = largura.get()
         comprimento_info = comprimento.get()
         ncm_info = ncm.get()
+        grupo_info = grupo.get()
         descricao_info = descricao_entry.get("1.0", END)
+        autocateogoria_info = autocategoria.get()
 
-        # Validação
-        if len(nome_info) == 0:
-            validation = Label(new1, text="Nome do produto é obrigatório!", bg="red", bd="5", font=24, width=30, height=2)
-            validation.place(x=0, y=3)
-            return
-
-        if len(codigo_info) == 0:
-            validation = Label(new1, text="Código do produto é obrigatório!", bg="red", bd="5", font=24, width=30, height=2)
-            validation.place(x=0, y=3)
-            return
-
-        if len(ean_info) != 13:
-            validation = Label(new1, text="EAN deve conter 13 dígitos.", bg="red", bd="5", font=24, width=30, height=2)
-            validation.place(x=0, y=3)
-            return
-
-        if len(ncm_info) != 8:
-            validation = Label(new1, text="NCM deve conter 8 dígitos.", bg="red", bd="5", font=24, width=30, height=2)
-            validation.place(x=0, y=3)
-            return
+        # # Validação
+        # if len(nome_info) == 0:
+        #     validation = Label(new1, text="Nome do produto é obrigatório!", bg="red", bd="5", font=24, width=30, height=2)
+        #     validation.place(x=0, y=3)
+        #     return
+        #
+        # if len(codigo_info) == 0:
+        #     validation = Label(new1, text="Código do produto é obrigatório!", bg="red", bd="5", font=24, width=30, height=2)
+        #     validation.place(x=0, y=3)
+        #     return
+        #
+        # if len(ean_info) != 13:
+        #     validation = Label(new1, text="EAN deve conter 13 dígitos.", bg="red", bd="5", font=24, width=30, height=2)
+        #     validation.place(x=0, y=3)
+        #     return
+        #
+        # if len(ncm_info) != 8:
+        #     validation = Label(new1, text="NCM deve conter 8 dígitos.", bg="red", bd="5", font=24, width=30, height=2)
+        #     validation.place(x=0, y=3)
+        #     return
 
         # Minimiza o Tkinter
         window.iconify()
@@ -134,11 +143,41 @@ def cadastro_basico():
         pg.click()
         pg.typewrite(ncm_info)
 
+        # Seta do Grupo
+        pg.moveTo(707, 538)
+        pg.click()
+        print(grupo_info)
+        if grupo_info == 'LEAL':
+            pg.moveTo(812, 575)
+            pg.click()
+        if grupo_info == 'MADZ':
+            pg.moveTo(794, 594)
+            pg.click()
+        if grupo_info == 'PISSTE':
+            pg.moveTo(782, 615)
+            pg.click()
+
+        print(autocateogoria_info)
+        # Categoria
+        if autocateogoria_info == 1:
+            pg.moveTo(878, 591)
+            pg.doubleClick()
+            pg.moveTo(1228, 421)
+            sleep(1.5)
+            pg.doubleClick()
+
         # Descrição
         pg.moveTo(633, 684)
         pg.click()
+        pyperclip.copy(NOME_DO_PRODUTO)
+        pg.hotkey('ctrl', 'v')
+        pg.hotkey('enter')
+        pg.hotkey('enter')
+        pyperclip.copy(DESCRICAO_INICIAL)
+        pg.hotkey('ctrl', 'v')
+        pg.hotkey('enter')
+        pg.hotkey('enter')
         listaDescricao = descricao_info.splitlines()
-
         for frase in listaDescricao:
             pyperclip.copy(frase)
             pg.hotkey('ctrl', 'v')
@@ -150,7 +189,7 @@ def cadastro_basico():
 
     # Tkinter Config
     new1 = Toplevel(window)
-    new1.geometry("1000x900")
+    new1.geometry("1000x950")
     new1.title("Cadastro")
 
     nome = StringVar()
@@ -161,6 +200,8 @@ def cadastro_basico():
     largura = StringVar()
     comprimento = StringVar()
     ncm = StringVar()
+    grupo = StringVar()
+    autocategoria = IntVar()
 
     heading1 = Label(new1, text="Cadastro no Aton", bg="#4682b4", fg="white", width="100", height="2", font=("Helvetica", 16))
     heading1.pack()
@@ -174,6 +215,7 @@ def cadastro_basico():
     comprimento_text = Label(new1, text="Comprimento")
     ncm_text = Label(new1, text="NCM")
     descricao_text = Label(new1, text="Descricao")
+    grupo_text = Label(new1, text="Grupo")
 
     nome_text.place(x=15, y=70)
     codigo_texto.place(x=15, y=120)
@@ -184,6 +226,7 @@ def cadastro_basico():
     comprimento_text.place(x=15, y=370)
     ncm_text.place(x=15, y=420)
     descricao_text.place(x=15, y=470)
+    grupo_text.place(x=200, y=120)
 
     nome_entry = Entry(new1, textvariable=nome, width=70)
     codigo_entry = Entry(new1, textvariable=codigo)
@@ -193,7 +236,13 @@ def cadastro_basico():
     largura_entry = Entry(new1, textvariable=largura)
     comprimento_entry = Entry(new1, textvariable=comprimento)
     ncm_entry = Entry(new1, textvariable=ncm)
-    descricao_entry = Text(new1)
+    descricao_entry = Text(new1, font=('Helvetica', 10), width=100)
+    grupo_entry = ttk.Combobox(new1, width=27, textvariable=grupo)
+    grupo_entry['values'] = ('LEAL',
+                             'MADZ',
+                             'PISSTE')
+    autocategoria_entry = Checkbutton(new1, text="Vincular categoria automaticamente", variable=autocategoria,
+                                      onvalue=1, offvalue=0)
 
     nome_entry.place(x=15, y=90)
     codigo_entry.place(x=15, y=140)
@@ -204,6 +253,9 @@ def cadastro_basico():
     comprimento_entry.place(x=15, y=390)
     ncm_entry.place(x=15, y=440)
     descricao_entry.place(x=15, y=500)
+    grupo_entry.place(x=200, y=140)
+    grupo_entry.current()
+    autocategoria_entry.place(x=450, y=90)
 
     register = Button(new1, text='Cadastrar', bg="white", fg="black", command=program)
     register.place(x=840, y=850, width=140, height=40)
@@ -224,7 +276,7 @@ if __name__ == '__main__':
         .place(x=30, y=110, width=200, height=100)
 
     # Imagem
-    ttk.Button(window, text="IMAGEM PADRÃO", width=20) \
+    ttk.Button(window, text="CONVERTER IMAGEM", width=20) \
         .place(x=270, y=110, width=200, height=100)
 
     window.mainloop()
