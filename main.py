@@ -1,150 +1,155 @@
 import os
 from tkinter import *
+from tkinter import ttk
 import pyperclip
 import pyautogui
 import pyautogui as pg
 from time import sleep
 
 
-def program():
-    # Kill Ambar
-    os.system("taskkill /im Ambar.exe")
+def cadastro_basico():
+    def program():
+        try:
+            # Kill Ambar
+            os.system("taskkill /im Ambar.exe")
+        except:
+            print('Ambar não está aberto.')
 
-    # Pega informações do Cadastro
-    nome_info = nome.get()
-    codigo_info = codigo.get()
-    ean_info = ean.get()
-    peso_info = peso.get()
-    altura_info = altura.get()
-    largura_info = largura.get()
-    comprimento_info = comprimento.get()
-    ncm_info = ncm.get()
-    descricao_info = descricao_entry.get("1.0", END)
+        # Pega informações do Cadastro
+        nome_info = nome.get()
+        codigo_info = codigo.get()
+        ean_info = ean.get()
+        peso_info = peso.get()
+        altura_info = altura.get()
+        largura_info = largura.get()
+        comprimento_info = comprimento.get()
+        ncm_info = ncm.get()
+        descricao_info = descricao_entry.get("1.0", END)
 
-    # Validação
-    if len(nome_info) == 0:
-        validation = Label(text="Nome do produto é obrigatório!", bg="red", bd="5", font=24, width=100)
-        validation.place(x=0, y=0)
-        return
+        # # Validação
+        # if len(nome_info) == 0:
+        #     validation = Label(text="Nome do produto é obrigatório!", bg="red", bd="5", font=24, width=100)
+        #     validation.place(x=0, y=0)
+        #     return
+        #
+        # if len(codigo_info) == 0:
+        #     validation = Label(text="Código do produto é obrigatório!", bg="red", bd="5", font=24, width=100)
+        #     validation.place(x=0, y=0)
+        #     return
+        #
+        # if len(ean_info) != 13:
+        #     validation = Label(text="EAN deve conter 13 dígitos.", bg="red", bd="5", font=24, width=100)
+        #     validation.place(x=0, y=0)
+        #     return
+        #
+        # if len(ncm_info) != 8:
+        #     validation = Label(text="NCM deve conter 8 dígitos.", bg="red", bd="5", font=24, width=100)
+        #     validation.place(x=0, y=0)
+        #     return
 
-    if len(codigo_info) == 0:
-        validation = Label(text="Código do produto é obrigatório!", bg="red", bd="5", font=24, width=100)
-        validation.place(x=0, y=0)
-        return
+        # Minimiza o Tkinter
+        window.iconify()
+        new1.iconify()
 
-    if len(ean_info) != 13:
-        validation = Label(text="EAN deve conter 13 dígitos.", bg="red", bd="5", font=24, width=100)
-        validation.place(x=0, y=0)
-        return
+        # Minimiza todas as abas
+        pg.hotkey('winleft', 'd')
 
-    if len(ncm_info) != 8:
-        validation = Label(text="NCM deve conter 8 dígitos.", bg="red", bd="5", font=24, width=100)
-        validation.place(x=0, y=0)
-        return
+        pyautogui.FAILSAFE = False
 
-    # Minimiza o Tkinter
-    window.iconify()
+        # Icone do Aton
+        pg.moveTo(36, 100)
+        pg.doubleClick()
 
-    # Minimiza todas as abas
-    pg.hotkey('winleft', 'd')
+        sleep(1)
 
-    pyautogui.FAILSAFE = False
+        # Campo de Usuário
+        pg.moveTo(1583, 532)
+        pg.click()
+        pg.typewrite('GUI')
 
-    # Icone do Aton
-    pg.moveTo(36, 100)
-    pg.doubleClick()
+        # Campo de Senha
+        pg.moveTo(1606, 563)
+        pg.click()
+        pg.typewrite('2552')
 
-    sleep(1)
+        # Botão de Login
+        pg.moveTo(1550, 601)
+        pg.doubleClick()
 
-    # Campo de Usuário
-    pg.moveTo(1583, 532)
-    pg.click()
-    pg.typewrite('GUI')
+        sleep(5)
 
-    # Campo de Senha
-    pg.moveTo(1606, 563)
-    pg.click()
-    pg.typewrite('2552')
+        # Menu Produtos
+        pg.moveTo(283, 37)
+        pg.click()
 
-    # Botão de Login
-    pg.moveTo(1550, 601)
-    pg.doubleClick()
+        # Cadastro de produtos
+        pg.moveTo(328, 60)
+        pg.click()
 
-    sleep(5)
+        sleep(2)
 
-    # Menu Produtos
-    pg.moveTo(283, 37)
-    pg.click()
+        # Botao Novo
+        pg.moveTo(519, 853)
+        pg.click()
 
-    # Cadastro de produtos
-    pg.moveTo(328, 60)
-    pg.click()
+        # Código Interno
+        pg.moveTo(681, 261)
+        pg.click()
+        pg.typewrite(['backspace', 'backspace', 'backspace', 'backspace'])
+        pyperclip.copy(codigo_info)
+        pyautogui.hotkey('ctrl', 'v')
 
-    sleep(2)
+        # Nome do Produto
+        pg.moveTo(905, 316)
+        pg.click()
+        pyperclip.copy(nome_info)
+        pyautogui.hotkey('ctrl', 'v')
 
-    # Botao Novo
-    pg.moveTo(519, 853)
-    pg.click()
+        # Ean
+        pg.moveTo(1143, 261)
+        pg.click()
+        pg.typewrite(ean_info)
 
-    # Código Interno
-    pg.moveTo(681, 261)
-    pg.click()
-    pg.typewrite(['backspace', 'backspace', 'backspace', 'backspace'])
-    pyperclip.copy(codigo_info)
-    pyautogui.hotkey('ctrl', 'v')
+        # Peso
+        pg.moveTo(533, 370)
+        pg.click()
+        pg.typewrite(peso_info)
 
-    # Nome do Produto
-    pg.moveTo(905, 316)
-    pg.click()
-    pyperclip.copy(nome_info)
-    pyautogui.hotkey('ctrl', 'v')
+        # Altura
+        pg.moveTo(622, 368)
+        pg.click()
+        pg.typewrite(altura_info)
 
-    # Ean
-    pg.moveTo(1143, 261)
-    pg.click()
-    pg.typewrite(ean_info)
+        # Largura
+        pg.moveTo(719, 367)
+        pg.click()
+        pg.typewrite(largura_info)
 
-    # Peso
-    pg.moveTo(533, 370)
-    pg.click()
-    pg.typewrite(peso_info)
+        # Comprimento
+        pg.moveTo(817, 370)
+        pg.click()
+        pg.typewrite(comprimento_info)
 
-    # Altura
-    pg.moveTo(622, 368)
-    pg.click()
-    pg.typewrite(altura_info)
+        # NCM
+        pg.moveTo(541, 423)
+        pg.click()
+        pg.typewrite(ncm_info)
 
-    # Largura
-    pg.moveTo(719, 367)
-    pg.click()
-    pg.typewrite(largura_info)
+        # Descrição
+        pg.moveTo(633, 684)
+        pg.click()
+        pyperclip.copy(descricao_info)
+        pyautogui.hotkey('ctrl', 'v')
+        # FAZER UM FOR AQUI
 
-    # Comprimento
-    pg.moveTo(817, 370)
-    pg.click()
-    pg.typewrite(comprimento_info)
+        # Botao Salvar
+        pg.moveTo(1283, 855)
+        # pg.click()
 
-    # NCM
-    pg.moveTo(541, 423)
-    pg.click()
-    pg.typewrite(ncm_info)
-
-    # Descrição
-    pg.moveTo(633, 684)
-    pg.click()
-    pyperclip.copy(descricao_info)
-    pyautogui.hotkey('ctrl', 'v')
-
-    # Botao Salvar
-    pg.moveTo(1283, 855)
-    # pg.click()
-
-
-if __name__ == '__main__':
     # Tkinter Config
-    window = Tk()
-    window.geometry("1000x900")
-    window.title("Cadastro")
+    new1 = Toplevel(window)
+    new1.geometry("1000x900")
+    new1.title("Cadastro")
 
     nome = StringVar()
     codigo = StringVar()
@@ -155,18 +160,18 @@ if __name__ == '__main__':
     comprimento = StringVar()
     ncm = StringVar()
 
-    heading = Label(text="Cadastro no Aton", bg="grey", fg="black", width="200", height="3")
-    heading.pack()
+    heading1 = Label(new1, text="Cadastro no Aton", bg="#4682b4", fg="white", width="100", height="2", font=("Helvetica", 16))
+    heading1.pack()
 
-    nome_text = Label(text="Nome do Produto")
-    codigo_texto = Label(text="Código Interno")
-    ean_text = Label(text="EAN")
-    peso_text = Label(text="Peso (KG)")
-    altura_text = Label(text="Altura")
-    largura_text = Label(text="Largura")
-    comprimento_text = Label(text="Comprimento")
-    ncm_text = Label(text="NCM")
-    descricao_text = Label(text="Descricao")
+    nome_text = Label(new1, text="Nome do Produto")
+    codigo_texto = Label(new1, text="Código Interno")
+    ean_text = Label(new1, text="EAN")
+    peso_text = Label(new1, text="Peso (KG)")
+    altura_text = Label(new1, text="Altura")
+    largura_text = Label(new1, text="Largura")
+    comprimento_text = Label(new1, text="Comprimento")
+    ncm_text = Label(new1, text="NCM")
+    descricao_text = Label(new1, text="Descricao")
 
     nome_text.place(x=15, y=70)
     codigo_texto.place(x=15, y=120)
@@ -178,15 +183,15 @@ if __name__ == '__main__':
     ncm_text.place(x=15, y=420)
     descricao_text.place(x=15, y=470)
 
-    nome_entry = Entry(textvariable=nome, width=70)
-    codigo_entry = Entry(textvariable=codigo)
-    ean_entry = Entry(textvariable=ean)
-    peso_entry = Entry(textvariable=peso)
-    altura_entry = Entry(textvariable=altura)
-    largura_entry = Entry(textvariable=largura)
-    comprimento_entry = Entry(textvariable=comprimento)
-    ncm_entry = Entry(textvariable=ncm)
-    descricao_entry = Text()
+    nome_entry = Entry(new1, textvariable=nome, width=70)
+    codigo_entry = Entry(new1, textvariable=codigo)
+    ean_entry = Entry(new1, textvariable=ean)
+    peso_entry = Entry(new1, textvariable=peso)
+    altura_entry = Entry(new1, textvariable=altura)
+    largura_entry = Entry(new1, textvariable=largura)
+    comprimento_entry = Entry(new1, textvariable=comprimento)
+    ncm_entry = Entry(new1, textvariable=ncm)
+    descricao_entry = Text(new1)
 
     nome_entry.place(x=15, y=90)
     codigo_entry.place(x=15, y=140)
@@ -198,7 +203,22 @@ if __name__ == '__main__':
     ncm_entry.place(x=15, y=440)
     descricao_entry.place(x=15, y=500)
 
-    register = Button(window, text='Cadastrar', bg="gray", fg="black", command=program)
-    register.place(x=205, y=450)
+    register = Button(new1, text='Cadastrar', bg="white", fg="black", command=program)
+    register.place(x=840, y=850, width=140, height=40)
+
+
+if __name__ == '__main__':
+    # Tkinter Config
+    window = Tk()
+    window.geometry("500x500")
+    window.title("Auxiliar")
+    window['background'] = '#778899'
+
+    heading = Label(text="AUXILIAR", bg="#4682b4", fg="white", width="200", height="3", font=("Helvetica", 16))
+    heading.pack()
+
+    # Cadastro
+    ttk.Button(window, text="CADASTRO BÁSICO ATON", command=cadastro_basico, width=20) \
+        .place(x=15, y=110, width=200, height=100)
 
     window.mainloop()
