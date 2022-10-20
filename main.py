@@ -4,6 +4,8 @@ from tkinter import ttk
 import pyperclip
 import pyautogui as pg
 from time import sleep
+from PIL import Image, ImageTk
+from tkinter import filedialog as fd
 
 
 def cadastro_basico():
@@ -203,7 +205,8 @@ def cadastro_basico():
     grupo = StringVar()
     autocategoria = IntVar()
 
-    heading1 = Label(new1, text="Cadastro no Aton", bg="#4682b4", fg="white", width="100", height="2", font=("Helvetica", 16))
+    heading1 = Label(new1, text="Cadastro no Aton", bg="#4682b4", fg="white", width="100", height="2",
+                     font=("Helvetica", 16))
     heading1.pack()
 
     nome_text = Label(new1, text="Nome do Produto")
@@ -261,6 +264,31 @@ def cadastro_basico():
     register.place(x=840, y=850, width=140, height=40)
 
 
+def conversor_imagem():
+    def conversor():
+        file_path = fd.askopenfilename(title='Escolha um arquivo', filetypes=[('image files', ('.png', '.jpg', '.jpeg',
+                                                                   '.gif', '.webp', '.tiff',
+                                                                   '.psd', '.raw', '.bmp',
+                                                                   '.heif', '.indd'))])
+        pic = Image.open(file_path)
+        pic = pic.resize((1000, 1000))
+        pic_im = pic.convert("RGB")
+        export_file_path = fd.asksaveasfilename(initialdir=file_path, title='Salve o arquivo', defaultextension=".jpg", filetypes=[('image files', ('.jpg', '.jpeg'))])
+        pic_im.save(export_file_path)
+
+    # Tkinter Config
+    new2 = Toplevel(window)
+    new2.geometry("300x300")
+    new2.title("Cadastro")
+
+    heading2 = Label(new2, text="Conversor de Imagem", bg="#4682b4", fg="white", width="100", height="2",
+                     font=("Helvetica", 16))
+    heading2.pack()
+
+    ttk.Button(new2, text="Converter", command=conversor, width=20) \
+        .place(x=50, y=110, width=200, height=100)
+
+
 if __name__ == '__main__':
     # Tkinter Config
     window = Tk()
@@ -276,7 +304,7 @@ if __name__ == '__main__':
         .place(x=30, y=110, width=200, height=100)
 
     # Imagem
-    ttk.Button(window, text="CONVERTER IMAGEM", width=20) \
+    ttk.Button(window, text="CONVERTER IMAGEM", width=20, command=conversor_imagem) \
         .place(x=270, y=110, width=200, height=100)
 
     window.mainloop()
