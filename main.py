@@ -2,7 +2,6 @@ import os
 from tkinter import *
 from tkinter import ttk
 import pyperclip
-import pyautogui
 import pyautogui as pg
 from time import sleep
 
@@ -54,7 +53,7 @@ def cadastro_basico():
         # Minimiza todas as abas
         pg.hotkey('winleft', 'd')
 
-        pyautogui.FAILSAFE = False
+        pg.FAILSAFE = False
 
         # Icone do Aton
         pg.moveTo(36, 100)
@@ -97,13 +96,13 @@ def cadastro_basico():
         pg.click()
         pg.typewrite(['backspace', 'backspace', 'backspace', 'backspace'])
         pyperclip.copy(codigo_info)
-        pyautogui.hotkey('ctrl', 'v')
+        pg.hotkey('ctrl', 'v')
 
         # Nome do Produto
         pg.moveTo(905, 316)
         pg.click()
         pyperclip.copy(nome_info)
-        pyautogui.hotkey('ctrl', 'v')
+        pg.hotkey('ctrl', 'v')
 
         # Ean
         pg.moveTo(1143, 261)
@@ -138,9 +137,12 @@ def cadastro_basico():
         # Descrição
         pg.moveTo(633, 684)
         pg.click()
-        pyperclip.copy(descricao_info)
-        pyautogui.hotkey('ctrl', 'v')
-        # FAZER UM FOR AQUI
+        listaDescricao = descricao_info.splitlines()
+
+        for frase in listaDescricao:
+            pyperclip.copy(frase)
+            pg.hotkey('ctrl', 'v')
+            pg.hotkey('enter')
 
         # Botao Salvar
         pg.moveTo(1283, 855)
