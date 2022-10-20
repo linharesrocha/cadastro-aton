@@ -25,26 +25,26 @@ def cadastro_basico():
         ncm_info = ncm.get()
         descricao_info = descricao_entry.get("1.0", END)
 
-        # # Validação
-        # if len(nome_info) == 0:
-        #     validation = Label(text="Nome do produto é obrigatório!", bg="red", bd="5", font=24, width=100)
-        #     validation.place(x=0, y=0)
-        #     return
-        #
-        # if len(codigo_info) == 0:
-        #     validation = Label(text="Código do produto é obrigatório!", bg="red", bd="5", font=24, width=100)
-        #     validation.place(x=0, y=0)
-        #     return
-        #
-        # if len(ean_info) != 13:
-        #     validation = Label(text="EAN deve conter 13 dígitos.", bg="red", bd="5", font=24, width=100)
-        #     validation.place(x=0, y=0)
-        #     return
-        #
-        # if len(ncm_info) != 8:
-        #     validation = Label(text="NCM deve conter 8 dígitos.", bg="red", bd="5", font=24, width=100)
-        #     validation.place(x=0, y=0)
-        #     return
+        # Validação
+        if len(nome_info) == 0:
+            validation = Label(new1, text="Nome do produto é obrigatório!", bg="red", bd="5", font=24, width=30, height=2)
+            validation.place(x=0, y=3)
+            return
+
+        if len(codigo_info) == 0:
+            validation = Label(new1, text="Código do produto é obrigatório!", bg="red", bd="5", font=24, width=30, height=2)
+            validation.place(x=0, y=3)
+            return
+
+        if len(ean_info) != 13:
+            validation = Label(new1, text="EAN deve conter 13 dígitos.", bg="red", bd="5", font=24, width=30, height=2)
+            validation.place(x=0, y=3)
+            return
+
+        if len(ncm_info) != 8:
+            validation = Label(new1, text="NCM deve conter 8 dígitos.", bg="red", bd="5", font=24, width=30, height=2)
+            validation.place(x=0, y=3)
+            return
 
         # Minimiza o Tkinter
         window.iconify()
@@ -221,6 +221,10 @@ if __name__ == '__main__':
 
     # Cadastro
     ttk.Button(window, text="CADASTRO BÁSICO ATON", command=cadastro_basico, width=20) \
-        .place(x=15, y=110, width=200, height=100)
+        .place(x=30, y=110, width=200, height=100)
+
+    # Imagem
+    ttk.Button(window, text="IMAGEM PADRÃO", width=20) \
+        .place(x=270, y=110, width=200, height=100)
 
     window.mainloop()
