@@ -124,6 +124,21 @@ def cadastro_produtos_seta_grupo():
     pg.click()
 
 
+def cadastro_produtos_opcao_grupo_leal():
+    pg.moveTo(812, 575)
+    pg.click()
+
+
+def cadastro_produtos_opcao_grupo_madz():
+    pg.moveTo(794, 594)
+    pg.click()
+
+
+def cadastro_produtos_opcao_grupo_pisste():
+    pg.moveTo(782, 615)
+    pg.click()
+
+
 def cadastro_produtos_descricao():
     pg.moveTo(633, 684)
     pg.click()
@@ -143,9 +158,11 @@ def cadastro_produtos_botao_alterar():
     pg.moveTo(617, 857)
     pg.click()
 
+
 def cadastro_produtos_botao_cancelar():
     pg.moveTo(1390, 858)
     pg.click()
+
 
 ## CONSULTAR PRODUTOS
 
@@ -164,6 +181,7 @@ def consultar_produtos_botao_consultar():
     pg.moveTo(632, 61)
     pg.click()
     sleep(1)
+
 
 def consultar_produtos_select_resultado():
     pg.moveTo(708, 144)

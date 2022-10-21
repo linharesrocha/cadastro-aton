@@ -9,6 +9,7 @@ import random
 
 # Strings Global
 NOME_DO_PRODUTO = '[NOME DO PRODUTO]'
+NOME_DO_KIT = '[NOME DO KIT COMPLETO]'
 
 DESCRICAO_INICIAL = 'Receba em sua casa o melhor em qualidade e preço de materiais fitness e academia, ' \
                     'garrafa de água, marmiteiras, bolsas térmicas, Garrafa Termica, e muito mais. Pedidos ' \
@@ -116,14 +117,11 @@ def cadastro_basico():
         cadastro_produtos_seta_grupo()
 
         if grupo_info == 'LEAL':
-            pg.moveTo(812, 575)
-            pg.click()
+            cadastro_produtos_opcao_grupo_leal()
         if grupo_info == 'MADZ':
-            pg.moveTo(794, 594)
-            pg.click()
+            cadastro_produtos_opcao_grupo_madz()
         if grupo_info == 'PISSTE':
-            pg.moveTo(782, 615)
-            pg.click()
+            cadastro_produtos_opcao_grupo_pisste()
 
         # Categoria
         if autocateogoria_info == 1:
@@ -277,6 +275,7 @@ def cadastro_kit():
         idaton1_info = idaton1.get()
         idaton2_info = idaton2.get()
         idaton3_info = idaton3.get()
+        grupo_info = grupo.get()
         list_idaton_info = [idaton1_info, idaton2_info, idaton3_info]
         list_idaton_info = list(filter(None, list_idaton_info))
 
@@ -365,12 +364,10 @@ def cadastro_kit():
         # print(largura_list)
         # print(comprimento_list)
 
+        print(len(descricoes_list))
+
         # Soma dimensões
         peso_total = str(sum(map(float, peso_list)))
-        print(peso_total)
-        # if str(peso_total)[0] == '0':
-        #     peso_total = str(peso_total)[:5].replace(',', '.')
-
         altura_total = int(sum(map(float, altura_list)))
         largura_total = int(sum(map(float, largura_list)))
         comprimento_total = int(sum(map(float, comprimento_list)))
@@ -396,9 +393,6 @@ def cadastro_kit():
                 pg.typewrite('+ ')
             aux = aux + 1
 
-        if sum((len(i) for i in nomes_list)) > 100:
-            messagebox.showinfo("Ops!", "O nome ultrapassou mais de 100 caracteres. Pode haver dado faltando!")
-
         cadastro_produtos_peso()
         pg.typewrite(peso_total)
 
@@ -414,6 +408,38 @@ def cadastro_kit():
         pyperclip.copy(comprimento_total)
         pg.hotkey('ctrl', 'v')
 
+        # Seta do Grupo
+        cadastro_produtos_seta_grupo()
+
+        if grupo_info == 'LEAL':
+            cadastro_produtos_opcao_grupo_leal()
+        if grupo_info == 'MADZ':
+            cadastro_produtos_opcao_grupo_madz()
+        if grupo_info == 'PISSTE':
+            cadastro_produtos_opcao_grupo_pisste()
+
+        # Descrição
+        cadastro_produtos_descricao()
+        pyperclip.copy(NOME_DO_KIT)
+        pg.hotkey('ctrl', 'v')
+        pg.hotkey('enter')
+        pg.hotkey('enter')
+
+        aux = 1
+        for descricao in descricoes_list:
+            pyperclip.copy(NOME_DO_PRODUTO)
+            pg.hotkey('ctrl', 'v')
+            pg.typewrite(' ' + str(aux))
+            pg.hotkey('enter')
+            listaDescricao = descricao.splitlines()
+            for frase in listaDescricao:
+                pyperclip.copy(frase)
+                pg.hotkey('ctrl', 'v')
+                pg.hotkey('enter')
+
+            aux = aux + 1
+
+        cadastro_produtos_botao_salvar()
 
 
     # Tkinter Config
@@ -427,6 +453,7 @@ def cadastro_kit():
     quantidade1 = StringVar()
     quantidade2 = StringVar()
     quantidade3 = StringVar()
+    grupo = StringVar()
 
     heading3 = Label(new3, text="Cadastro Kit", bg="#4682b4", fg="white", width="100", height="2",
                      font=("Helvetica", 16))
@@ -436,11 +463,13 @@ def cadastro_kit():
     idaton2_text = Label(new3, text="Código ID Aton - 2")
     idaton3_text = Label(new3, text="Código ID Aton - 3")
     quantidade_text = Label(new3, text="Quantidade")
+    grupo_text = Label(new3, text="Grupo")
 
     idaton1_text.place(x=140, y=70)
     idaton2_text.place(x=140, y=140)
     idaton3_text.place(x=140, y=210)
     quantidade_text.place(x=280, y=70)
+    grupo_text.place(x=25, y=70)
 
     idaton1_entry = Entry(new3, textvariable=idaton1)
     idaton2_entry = Entry(new3, textvariable=idaton2)
@@ -448,6 +477,10 @@ def cadastro_kit():
     quantidade1_entry = Entry(new3, textvariable=quantidade1)
     quantidade2_entry = Entry(new3, textvariable=quantidade2)
     quantidade3_entry = Entry(new3, textvariable=quantidade3)
+    grupo_entry = ttk.Combobox(new3, width=27, textvariable=grupo)
+    grupo_entry['values'] = ('LEAL',
+                             'MADZ',
+                             'PISSTE')
 
     idaton1_entry.place(x=140, y=90)
     idaton2_entry.place(x=140, y=160)
@@ -455,6 +488,8 @@ def cadastro_kit():
     quantidade1_entry.place(x=290, y=90, width=40)
     quantidade2_entry.place(x=290, y=160, width=40)
     quantidade3_entry.place(x=290, y=230, width=40)
+    grupo_entry.place(x=25, y=90, width=100)
+    grupo_entry.current()
 
     ttk.Button(new3, text="Cadastrar", command=program2, width=20) \
         .place(x=140, y=300, width=120, height=40)
