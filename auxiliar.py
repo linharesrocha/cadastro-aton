@@ -52,6 +52,13 @@ def login_aton(login, senha):
     sleep(5)
 
 
+def button_close_aton():
+    # Button Close Ambar
+    pg.moveTo(1906, 12)
+    pg.click()
+    sleep(1)
+
+
 def menu_produtos():
     # Menu Produtos
     pg.moveTo(283, 37)
@@ -136,6 +143,9 @@ def cadastro_produtos_botao_alterar():
     pg.moveTo(617, 857)
     pg.click()
 
+def cadastro_produtos_botao_cancelar():
+    pg.moveTo(1390, 858)
+    pg.click()
 
 ## CONSULTAR PRODUTOS
 
@@ -158,6 +168,6 @@ def consultar_produtos_botao_consultar():
 def consultar_produtos_select_resultado():
     pg.moveTo(708, 144)
     pg.doubleClick()
-    sleep(1)
+    sleep(2)
 
 ###################################################

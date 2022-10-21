@@ -258,10 +258,20 @@ def cadastro_kit():
     def program2():
         matar_ambar()
 
+        codigo_interno_list = []
+        nomes_list = []
+        descricoes_list = []
+        peso_list = []
+        altura_list = []
+        largura_list = []
+        comprimento_list = []
+
         idaton1_info = idaton1.get()
         idaton2_info = idaton2.get()
         idaton3_info = idaton3.get()
         list_idaton_info = [idaton1_info, idaton2_info, idaton3_info]
+        list_idaton_info = list(filter(None, list_idaton_info))
+
         quantidade1_info = quantidade1.get()
         quantidade2_info = quantidade2.get()
         quantidade3_info = quantidade3.get()
@@ -290,22 +300,68 @@ def cadastro_kit():
             consultar_produtos_select_resultado()
 
             # CODIGO PARA PEGAR INFORMAÇÕES E ARMAZENAR
+            cadastro_produtos_botao_alterar()
 
+            cadastro_produtos_codigo_interno()
+            pg.hotkey('ctrl', 'a')
+            pg.hotkey('ctrl', 'c')
+            info = pyperclip.paste()
+            codigo_interno_list.append(info)
+
+            cadastro_produtos_nome_produto()
+            pg.hotkey('ctrl', 'a')
+            pg.hotkey('ctrl', 'c')
+            info = pyperclip.paste()
+            nomes_list.append(info)
+
+            cadastro_produtos_peso()
+            pg.hotkey('ctrl', 'a')
+            pg.hotkey('ctrl', 'c')
+            info = pyperclip.paste()
+            peso_list.append(info)
+
+            cadastro_produtos_altura()
+            pg.hotkey('ctrl', 'a')
+            pg.hotkey('ctrl', 'c')
+            info = pyperclip.paste()
+            altura_list.append(info)
+
+            cadastro_produtos_largura()
+            pg.hotkey('ctrl', 'a')
+            pg.hotkey('ctrl', 'c')
+            info = pyperclip.paste()
+            largura_list.append(info)
+
+            cadastro_produtos_comprimento()
+            pg.hotkey('ctrl', 'a')
+            pg.hotkey('ctrl', 'c')
+            info = pyperclip.paste()
+            comprimento_list.append(info)
+
+            cadastro_produtos_descricao()
+            pg.hotkey('ctrl', 'a')
+            pg.hotkey('ctrl', 'c')
+            info = pyperclip.paste()
+            descricoes_list.append(info)
+
+            cadastro_produtos_botao_cancelar()
             cadastro_produtos_botao_consultar()
 
-
+        # Criando Produto Kit
+        button_close_aton()
+        cadastro_produtos_botao_novo()
 
     # Tkinter Config
     new3 = Toplevel(window)
     new3.geometry("400x350")
     new3.title("Cadastro")
 
-    idaton1 = IntVar()
-    idaton2 = IntVar()
-    idaton3 = IntVar()
-    quantidade1 = IntVar()
-    quantidade2 = IntVar()
-    quantidade3 = IntVar()
+    idaton1 = StringVar()
+    idaton2 = StringVar()
+    idaton3 = StringVar()
+    quantidade1 = StringVar()
+    quantidade2 = StringVar()
+    quantidade3 = StringVar()
 
     heading3 = Label(new3, text="Cadastro Kit", bg="#4682b4", fg="white", width="100", height="2",
                      font=("Helvetica", 16))
