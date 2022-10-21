@@ -206,7 +206,7 @@ def cadastro_basico():
     grupo = StringVar()
     autocategoria = IntVar()
 
-    heading1 = Label(new1, text="Cadastro no Aton", bg="#4682b4", fg="white", width="100", height="2",
+    heading1 = Label(new1, text="Cadastro Simples", bg="#4682b4", fg="white", width="100", height="2",
                      font=("Helvetica", 16))
     heading1.pack()
 
@@ -267,7 +267,8 @@ def cadastro_basico():
 
 def conversor_imagem():
     def conversor():
-        file_path = fd.askopenfilename(title='Escolha um arquivo', multiple=True, filetypes=[('image files', ('.png', '.jpg', '.jpeg',
+        file_path = fd.askopenfilename(title='Escolha um arquivo', multiple=True,
+                                       filetypes=[('image files', ('.png', '.jpg', '.jpeg',
                                                                    '.gif', '.webp', '.tiff',
                                                                    '.psd', '.raw', '.bmp',
                                                                    '.heif', '.indd'))])
@@ -279,7 +280,6 @@ def conversor_imagem():
             path_original = path_split_list[:-1]
             path_original = '/'.join(path_original)
             path_original = path_original + '/'
-
 
             # Conversion and Save
             pic = Image.open(path)
@@ -301,6 +301,49 @@ def conversor_imagem():
         .place(x=50, y=110, width=200, height=100)
 
 
+def cadastro_kit():
+    def program2():
+        idaton1_info = idaton1.get()
+        idaton2_info = idaton2.get()
+        idaton3_info = idaton3.get()
+
+        print(idaton3_info)
+        print(idaton2_info)
+        print(idaton1_info)
+
+    # Tkinter Config
+    new3 = Toplevel(window)
+    new3.geometry("400x350")
+    new3.title("Cadastro")
+
+    idaton1 = IntVar()
+    idaton2 = IntVar()
+    idaton3 = IntVar()
+
+    heading3 = Label(new3, text="Conversor Kit", bg="#4682b4", fg="white", width="100", height="2",
+                     font=("Helvetica", 16))
+    heading3.pack()
+
+    idaton1_text = Label(new3, text="Código ID Aton - 1")
+    idaton2_text = Label(new3, text="Código ID Aton - 2")
+    idaton3_text = Label(new3, text="Código ID Aton - 3")
+
+    idaton1_text.place(x=140, y=70)
+    idaton2_text.place(x=140, y=140)
+    idaton3_text.place(x=140, y=210)
+
+    idaton1_entry = Entry(new3, textvariable=idaton1)
+    idaton2_entry = Entry(new3, textvariable=idaton2)
+    idaton3_entry = Entry(new3, textvariable=idaton3)
+
+    idaton1_entry.place(x=140, y=90)
+    idaton2_entry.place(x=140, y=160)
+    idaton3_entry.place(x=140, y=230)
+
+    ttk.Button(new3, text="Cadastrar", command=program2, width=20) \
+        .place(x=140, y=300, width=120, height=40)
+
+
 if __name__ == '__main__':
     # Tkinter Config
     window = Tk()
@@ -312,11 +355,15 @@ if __name__ == '__main__':
     heading.pack()
 
     # Cadastro
-    ttk.Button(window, text="CADASTRO BÁSICO ATON", command=cadastro_basico, width=20) \
+    ttk.Button(window, text="CADASTRO SIMPLES ATON", command=cadastro_basico, width=20) \
         .place(x=30, y=110, width=200, height=100)
 
     # Imagem
-    ttk.Button(window, text="CONVERTER IMAGEM", width=20, command=conversor_imagem) \
+    ttk.Button(window, text="CADASTRO KIT ATON", command=cadastro_kit, width=20) \
         .place(x=270, y=110, width=200, height=100)
+
+    # Cadastro Kit
+    ttk.Button(window, text="CONVERSÃO IMG PADRÃO", command=conversor_imagem, width=20) \
+        .place(x=30, y=280, width=200, height=100)
 
     window.mainloop()
