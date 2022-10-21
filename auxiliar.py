@@ -3,10 +3,12 @@ import pyautogui as pg
 from time import sleep
 import pyperclip
 
+
 # Funções Auxiliares
 def matar_ambar():
     try:
         # Kill Ambar
+        os.system("taskkill /im Ambar.exe")
         os.system("taskkill /im Ambar.exe")
     except:
         print('Ambar não está aberto.')
@@ -26,6 +28,7 @@ def minimiza_janelas(janela, main):
 def executa_icone_aton():
     # Icone do Aton
     pg.moveTo(36, 100)
+    sleep(1)
     pg.doubleClick()
 
     sleep(1)
@@ -62,8 +65,8 @@ def opcao_cadastro_produtos():
 
     sleep(2)
 
-# CADASTRO PRODUTOS
 
+# CADASTRO PRODUTOS
 def cadastro_produtos_botao_novo():
     pg.moveTo(519, 853)
     pg.click()
@@ -123,9 +126,16 @@ def cadastro_produtos_botao_salvar():
     pg.moveTo(1283, 855)
     # pg.click()
 
+
 def cadastro_produtos_botao_consultar():
     pg.moveTo(766, 859)
     pg.click()
+
+
+def cadastro_produtos_botao_alterar():
+    pg.moveTo(617, 857)
+    pg.click()
+
 
 ## CONSULTAR PRODUTOS
 
@@ -133,19 +143,21 @@ def consultar_produtos_opcao_todos():
     pg.moveTo(1617, 64)
     pg.click()
 
+
 def consultar_produtos_pesquisa():
     pg.moveTo(353, 61)
     pg.click()
+    pg.typewrite(['backspace', 'backspace', 'backspace', 'backspace', 'backspace'])
 
-def consultar_produtos_select_resultado():
+
+def consultar_produtos_botao_consultar():
     pg.moveTo(632, 61)
     pg.click()
+    sleep(1)
 
-
-pg.moveTo(708, 144)
-botao alterar
-# botao alterar
-pg.moveTo(617, 857)
-
+def consultar_produtos_select_resultado():
+    pg.moveTo(708, 144)
+    pg.doubleClick()
+    sleep(1)
 
 ###################################################

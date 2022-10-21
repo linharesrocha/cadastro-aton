@@ -261,6 +261,7 @@ def cadastro_kit():
         idaton1_info = idaton1.get()
         idaton2_info = idaton2.get()
         idaton3_info = idaton3.get()
+        list_idaton_info = [idaton1_info, idaton2_info, idaton3_info]
         quantidade1_info = quantidade1.get()
         quantidade2_info = quantidade2.get()
         quantidade3_info = quantidade3.get()
@@ -274,6 +275,23 @@ def cadastro_kit():
         menu_produtos()
 
         opcao_cadastro_produtos()
+
+        cadastro_produtos_botao_consultar()
+
+        consultar_produtos_opcao_todos()
+
+        for idaton in list_idaton_info:
+            consultar_produtos_pesquisa()
+            pyperclip.copy(idaton)
+            pg.hotkey('ctrl', 'v')
+
+            consultar_produtos_botao_consultar()
+
+            consultar_produtos_select_resultado()
+
+            # CODIGO PARA PEGAR INFORMAÇÕES E ARMAZENAR
+
+            cadastro_produtos_botao_consultar()
 
 
 
