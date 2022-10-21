@@ -264,21 +264,52 @@ def cadastro_kit():
         idaton1_info = idaton1.get()
         idaton2_info = idaton2.get()
         idaton3_info = idaton3.get()
+        list_idaton_info = [idaton1_info, idaton2_info, idaton3_info]
+        list_idaton_info = list(filter(None, list_idaton_info))
+        list_idaton_info = list(map(int, list_idaton_info))
+
         grupo_info = grupo.get()
         checkbox_peso_info = checkbox_peso.get()
         checkbox_altura_info = checkbox_altura.get()
         checkbox_comprimento_info = checkbox_comprimento.get()
         checkbox_largura_info = checkbox_largura.get()
-        list_idaton_info = [idaton1_info, idaton2_info, idaton3_info]
-        list_idaton_info = list(filter(None, list_idaton_info))
 
         quantidade1_info = quantidade1.get()
         quantidade2_info = quantidade2.get()
         quantidade3_info = quantidade3.get()
+        list_quantidade_info = [quantidade1_info, quantidade2_info, quantidade3_info]
+        list_quantidade_info = list(filter(None, list_quantidade_info))
+        list_quantidade_info = list(map(int, list_quantidade_info))
 
-        # Só pode cadastrar se tiver mais de 1 ID
-        # if len(list_idaton_info) < 2:
-        #     return
+        # Validacoes
+        if len(list_idaton_info) == 0:
+            Label(new3, text="ID do Produto é Obrigatório!", bg="red", bd="5", font=24, width=60,
+                  height=2).place(x=0, y=3)
+            return
+
+        if len(list_quantidade_info) == 0:
+            Label(new3, text="Quantidade é Obrigatório!", bg="red", bd="5", font=24, width=60,
+                  height=2).place(x=0, y=3)
+            return
+
+        if len(list_idaton_info) == 1:
+            if quantidade1_info == '' and quantidade2_info == '' and quantidade3_info == '':
+                Label(new3, text="Preencha o campo quantidade!", bg="red", bd="5", font=24, width=60,
+                      height=2).place(x=0, y=3)
+                return
+
+            if list_quantidade_info[0] < 2 or list_quantidade_info[1] < 2 or list_quantidade_info[2] < 2:
+                Label(new3, text="Não é um Kit!", bg="red", bd="5", font=24, width=60,
+                      height=2).place(x=0, y=3)
+                return
+
+        try:
+            if list_idaton_info[0] == list_idaton_info[1] or list_idaton_info[0] == list_idaton_info[2] or list_idaton_info[1] == list_idaton_info[2]:
+                Label(new3, text="IDs não podem ser iguais!", bg="red", bd="5", font=24, width=60,
+                      height=2).place(x=0, y=3)
+                return
+        except IndexError:
+            pass
 
         minimiza_janelas(new3, window)
 
@@ -460,8 +491,24 @@ def cadastro_kit():
         cadastro_produtos_opcao_desmembra_comp()
         cadastro_produtos_botao_salvar()
 
+        # Salvando Itens Composicao
+        cadastro_produtos_aba_composicao()
+        aux_quantidade = 0
+        for codigo in codigo_interno_list:
+            cadastro_produtos_composicao_botao_novo()
+            cadastro_produtos_composicao_pesquisa_codigo()
+            pg.typewrite(codigo)
+            pg.press('enter')
+            sleep(1)
+            cadastro_produtos_composicao_resultado_produto()
+            cadastro_produtos_composicao_quantidade()
+            pyperclip.copy(list_quantidade_info[0])
+            pg.hotkey('ctrl', 'v')
+            aux_quantidade = aux_quantidade + 1
+            cadastro_produtos_composicao_botao_salvar()
+            sleep(1)
 
-    # Tkinter Config
+    ############ TKINTER #############
     new3 = Toplevel(window)
     new3.geometry("400x350")
     new3.title("Cadastro")

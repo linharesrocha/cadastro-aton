@@ -138,9 +138,11 @@ def cadastro_produtos_opcao_grupo_pisste():
     pg.moveTo(782, 615)
     pg.click()
 
+
 def cadastro_produtos_opcao_desmembra_comp():
     pg.moveTo(1311, 328)
     pg.click()
+
 
 def cadastro_produtos_descricao():
     pg.moveTo(633, 684)
@@ -191,5 +193,37 @@ def consultar_produtos_select_resultado():
     pg.moveTo(708, 144)
     pg.doubleClick()
     sleep(2)
+
+
+# Cadastro Produtos Composicao
+
+def cadastro_produtos_aba_composicao():
+    pg.moveTo(931, 217)
+    pg.click()
+
+
+def cadastro_produtos_composicao_botao_novo():
+    pg.moveTo(1227, 354)
+    pg.click()
+
+
+def cadastro_produtos_composicao_pesquisa_codigo():
+    pg.moveTo(532, 357)
+    pg.click()
+
+
+def cadastro_produtos_composicao_resultado_produto():
+    pg.moveTo(629, 421)
+    pg.doubleClick()
+
+
+def cadastro_produtos_composicao_quantidade():
+    pg.moveTo(1153, 358)
+    pg.click()
+
+
+def cadastro_produtos_composicao_botao_salvar():
+    pg.moveTo(1312, 353)
+    pg.click()
 
 ###################################################
