@@ -23,7 +23,7 @@ LOGIN_PASS = '2552'
 now = datetime.now()
 DATE_TIME = now.strftime("%Y%m%d")
 
-RANDOM = random.randint(0,9)
+RANDOM = random.randint(0, 9)
 print(RANDOM)
 
 
@@ -44,26 +44,28 @@ def cadastro_basico():
         descricao_info = descricao_entry.get("1.0", END)
         autocateogoria_info = autocategoria.get()
 
-        # # Validação
-        # if len(nome_info) == 0:
-        #     validation = Label(new1, text="Nome do produto é obrigatório!", bg="red", bd="5", font=24, width=30, height=2)
-        #     validation.place(x=0, y=3)
-        #     return
-        #
-        # if len(codigo_info) == 0:
-        #     validation = Label(new1, text="Código do produto é obrigatório!", bg="red", bd="5", font=24, width=30, height=2)
-        #     validation.place(x=0, y=3)
-        #     return
-        #
-        # if len(ean_info) != 13:
-        #     validation = Label(new1, text="EAN deve conter 13 dígitos.", bg="red", bd="5", font=24, width=30, height=2)
-        #     validation.place(x=0, y=3)
-        #     return
-        #
-        # if len(ncm_info) != 8:
-        #     validation = Label(new1, text="NCM deve conter 8 dígitos.", bg="red", bd="5", font=24, width=30, height=2)
-        #     validation.place(x=0, y=3)
-        #     return
+        # Validação
+        if len(nome_info) == 0:
+            validation = Label(new1, text="Nome do produto é obrigatório!", bg="red", bd="5", font=24, width=30,
+                               height=2)
+            validation.place(x=0, y=3)
+            return
+
+        if len(codigo_info) == 0:
+            validation = Label(new1, text="Código do produto é obrigatório!", bg="red", bd="5", font=24, width=30,
+                               height=2)
+            validation.place(x=0, y=3)
+            return
+
+        if len(ean_info) != 13:
+            validation = Label(new1, text="EAN deve conter 13 dígitos.", bg="red", bd="5", font=24, width=30, height=2)
+            validation.place(x=0, y=3)
+            return
+
+        if len(ncm_info) != 8:
+            validation = Label(new1, text="NCM deve conter 8 dígitos.", bg="red", bd="5", font=24, width=30, height=2)
+            validation.place(x=0, y=3)
+            return
 
         minimiza_janelas(new1, window)
 
@@ -225,39 +227,26 @@ def cadastro_basico():
 
 
 def conversor_imagem():
-    def conversor():
-        file_path = fd.askopenfilename(title='Escolha um arquivo', multiple=True,
-                                       filetypes=[('image files', ('.png', '.jpg', '.jpeg',
-                                                                   '.gif', '.webp', '.tiff',
-                                                                   '.psd', '.raw', '.bmp',
-                                                                   '.heif', '.indd'))])
-        for path in file_path:
-            # Directory
-            path_split_list = path.split('/')
-            name_original = path_split_list[-1]
-            name_split_list = name_original.split('.')
-            path_original = path_split_list[:-1]
-            path_original = '/'.join(path_original)
-            path_original = path_original + '/'
+    file_path = fd.askopenfilename(title='Escolha um arquivo', multiple=True,
+                                   filetypes=[('image files', ('.png', '.jpg', '.jpeg',
+                                                               '.gif', '.webp', '.tiff',
+                                                               '.psd', '.raw', '.bmp',
+                                                               '.heif', '.indd'))])
+    for path in file_path:
+        # Directory
+        path_split_list = path.split('/')
+        name_original = path_split_list[-1]
+        name_split_list = name_original.split('.')
+        path_original = path_split_list[:-1]
+        path_original = '/'.join(path_original)
+        path_original = path_original + '/'
 
-            # Conversion and Save
-            pic = Image.open(path)
-            pic = pic.resize((1000, 1000))
-            pic.convert("RGB").save(path_original + 'novo_' + name_split_list[0] + '.jpg')
+        # Conversion and Save
+        pic = Image.open(path)
+        pic = pic.resize((1000, 1000))
+        pic.convert("RGB").save(path_original + 'novo_' + name_split_list[0] + '.jpg')
 
-            messagebox.showinfo("Pronto!", "Conversão concluida!")
-
-    # Tkinter Config
-    new2 = Toplevel(window)
-    new2.geometry("300x300")
-    new2.title("Cadastro")
-
-    heading2 = Label(new2, text="Conversor de Imagem", bg="#4682b4", fg="white", width="100", height="2",
-                     font=("Helvetica", 16))
-    heading2.pack()
-
-    ttk.Button(new2, text="Converter", command=conversor, width=20) \
-        .place(x=50, y=110, width=200, height=100)
+        messagebox.showinfo("Pronto!", "Conversão concluida!")
 
 
 def cadastro_kit():
@@ -276,6 +265,10 @@ def cadastro_kit():
         idaton2_info = idaton2.get()
         idaton3_info = idaton3.get()
         grupo_info = grupo.get()
+        checkbox_peso_info = checkbox_peso.get()
+        checkbox_altura_info = checkbox_altura.get()
+        checkbox_comprimento_info = checkbox_comprimento.get()
+        checkbox_largura_info = checkbox_largura.get()
         list_idaton_info = [idaton1_info, idaton2_info, idaton3_info]
         list_idaton_info = list(filter(None, list_idaton_info))
 
@@ -358,19 +351,16 @@ def cadastro_kit():
             cadastro_produtos_botao_cancelar()
             cadastro_produtos_botao_consultar()
 
-        # Altera virgula para ponto
-        # print(peso_list)
-        # print(altura_list)
-        # print(largura_list)
-        # print(comprimento_list)
-
-        print(len(descricoes_list))
-
         # Soma dimensões
         peso_total = str(sum(map(float, peso_list)))
         altura_total = int(sum(map(float, altura_list)))
         largura_total = int(sum(map(float, largura_list)))
         comprimento_total = int(sum(map(float, comprimento_list)))
+
+        peso_maior = str(max(map(float, peso_list)))
+        altura_maior = int(max(map(float, altura_list)))
+        largura_maior = int(max(map(float, largura_list)))
+        comprimento_maior = int(max(map(float, comprimento_list)))
 
         # Criando Produto Kit
         button_close_aton()
@@ -393,24 +383,54 @@ def cadastro_kit():
                 pg.typewrite('+ ')
             aux = aux + 1
 
+        # Peso
         cadastro_produtos_peso()
-        pg.typewrite(peso_total)
+        if checkbox_peso_info == 1:
+            pg.typewrite(peso_total)
+        else:
+            pg.typewrite(peso_maior)
+        print('PESO')
+        print(peso_total)
+        print(peso_maior)
 
+        # Altura
         cadastro_produtos_altura()
-        pyperclip.copy(altura_total)
-        pg.hotkey('ctrl', 'v')
+        if checkbox_altura_info == 1:
+            pyperclip.copy(altura_total)
+            pg.hotkey('ctrl', 'v')
+        else:
+            pyperclip.copy(altura_maior)
+            pg.hotkey('ctrl', 'v')
+        print('ALTURA')
+        print(altura_total)
+        print(altura_maior)
 
+        # Largura
         cadastro_produtos_largura()
-        pyperclip.copy(largura_total)
-        pg.hotkey('ctrl', 'v')
+        if checkbox_largura_info == 1:
+            pyperclip.copy(largura_total)
+            pg.hotkey('ctrl', 'v')
+        else:
+            pyperclip.copy(largura_maior)
+            pg.hotkey('ctrl', 'v')
+        print('LARGURA')
+        print(largura_total)
+        print(largura_maior)
 
+        # Comprimento
         cadastro_produtos_comprimento()
-        pyperclip.copy(comprimento_total)
-        pg.hotkey('ctrl', 'v')
+        if checkbox_comprimento_info == 1:
+            pyperclip.copy(comprimento_total)
+            pg.hotkey('ctrl', 'v')
+        else:
+            pyperclip.copy(comprimento_maior)
+            pg.hotkey('ctrl', 'v')
+        print('COMPRIMNETO')
+        print(comprimento_total)
+        print(comprimento_maior)
 
         # Seta do Grupo
         cadastro_produtos_seta_grupo()
-
         if grupo_info == 'LEAL':
             cadastro_produtos_opcao_grupo_leal()
         if grupo_info == 'MADZ':
@@ -424,7 +444,6 @@ def cadastro_kit():
         pg.hotkey('ctrl', 'v')
         pg.hotkey('enter')
         pg.hotkey('enter')
-
         aux = 1
         for descricao in descricoes_list:
             pyperclip.copy(NOME_DO_PRODUTO)
@@ -436,9 +455,9 @@ def cadastro_kit():
                 pyperclip.copy(frase)
                 pg.hotkey('ctrl', 'v')
                 pg.hotkey('enter')
-
             aux = aux + 1
 
+        cadastro_produtos_opcao_desmembra_comp()
         cadastro_produtos_botao_salvar()
 
 
@@ -454,6 +473,10 @@ def cadastro_kit():
     quantidade2 = StringVar()
     quantidade3 = StringVar()
     grupo = StringVar()
+    checkbox_peso = IntVar()
+    checkbox_altura = IntVar()
+    checkbox_comprimento = IntVar()
+    checkbox_largura = IntVar()
 
     heading3 = Label(new3, text="Cadastro Kit", bg="#4682b4", fg="white", width="100", height="2",
                      font=("Helvetica", 16))
@@ -464,12 +487,14 @@ def cadastro_kit():
     idaton3_text = Label(new3, text="Código ID Aton - 3")
     quantidade_text = Label(new3, text="Quantidade")
     grupo_text = Label(new3, text="Grupo")
+    dimensao_text = Label(new3, text="Somar Kits")
 
     idaton1_text.place(x=140, y=70)
     idaton2_text.place(x=140, y=140)
     idaton3_text.place(x=140, y=210)
     quantidade_text.place(x=280, y=70)
     grupo_text.place(x=25, y=70)
+    dimensao_text.place(x=20, y=120)
 
     idaton1_entry = Entry(new3, textvariable=idaton1)
     idaton2_entry = Entry(new3, textvariable=idaton2)
@@ -481,6 +506,14 @@ def cadastro_kit():
     grupo_entry['values'] = ('LEAL',
                              'MADZ',
                              'PISSTE')
+    checkbox_peso_entry = Checkbutton(new3, text="Peso", variable=checkbox_peso,
+                                      onvalue=1, offvalue=0)
+    checkbox_altura_entry = Checkbutton(new3, text="Altura", variable=checkbox_altura,
+                                        onvalue=1, offvalue=0)
+    checkbox_comprimento_entry = Checkbutton(new3, text="Comprimento", variable=checkbox_comprimento,
+                                             onvalue=1, offvalue=0)
+    checkbox_largura_entry = Checkbutton(new3, text="Largura", variable=checkbox_largura,
+                                         onvalue=1, offvalue=0)
 
     idaton1_entry.place(x=140, y=90)
     idaton2_entry.place(x=140, y=160)
@@ -490,6 +523,10 @@ def cadastro_kit():
     quantidade3_entry.place(x=290, y=230, width=40)
     grupo_entry.place(x=25, y=90, width=100)
     grupo_entry.current()
+    checkbox_peso_entry.place(x=20, y=140)
+    checkbox_altura_entry.place(x=20, y=160)
+    checkbox_comprimento_entry.place(x=20, y=180)
+    checkbox_largura_entry.place(x=20, y=200)
 
     ttk.Button(new3, text="Cadastrar", command=program2, width=20) \
         .place(x=140, y=300, width=120, height=40)

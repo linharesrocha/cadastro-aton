@@ -138,6 +138,9 @@ def cadastro_produtos_opcao_grupo_pisste():
     pg.moveTo(782, 615)
     pg.click()
 
+def cadastro_produtos_opcao_desmembra_comp():
+    pg.moveTo(1311, 328)
+    pg.click()
 
 def cadastro_produtos_descricao():
     pg.moveTo(633, 684)
@@ -146,7 +149,8 @@ def cadastro_produtos_descricao():
 
 def cadastro_produtos_botao_salvar():
     pg.moveTo(1283, 855)
-    # pg.click()
+    pg.click()
+    sleep(2)
 
 
 def cadastro_produtos_botao_consultar():
