@@ -4,8 +4,9 @@ from tkinter import ttk
 import pyperclip
 import pyautogui as pg
 from time import sleep
-from PIL import Image, ImageTk
+from PIL import Image
 from tkinter import filedialog as fd
+from tkinter import messagebox
 
 
 def cadastro_basico():
@@ -284,6 +285,8 @@ def conversor_imagem():
             pic = Image.open(path)
             pic = pic.resize((1000, 1000))
             pic.convert("RGB").save(path_original + 'novo_' + name_split_list[0] + '.jpg')
+
+            messagebox.showinfo("Pronto!", "Conversão concluida!")
 
     # Tkinter Config
     new2 = Toplevel(window)
