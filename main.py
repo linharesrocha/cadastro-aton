@@ -266,15 +266,24 @@ def cadastro_basico():
 
 def conversor_imagem():
     def conversor():
-        file_path = fd.askopenfilename(title='Escolha um arquivo', filetypes=[('image files', ('.png', '.jpg', '.jpeg',
+        file_path = fd.askopenfilename(title='Escolha um arquivo', multiple=True, filetypes=[('image files', ('.png', '.jpg', '.jpeg',
                                                                    '.gif', '.webp', '.tiff',
                                                                    '.psd', '.raw', '.bmp',
                                                                    '.heif', '.indd'))])
-        pic = Image.open(file_path)
-        pic = pic.resize((1000, 1000))
-        pic_im = pic.convert("RGB")
-        export_file_path = fd.asksaveasfilename(initialdir=file_path, title='Salve o arquivo', defaultextension=".jpg", filetypes=[('image files', ('.jpg', '.jpeg'))])
-        pic_im.save(export_file_path)
+        for path in file_path:
+            # Directory
+            path_split_list = path.split('/')
+            name_original = path_split_list[-1]
+            name_split_list = name_original.split('.')
+            path_original = path_split_list[:-1]
+            path_original = '/'.join(path_original)
+            path_original = path_original + '/'
+
+
+            # Conversion and Save
+            pic = Image.open(path)
+            pic = pic.resize((1000, 1000))
+            pic.convert("RGB").save(path_original + 'novo_' + name_split_list[0] + '.jpg')
 
     # Tkinter Config
     new2 = Toplevel(window)
