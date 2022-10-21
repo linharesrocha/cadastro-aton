@@ -4,6 +4,8 @@ from PIL import Image
 from tkinter import filedialog as fd
 from tkinter import messagebox
 from auxiliar import *
+from datetime import datetime
+import random
 
 # Strings Global
 NOME_DO_PRODUTO = '[NOME DO PRODUTO]'
@@ -16,6 +18,12 @@ DESCRICAO_INICIAL = 'Receba em sua casa o melhor em qualidade e preço de materi
 
 LOGIN_USER = 'GUI'
 LOGIN_PASS = '2552'
+
+now = datetime.now()
+DATE_TIME = now.strftime("%Y%m%d")
+
+RANDOM = random.randint(0,9)
+print(RANDOM)
 
 
 def cadastro_basico():
@@ -276,6 +284,10 @@ def cadastro_kit():
         quantidade2_info = quantidade2.get()
         quantidade3_info = quantidade3.get()
 
+        # Só pode cadastrar se tiver mais de 1 ID
+        if len(list_idaton_info) == 1:
+            return
+
         minimiza_janelas(new3, window)
 
         executa_icone_aton()
@@ -347,9 +359,55 @@ def cadastro_kit():
             cadastro_produtos_botao_cancelar()
             cadastro_produtos_botao_consultar()
 
+        # Altera virgula para ponto
+
+        # Soma dimensões
+        peso_total = sum(map(float, peso_list))
+        altura_total = sum(map(float, altura_list))
+        largura_total = sum(map(float, largura_list))
+        comprimento_total = sum(map(float, comprimento_list))
+
+        print(comprimento_total)
+        print(comprimento_list)
+
         # Criando Produto Kit
         button_close_aton()
         cadastro_produtos_botao_novo()
+
+        # Código Interno
+        cadastro_produtos_codigo_interno()
+        pg.hotkey('ctrl', 'a')
+        pg.press('backspace')
+        pg.typewrite('KITDG' + str(DATE_TIME) + str(RANDOM))
+
+        # Nome
+        aux = 1
+        cadastro_produtos_nome_produto()
+        pg.typewrite('KIT ')
+        for name in nomes_list:
+            pyperclip.copy(name)
+            pg.hotkey('ctrl', 'v')
+            if len(nomes_list) != aux:
+                pg.typewrite('+ ')
+            aux = aux + 1
+
+        cadastro_produtos_peso()
+        pyperclip.copy(peso_total)
+        pg.hotkey('ctrl', 'v')
+
+        cadastro_produtos_altura()
+        pyperclip.copy(altura_total)
+        pg.hotkey('ctrl', 'v')
+
+        cadastro_produtos_largura()
+        pyperclip.copy(largura_total)
+        pg.hotkey('ctrl', 'v')
+
+        cadastro_produtos_comprimento()
+        pyperclip.copy(comprimento_total)
+        pg.hotkey('ctrl', 'v')
+
+
 
     # Tkinter Config
     new3 = Toplevel(window)
