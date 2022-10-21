@@ -285,8 +285,8 @@ def cadastro_kit():
         quantidade3_info = quantidade3.get()
 
         # Só pode cadastrar se tiver mais de 1 ID
-        if len(list_idaton_info) == 1:
-            return
+        # if len(list_idaton_info) < 2:
+        #     return
 
         minimiza_janelas(new3, window)
 
@@ -330,25 +330,25 @@ def cadastro_kit():
             pg.hotkey('ctrl', 'a')
             pg.hotkey('ctrl', 'c')
             info = pyperclip.paste()
-            peso_list.append(info)
+            peso_list.append(info.replace(',', '.'))
 
             cadastro_produtos_altura()
             pg.hotkey('ctrl', 'a')
             pg.hotkey('ctrl', 'c')
             info = pyperclip.paste()
-            altura_list.append(info)
+            altura_list.append(info.replace(',', '.'))
 
             cadastro_produtos_largura()
             pg.hotkey('ctrl', 'a')
             pg.hotkey('ctrl', 'c')
             info = pyperclip.paste()
-            largura_list.append(info)
+            largura_list.append(info.replace(',', '.'))
 
             cadastro_produtos_comprimento()
             pg.hotkey('ctrl', 'a')
             pg.hotkey('ctrl', 'c')
             info = pyperclip.paste()
-            comprimento_list.append(info)
+            comprimento_list.append(info.replace(',', '.'))
 
             cadastro_produtos_descricao()
             pg.hotkey('ctrl', 'a')
@@ -360,15 +360,20 @@ def cadastro_kit():
             cadastro_produtos_botao_consultar()
 
         # Altera virgula para ponto
+        # print(peso_list)
+        # print(altura_list)
+        # print(largura_list)
+        # print(comprimento_list)
 
         # Soma dimensões
-        peso_total = sum(map(float, peso_list))
-        altura_total = sum(map(float, altura_list))
-        largura_total = sum(map(float, largura_list))
-        comprimento_total = sum(map(float, comprimento_list))
+        peso_total = str(sum(map(float, peso_list)))
+        print(peso_total)
+        # if str(peso_total)[0] == '0':
+        #     peso_total = str(peso_total)[:5].replace(',', '.')
 
-        print(comprimento_total)
-        print(comprimento_list)
+        altura_total = int(sum(map(float, altura_list)))
+        largura_total = int(sum(map(float, largura_list)))
+        comprimento_total = int(sum(map(float, comprimento_list)))
 
         # Criando Produto Kit
         button_close_aton()
@@ -391,9 +396,11 @@ def cadastro_kit():
                 pg.typewrite('+ ')
             aux = aux + 1
 
+        if sum((len(i) for i in nomes_list)) > 100:
+            messagebox.showinfo("Ops!", "O nome ultrapassou mais de 100 caracteres. Pode haver dado faltando!")
+
         cadastro_produtos_peso()
-        pyperclip.copy(peso_total)
-        pg.hotkey('ctrl', 'v')
+        pg.typewrite(peso_total)
 
         cadastro_produtos_altura()
         pyperclip.copy(altura_total)

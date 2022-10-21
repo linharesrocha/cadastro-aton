@@ -28,7 +28,7 @@ def minimiza_janelas(janela, main):
 def executa_icone_aton():
     # Icone do Aton
     pg.moveTo(36, 100)
-    sleep(1)
+    sleep(2)
     pg.doubleClick()
 
     sleep(1)
