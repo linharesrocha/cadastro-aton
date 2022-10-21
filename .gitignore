@@ -1,2 +1,5 @@
 .idea
 test.py
+build/
+dist/
+Mordomo.spec

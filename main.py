@@ -24,7 +24,6 @@ now = datetime.now()
 DATE_TIME = now.strftime("%Y%m%d")
 
 RANDOM = random.randint(0, 9)
-print(RANDOM)
 
 
 def cadastro_basico():
@@ -420,9 +419,6 @@ def cadastro_kit():
             pg.typewrite(peso_total)
         else:
             pg.typewrite(peso_maior)
-        print('PESO')
-        print(peso_total)
-        print(peso_maior)
 
         # Altura
         cadastro_produtos_altura()
@@ -432,9 +428,6 @@ def cadastro_kit():
         else:
             pyperclip.copy(altura_maior)
             pg.hotkey('ctrl', 'v')
-        print('ALTURA')
-        print(altura_total)
-        print(altura_maior)
 
         # Largura
         cadastro_produtos_largura()
@@ -444,9 +437,6 @@ def cadastro_kit():
         else:
             pyperclip.copy(largura_maior)
             pg.hotkey('ctrl', 'v')
-        print('LARGURA')
-        print(largura_total)
-        print(largura_maior)
 
         # Comprimento
         cadastro_produtos_comprimento()
@@ -456,9 +446,6 @@ def cadastro_kit():
         else:
             pyperclip.copy(comprimento_maior)
             pg.hotkey('ctrl', 'v')
-        print('COMPRIMNETO')
-        print(comprimento_total)
-        print(comprimento_maior)
 
         # Seta do Grupo
         cadastro_produtos_seta_grupo()
@@ -583,10 +570,11 @@ if __name__ == '__main__':
     # Tkinter Config
     window = Tk()
     window.geometry("500x500")
-    window.title("Auxiliar")
+    window.title("Mordomo")
     window['background'] = '#778899'
+    window.iconbitmap("icon.ico")
 
-    heading = Label(text="AUXILIAR", bg="#4682b4", fg="white", width="200", height="3", font=("Helvetica", 16))
+    heading = Label(text="Mordomo", bg="#4682b4", fg="white", width="200", height="3", font=("Helvetica", 16))
     heading.pack()
 
     # Cadastro
