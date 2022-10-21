@@ -306,10 +306,17 @@ def cadastro_kit():
         idaton1_info = idaton1.get()
         idaton2_info = idaton2.get()
         idaton3_info = idaton3.get()
+        quantidade1_info = quantidade1.get()
+        quantidade2_info = quantidade2.get()
+        quantidade3_info = quantidade3.get()
 
         print(idaton3_info)
         print(idaton2_info)
         print(idaton1_info)
+
+        print(quantidade1_info)
+        print(quantidade2_info)
+        print(quantidade3_info)
 
     # Tkinter Config
     new3 = Toplevel(window)
@@ -319,26 +326,38 @@ def cadastro_kit():
     idaton1 = IntVar()
     idaton2 = IntVar()
     idaton3 = IntVar()
+    quantidade1 = IntVar()
+    quantidade2 = IntVar()
+    quantidade3 = IntVar()
 
-    heading3 = Label(new3, text="Conversor Kit", bg="#4682b4", fg="white", width="100", height="2",
+    heading3 = Label(new3, text="Cadastro Kit", bg="#4682b4", fg="white", width="100", height="2",
                      font=("Helvetica", 16))
     heading3.pack()
 
     idaton1_text = Label(new3, text="Código ID Aton - 1")
     idaton2_text = Label(new3, text="Código ID Aton - 2")
     idaton3_text = Label(new3, text="Código ID Aton - 3")
+    quantidade_text = Label(new3, text="Quantidade")
 
     idaton1_text.place(x=140, y=70)
     idaton2_text.place(x=140, y=140)
     idaton3_text.place(x=140, y=210)
+    quantidade_text.place(x=280, y=70)
 
     idaton1_entry = Entry(new3, textvariable=idaton1)
     idaton2_entry = Entry(new3, textvariable=idaton2)
     idaton3_entry = Entry(new3, textvariable=idaton3)
+    quantidade1_entry = Entry(new3, textvariable=quantidade1)
+    quantidade2_entry = Entry(new3, textvariable=quantidade2)
+    quantidade3_entry = Entry(new3, textvariable=quantidade3)
 
     idaton1_entry.place(x=140, y=90)
     idaton2_entry.place(x=140, y=160)
     idaton3_entry.place(x=140, y=230)
+    quantidade1_entry.place(x=290, y=90, width=40)
+    quantidade2_entry.place(x=290, y=160, width=40)
+    quantidade3_entry.place(x=290, y=230, width=40)
+
 
     ttk.Button(new3, text="Cadastrar", command=program2, width=20) \
         .place(x=140, y=300, width=120, height=40)
