@@ -1,28 +1,26 @@
-import os
 from tkinter import *
 from tkinter import ttk
-import pyperclip
-import pyautogui as pg
-from time import sleep
 from PIL import Image
 from tkinter import filedialog as fd
 from tkinter import messagebox
+from auxiliar import *
+
+# Strings Global
+NOME_DO_PRODUTO = '[NOME DO PRODUTO]'
+
+DESCRICAO_INICIAL = 'Receba em sua casa o melhor em qualidade e preço de materiais fitness e academia, ' \
+                    'garrafa de água, marmiteiras, bolsas térmicas, Garrafa Termica, e muito mais. Pedidos ' \
+                    'realizados antes de 11 horas, serão despachados no mesmo dia! Nós somos excelência em ' \
+                    'atendimentos aos nossos clientes, mande suas dúvidas ou perguntas, vamos responder ' \
+                    'rápidamente. '
+
+LOGIN_USER = 'GUI'
+LOGIN_PASS = '2552'
 
 
 def cadastro_basico():
     def program():
-        NOME_DO_PRODUTO = '[NOME DO PRODUTO]'
-
-        DESCRICAO_INICIAL = 'Receba em sua casa o melhor em qualidade e preço de materiais fitness e academia, ' \
-                            'garrafa de água, marmiteiras, bolsas térmicas, Garrafa Termica, e muito mais. Pedidos ' \
-                            'realizados antes de 11 horas, serão despachados no mesmo dia! Nós somos excelência em ' \
-                            'atendimentos aos nossos clientes, mande suas dúvidas ou perguntas, vamos responder ' \
-                            'rápidamente. '
-        try:
-            # Kill Ambar
-            os.system("taskkill /im Ambar.exe")
-        except:
-            print('Ambar não está aberto.')
+        matar_ambar()
 
         # Pega informações do Cadastro
         nome_info = nome.get()
@@ -58,98 +56,57 @@ def cadastro_basico():
         #     validation.place(x=0, y=3)
         #     return
 
-        # Minimiza o Tkinter
-        window.iconify()
-        new1.iconify()
+        minimiza_janelas(new1, window)
 
-        # Minimiza todas as abas
-        pg.hotkey('winleft', 'd')
+        executa_icone_aton()
 
-        pg.FAILSAFE = False
+        login_aton(LOGIN_USER, LOGIN_PASS)
 
-        # Icone do Aton
-        pg.moveTo(36, 100)
-        pg.doubleClick()
+        menu_produtos()
 
-        sleep(1)
-
-        # Campo de Usuário
-        pg.moveTo(1583, 532)
-        pg.click()
-        pg.typewrite('GUI')
-
-        # Campo de Senha
-        pg.moveTo(1606, 563)
-        pg.click()
-        pg.typewrite('2552')
-
-        # Botão de Login
-        pg.moveTo(1550, 601)
-        pg.doubleClick()
-
-        sleep(5)
-
-        # Menu Produtos
-        pg.moveTo(283, 37)
-        pg.click()
-
-        # Cadastro de produtos
-        pg.moveTo(328, 60)
-        pg.click()
-
-        sleep(2)
+        opcao_cadastro_produtos()
 
         # Botao Novo
-        pg.moveTo(519, 853)
-        pg.click()
+        cadastro_produtos_botao_novo()
 
         # Código Interno
-        pg.moveTo(681, 261)
-        pg.click()
+        cadastro_produtos_codigo_interno()
         pg.typewrite(['backspace', 'backspace', 'backspace', 'backspace'])
         pyperclip.copy(codigo_info)
         pg.hotkey('ctrl', 'v')
 
         # Nome do Produto
-        pg.moveTo(905, 316)
-        pg.click()
+        cadastro_produtos_nome_produto()
         pyperclip.copy(nome_info)
         pg.hotkey('ctrl', 'v')
 
         # Ean
-        pg.moveTo(1143, 261)
-        pg.click()
+        cadastro_produtos_ean()
         pg.typewrite(ean_info)
 
         # Peso
-        pg.moveTo(533, 370)
-        pg.click()
+        cadastro_produtos_peso()
         pg.typewrite(peso_info)
 
         # Altura
-        pg.moveTo(622, 368)
-        pg.click()
+        cadastro_produtos_altura()
         pg.typewrite(altura_info)
 
         # Largura
-        pg.moveTo(719, 367)
-        pg.click()
+        cadastro_produtos_largura()
         pg.typewrite(largura_info)
 
         # Comprimento
-        pg.moveTo(817, 370)
-        pg.click()
+        cadastro_produtos_comprimento()
         pg.typewrite(comprimento_info)
 
         # NCM
-        pg.moveTo(541, 423)
-        pg.click()
+        cadastro_produtos_ncm()
         pg.typewrite(ncm_info)
 
         # Seta do Grupo
-        pg.moveTo(707, 538)
-        pg.click()
-        print(grupo_info)
+        cadastro_produtos_seta_grupo()
+
         if grupo_info == 'LEAL':
             pg.moveTo(812, 575)
             pg.click()
@@ -160,7 +117,6 @@ def cadastro_basico():
             pg.moveTo(782, 615)
             pg.click()
 
-        print(autocateogoria_info)
         # Categoria
         if autocateogoria_info == 1:
             pg.moveTo(878, 591)
@@ -170,8 +126,7 @@ def cadastro_basico():
             pg.doubleClick()
 
         # Descrição
-        pg.moveTo(633, 684)
-        pg.click()
+        cadastro_produtos_descricao()
         pyperclip.copy(NOME_DO_PRODUTO)
         pg.hotkey('ctrl', 'v')
         pg.hotkey('enter')
@@ -186,9 +141,7 @@ def cadastro_basico():
             pg.hotkey('ctrl', 'v')
             pg.hotkey('enter')
 
-        # Botao Salvar
-        pg.moveTo(1283, 855)
-        # pg.click()
+        cadastro_produtos_botao_salvar()
 
     # Tkinter Config
     new1 = Toplevel(window)
@@ -303,6 +256,8 @@ def conversor_imagem():
 
 def cadastro_kit():
     def program2():
+        matar_ambar()
+
         idaton1_info = idaton1.get()
         idaton2_info = idaton2.get()
         idaton3_info = idaton3.get()
@@ -310,13 +265,17 @@ def cadastro_kit():
         quantidade2_info = quantidade2.get()
         quantidade3_info = quantidade3.get()
 
-        print(idaton3_info)
-        print(idaton2_info)
-        print(idaton1_info)
+        minimiza_janelas(new3, window)
 
-        print(quantidade1_info)
-        print(quantidade2_info)
-        print(quantidade3_info)
+        executa_icone_aton()
+
+        login_aton(LOGIN_USER, LOGIN_PASS)
+
+        menu_produtos()
+
+        opcao_cadastro_produtos()
+
+
 
     # Tkinter Config
     new3 = Toplevel(window)
@@ -357,7 +316,6 @@ def cadastro_kit():
     quantidade1_entry.place(x=290, y=90, width=40)
     quantidade2_entry.place(x=290, y=160, width=40)
     quantidade3_entry.place(x=290, y=230, width=40)
-
 
     ttk.Button(new3, text="Cadastrar", command=program2, width=20) \
         .place(x=140, y=300, width=120, height=40)
