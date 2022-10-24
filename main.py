@@ -1,5 +1,7 @@
 from tkinter import *
 from tkinter import ttk
+
+import pyperclip
 from PIL import Image
 from tkinter import filedialog as fd
 from tkinter import messagebox
@@ -22,6 +24,9 @@ LOGIN_PASS = '2552'
 
 now = datetime.now()
 DATE_TIME = now.strftime("%Y%m%d")
+
+INICIAL_KITDG = 'KITDG'
+INICIAL_KIT = 'KIT '
 
 RANDOM = random.randint(0, 9)
 
@@ -268,7 +273,6 @@ def cadastro_kit():
         list_idaton_info = list(map(int, list_idaton_info))
 
         grupo_info = grupo.get()
-        checkbox_peso_info = checkbox_peso.get()
         checkbox_altura_info = checkbox_altura.get()
         checkbox_comprimento_info = checkbox_comprimento.get()
         checkbox_largura_info = checkbox_largura.get()
@@ -387,7 +391,6 @@ def cadastro_kit():
         largura_total = int(sum(map(float, largura_list)))
         comprimento_total = int(sum(map(float, comprimento_list)))
 
-        peso_maior = str(max(map(float, peso_list)))
         altura_maior = int(max(map(float, altura_list)))
         largura_maior = int(max(map(float, largura_list)))
         comprimento_maior = int(max(map(float, comprimento_list)))
@@ -400,12 +403,17 @@ def cadastro_kit():
         cadastro_produtos_codigo_interno()
         pg.hotkey('ctrl', 'a')
         pg.press('backspace')
-        pg.typewrite('KITDG' + str(DATE_TIME) + str(RANDOM))
+        pyperclip.copy(INICIAL_KITDG)
+        pg.hotkey('ctrl', 'c')
+        pg.hotkey('ctrl', 'v')
+        pg.typewrite(str(DATE_TIME) + str(RANDOM))
 
         # Nome
         aux = 1
         cadastro_produtos_nome_produto()
-        pg.typewrite('KIT ')
+        pyperclip.copy(INICIAL_KIT)
+        pg.hotkey('ctrl', 'c')
+        pg.hotkey('ctrl', 'v')
         for name in nomes_list:
             pyperclip.copy(name)
             pg.hotkey('ctrl', 'v')
@@ -415,10 +423,7 @@ def cadastro_kit():
 
         # Peso
         cadastro_produtos_peso()
-        if checkbox_peso_info == 1:
-            pg.typewrite(peso_total)
-        else:
-            pg.typewrite(peso_maior)
+        pg.typewrite(peso_total)
 
         # Altura
         cadastro_produtos_altura()
@@ -507,7 +512,6 @@ def cadastro_kit():
     quantidade2 = StringVar()
     quantidade3 = StringVar()
     grupo = StringVar()
-    checkbox_peso = IntVar()
     checkbox_altura = IntVar()
     checkbox_comprimento = IntVar()
     checkbox_largura = IntVar()
@@ -528,7 +532,7 @@ def cadastro_kit():
     idaton3_text.place(x=140, y=210)
     quantidade_text.place(x=280, y=70)
     grupo_text.place(x=25, y=70)
-    dimensao_text.place(x=20, y=120)
+    dimensao_text.place(x=20, y=140)
 
     idaton1_entry = Entry(new3, textvariable=idaton1)
     idaton2_entry = Entry(new3, textvariable=idaton2)
@@ -540,8 +544,6 @@ def cadastro_kit():
     grupo_entry['values'] = ('LEAL',
                              'MADZ',
                              'PISSTE')
-    checkbox_peso_entry = Checkbutton(new3, text="Peso", variable=checkbox_peso,
-                                      onvalue=1, offvalue=0)
     checkbox_altura_entry = Checkbutton(new3, text="Altura", variable=checkbox_altura,
                                         onvalue=1, offvalue=0)
     checkbox_comprimento_entry = Checkbutton(new3, text="Comprimento", variable=checkbox_comprimento,
@@ -557,7 +559,6 @@ def cadastro_kit():
     quantidade3_entry.place(x=290, y=230, width=40)
     grupo_entry.place(x=25, y=90, width=100)
     grupo_entry.current()
-    checkbox_peso_entry.place(x=20, y=140)
     checkbox_altura_entry.place(x=20, y=160)
     checkbox_comprimento_entry.place(x=20, y=180)
     checkbox_largura_entry.place(x=20, y=200)
