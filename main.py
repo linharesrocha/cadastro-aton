@@ -579,9 +579,6 @@ def consulta_produtos_aton():
     consultar_produtos_botao_consultar()
 
 
-def matar_aton():
-    print('oi')
-
 if __name__ == '__main__':
     # Tkinter Config
     window = Tk()
@@ -619,6 +616,10 @@ if __name__ == '__main__':
 
     # Consultar Produtos Aton
     ttk.Button(tab3, text="CONSULTA PRODUTOS ATON", command=consulta_produtos_aton, width=20) \
-        .place(x=150, y=110, width=200, height=100)
+        .place(x=30, y=110, width=200, height=100)
+
+    # Consultar Produtos Aton
+    ttk.Button(tab3, text="MATAR ATON", command=matar_ambar, width=20) \
+        .place(x=270, y=110, width=200, height=100)
 
     window.mainloop()
