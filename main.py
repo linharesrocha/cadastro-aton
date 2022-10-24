@@ -1,6 +1,5 @@
 from tkinter import *
 from tkinter import ttk
-
 import pyperclip
 from PIL import Image
 from tkinter import filedialog as fd
@@ -307,7 +306,8 @@ def cadastro_kit():
                 return
 
         try:
-            if list_idaton_info[0] == list_idaton_info[1] or list_idaton_info[0] == list_idaton_info[2] or list_idaton_info[1] == list_idaton_info[2]:
+            if list_idaton_info[0] == list_idaton_info[1] or list_idaton_info[0] == list_idaton_info[2] or \
+                    list_idaton_info[1] == list_idaton_info[2]:
                 Label(new3, text="IDs não podem ser iguais!", bg="red", bd="5", font=24, width=60,
                       height=2).place(x=0, y=3)
                 return
@@ -585,7 +585,7 @@ if __name__ == '__main__':
     window.geometry("500x500")
     window.title("Mordomo")
     window['background'] = '#778899'
-    window.iconbitmap("icon.ico")
+    window.iconbitmap("favicon.ico")
     tabControl = ttk.Notebook(window)
 
     tab1 = ttk.Frame(tabControl)
@@ -599,8 +599,6 @@ if __name__ == '__main__':
     tabControl.add(tab2, text='AUXILIARES')
     tabControl.add(tab3, text='ATALHOS')
     tabControl.pack(expand=2, fill="both")
-
-
 
     # Cadastro
     ttk.Button(tab1, text="CADASTRO SIMPLES ATON", command=cadastro_basico, width=20) \

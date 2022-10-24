@@ -1,4 +1,6 @@
 import os
+from ctypes import windll
+
 import pyautogui as pg
 from time import sleep
 import pyperclip
@@ -27,6 +29,7 @@ def minimiza_janelas(main, janela=0):
 
 
 def executa_icone_aton():
+    sleep(1)
     # Icone do Aton
     os.startfile("C:\Ambar\Ambar.exe")
     sleep(2)
