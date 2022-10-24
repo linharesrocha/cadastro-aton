@@ -14,10 +14,11 @@ def matar_ambar():
         print('Ambar não está aberto.')
 
 
-def minimiza_janelas(janela, main):
+def minimiza_janelas(main, janela=0):
     # Minimiza o Tkinter
     main.iconify()
-    janela.iconify()
+    if janela != 0:
+        janela.iconify()
 
     # Minimiza todas as abas
     pg.hotkey('winleft', 'd')

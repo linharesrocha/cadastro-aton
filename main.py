@@ -71,7 +71,7 @@ def cadastro_basico():
             validation.place(x=0, y=3)
             return
 
-        minimiza_janelas(new1, window)
+        minimiza_janelas(window, new1)
 
         executa_icone_aton()
 
@@ -314,7 +314,7 @@ def cadastro_kit():
         except IndexError:
             pass
 
-        minimiza_janelas(new3, window)
+        minimiza_janelas(window, new3)
 
         executa_icone_aton()
 
@@ -567,6 +567,15 @@ def cadastro_kit():
         .place(x=140, y=300, width=120, height=40)
 
 
+def consulta_produtos_aton():
+    matar_ambar()
+    minimiza_janelas(window)
+    executa_icone_aton()
+    login_aton(LOGIN_USER, LOGIN_PASS)
+    menu_produtos()
+    opcao_cadastro_produtos()
+
+
 if __name__ == '__main__':
     # Tkinter Config
     window = Tk()
@@ -600,6 +609,10 @@ if __name__ == '__main__':
 
     # Cadastro Kit
     ttk.Button(tab2, text="CONVERSÃO IMG PADRÃO", command=conversor_imagem, width=20) \
+        .place(x=150, y=110, width=200, height=100)
+
+    # Consultar Produtos Aton
+    ttk.Button(tab3, text="CONSULTA PRODUTOS ATON", command=consulta_produtos_aton, width=20) \
         .place(x=150, y=110, width=200, height=100)
 
     window.mainloop()
