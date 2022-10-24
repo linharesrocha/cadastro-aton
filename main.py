@@ -494,7 +494,7 @@ def cadastro_kit():
             sleep(1)
             cadastro_produtos_composicao_resultado_produto()
             cadastro_produtos_composicao_quantidade()
-            pyperclip.copy(list_quantidade_info[0])
+            pyperclip.copy(list_quantidade_info[aux_quantidade])
             pg.hotkey('ctrl', 'v')
             aux_quantidade = aux_quantidade + 1
             cadastro_produtos_composicao_botao_salvar()
