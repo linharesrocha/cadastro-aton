@@ -615,11 +615,15 @@ if __name__ == '__main__':
         .place(x=150, y=110, width=200, height=100)
 
     # Consultar Produtos Aton
-    ttk.Button(tab3, text="CONSULTA PRODUTOS ATON", command=consulta_produtos_aton, width=20) \
+    ttk.Button(tab3, text="CONSULTAR PRODUTOS ATON", command=consulta_produtos_aton, width=20) \
         .place(x=30, y=110, width=200, height=100)
 
     # Consultar Produtos Aton
     ttk.Button(tab3, text="MATAR ATON", command=matar_ambar, width=20) \
         .place(x=270, y=110, width=200, height=100)
+
+    # Consultar Produtos Aton
+    ttk.Button(tab1, text="CONSULTAR PRODUTOS ATON", command=consulta_produtos_aton, width=20) \
+        .place(x=310, y=340, width=180, height=50)
 
     window.mainloop()
