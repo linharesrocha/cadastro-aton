@@ -420,12 +420,17 @@ def cadastro_kit():
         pyperclip.copy(INICIAL_KIT)
         pg.hotkey('ctrl', 'c')
         pg.hotkey('ctrl', 'v')
+        aux2 = 0
         for name in nomes_list:
+            pyperclip.copy(list_quantidade_info[aux2])
+            pg.hotkey('ctrl', 'v')
+            pg.press('space')
             pyperclip.copy(name)
             pg.hotkey('ctrl', 'v')
             if len(nomes_list) != aux:
                 pg.typewrite('+ ')
             aux = aux + 1
+            aux2 = aux2 + 1
 
         # Peso
         cadastro_produtos_peso()
