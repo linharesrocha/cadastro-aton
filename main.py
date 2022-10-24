@@ -574,20 +574,32 @@ if __name__ == '__main__':
     window.title("Mordomo")
     window['background'] = '#778899'
     window.iconbitmap("icon.ico")
+    tabControl = ttk.Notebook(window)
+
+    tab1 = ttk.Frame(tabControl)
+    tab2 = ttk.Frame(tabControl)
+    tab3 = ttk.Frame(tabControl)
 
     heading = Label(text="Mordomo", bg="#4682b4", fg="white", width="200", height="3", font=("Helvetica", 16))
     heading.pack()
 
+    tabControl.add(tab1, text='ATON')
+    tabControl.add(tab2, text='AUXILIARES')
+    tabControl.add(tab3, text='ATALHOS')
+    tabControl.pack(expand=2, fill="both")
+
+
+
     # Cadastro
-    ttk.Button(window, text="CADASTRO SIMPLES ATON", command=cadastro_basico, width=20) \
+    ttk.Button(tab1, text="CADASTRO SIMPLES ATON", command=cadastro_basico, width=20) \
         .place(x=30, y=110, width=200, height=100)
 
     # Imagem
-    ttk.Button(window, text="CADASTRO KIT ATON", command=cadastro_kit, width=20) \
+    ttk.Button(tab1, text="CADASTRO KIT ATON", command=cadastro_kit, width=20) \
         .place(x=270, y=110, width=200, height=100)
 
     # Cadastro Kit
-    ttk.Button(window, text="CONVERSÃO IMG PADRÃO", command=conversor_imagem, width=20) \
-        .place(x=30, y=280, width=200, height=100)
+    ttk.Button(tab2, text="CONVERSÃO IMG PADRÃO", command=conversor_imagem, width=20) \
+        .place(x=150, y=110, width=200, height=100)
 
     window.mainloop()
