@@ -264,12 +264,11 @@ def cadastro_kit():
         largura_list = []
         comprimento_list = []
 
-        idaton1_info = idaton1.get()
-        idaton2_info = idaton2.get()
-        idaton3_info = idaton3.get()
-        list_idaton_info = [idaton1_info, idaton2_info, idaton3_info]
-        list_idaton_info = list(filter(None, list_idaton_info))
-        list_idaton_info = list(map(int, list_idaton_info))
+        codigointerno1_info = codigointerno1.get()
+        codigointerno2_info = codigointerno2.get()
+        codigointerno3_info = codigointerno3.get()
+        list_codigointerno_info = [codigointerno1_info, codigointerno2_info, codigointerno3_info]
+        list_codigointerno_info = list(filter(None, list_codigointerno_info))
 
         grupo_info = grupo.get()
         checkbox_altura_info = checkbox_altura.get()
@@ -284,7 +283,7 @@ def cadastro_kit():
         list_quantidade_info = list(map(int, list_quantidade_info))
 
         # Validacoes
-        if len(list_idaton_info) == 0:
+        if len(list_codigointerno_info) == 0:
             Label(new3, text="ID do Produto é Obrigatório!", bg="red", bd="5", font=24, width=60,
                   height=2).place(x=0, y=3)
             return
@@ -294,7 +293,7 @@ def cadastro_kit():
                   height=2).place(x=0, y=3)
             return
 
-        if len(list_idaton_info) == 1:
+        if len(list_codigointerno_info) == 1:
             if quantidade1_info == '' and quantidade2_info == '' and quantidade3_info == '':
                 Label(new3, text="Preencha o campo quantidade!", bg="red", bd="5", font=24, width=60,
                       height=2).place(x=0, y=3)
@@ -306,8 +305,9 @@ def cadastro_kit():
                 return
 
         try:
-            if list_idaton_info[0] == list_idaton_info[1] or list_idaton_info[0] == list_idaton_info[2] or \
-                    list_idaton_info[1] == list_idaton_info[2]:
+            if list_codigointerno_info[0] == list_codigointerno_info[1] or list_codigointerno_info[0] == \
+                    list_codigointerno_info[2] or \
+                    list_codigointerno_info[1] == list_codigointerno_info[2]:
                 Label(new3, text="IDs não podem ser iguais!", bg="red", bd="5", font=24, width=60,
                       height=2).place(x=0, y=3)
                 return
@@ -328,12 +328,18 @@ def cadastro_kit():
 
         consultar_produtos_opcao_todos()
 
-        for idaton in list_idaton_info:
+        aux = 0
+        for codigointerno in list_codigointerno_info:
             consultar_produtos_pesquisa()
-            pyperclip.copy(idaton)
+            pyperclip.copy(codigointerno)
             pg.hotkey('ctrl', 'v')
 
             consultar_produtos_botao_consultar()
+
+            # Ordenando apenas uma vez
+            if aux != 1:
+                consultar_produtos_menu_cod_id()
+                aux = aux + 1
 
             consultar_produtos_select_resultado()
 
@@ -505,9 +511,9 @@ def cadastro_kit():
     new3.geometry("400x350")
     new3.title("Cadastro")
 
-    idaton1 = StringVar()
-    idaton2 = StringVar()
-    idaton3 = StringVar()
+    codigointerno1 = StringVar()
+    codigointerno2 = StringVar()
+    codigointerno3 = StringVar()
     quantidade1 = StringVar()
     quantidade2 = StringVar()
     quantidade3 = StringVar()
@@ -520,23 +526,23 @@ def cadastro_kit():
                      font=("Helvetica", 16))
     heading3.pack()
 
-    idaton1_text = Label(new3, text="Código ID Aton - 1")
-    idaton2_text = Label(new3, text="Código ID Aton - 2")
-    idaton3_text = Label(new3, text="Código ID Aton - 3")
+    codigointerno1_text = Label(new3, text="Código Interno - 1")
+    codigointerno2_text = Label(new3, text="Código Interno - 2")
+    codigointerno3_text = Label(new3, text="Código Interno - 3")
     quantidade_text = Label(new3, text="Quantidade")
     grupo_text = Label(new3, text="Grupo")
     dimensao_text = Label(new3, text="Somar Kits")
 
-    idaton1_text.place(x=140, y=70)
-    idaton2_text.place(x=140, y=140)
-    idaton3_text.place(x=140, y=210)
+    codigointerno1_text.place(x=140, y=70)
+    codigointerno2_text.place(x=140, y=140)
+    codigointerno3_text.place(x=140, y=210)
     quantidade_text.place(x=280, y=70)
     grupo_text.place(x=25, y=70)
     dimensao_text.place(x=20, y=140)
 
-    idaton1_entry = Entry(new3, textvariable=idaton1)
-    idaton2_entry = Entry(new3, textvariable=idaton2)
-    idaton3_entry = Entry(new3, textvariable=idaton3)
+    codigointerno1_entry = Entry(new3, textvariable=codigointerno1)
+    codigointerno2_entry = Entry(new3, textvariable=codigointerno2)
+    codigointerno3_entry = Entry(new3, textvariable=codigointerno3)
     quantidade1_entry = Entry(new3, textvariable=quantidade1)
     quantidade2_entry = Entry(new3, textvariable=quantidade2)
     quantidade3_entry = Entry(new3, textvariable=quantidade3)
@@ -551,9 +557,9 @@ def cadastro_kit():
     checkbox_largura_entry = Checkbutton(new3, text="Largura", variable=checkbox_largura,
                                          onvalue=1, offvalue=0)
 
-    idaton1_entry.place(x=140, y=90)
-    idaton2_entry.place(x=140, y=160)
-    idaton3_entry.place(x=140, y=230)
+    codigointerno1_entry.place(x=140, y=90)
+    codigointerno2_entry.place(x=140, y=160)
+    codigointerno3_entry.place(x=140, y=230)
     quantidade1_entry.place(x=290, y=90, width=40)
     quantidade2_entry.place(x=290, y=160, width=40)
     quantidade3_entry.place(x=290, y=230, width=40)

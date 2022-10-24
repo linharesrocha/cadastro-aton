@@ -181,7 +181,8 @@ def consultar_produtos_opcao_todos():
 def consultar_produtos_pesquisa():
     pg.moveTo(353, 61)
     pg.click()
-    pg.typewrite(['backspace', 'backspace', 'backspace', 'backspace', 'backspace'])
+    pg.hotkey('ctrl', 'a')
+    pg.typewrite(['backspace'])
 
 
 def consultar_produtos_botao_consultar():
@@ -194,6 +195,14 @@ def consultar_produtos_select_resultado():
     pg.moveTo(708, 144)
     pg.doubleClick()
     sleep(2)
+
+
+def consultar_produtos_menu_cod_id():
+    pg.moveTo(35, 120)
+    pg.click()
+    sleep(1)
+    pg.click()
+    sleep(1)
 
 
 # Cadastro Produtos Composicao
