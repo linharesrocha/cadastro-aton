@@ -28,11 +28,8 @@ def minimiza_janelas(main, janela=0):
 
 def executa_icone_aton():
     # Icone do Aton
-    pg.moveTo(36, 100)
+    os.startfile("C:\Ambar\Ambar.exe")
     sleep(2)
-    pg.doubleClick()
-
-    sleep(1)
 
 
 def login_aton(login, senha):
