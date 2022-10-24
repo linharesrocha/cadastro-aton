@@ -574,7 +574,13 @@ def consulta_produtos_aton():
     login_aton(LOGIN_USER, LOGIN_PASS)
     menu_produtos()
     opcao_cadastro_produtos()
+    cadastro_produtos_botao_consultar()
+    consultar_produtos_opcao_todos()
+    consultar_produtos_botao_consultar()
 
+
+def matar_aton():
+    print('oi')
 
 if __name__ == '__main__':
     # Tkinter Config
