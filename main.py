@@ -254,10 +254,7 @@ def gerador_cod_interno():
             return
 
         # Transformando no padrão
-        codigo_ean_montagem = []
-        codigo_ean_montagem.append("DG")
-        codigo_ean_montagem.append(ean_codigo_info[0])
-        codigo_ean_montagem.append(ean_codigo_info[8:])
+        codigo_ean_montagem = ["DG", ean_codigo_info[0], ean_codigo_info[8:]]
         codigo_ean_montagem = list(map(str, codigo_ean_montagem))
 
         # Junta a lista em um código único
@@ -266,6 +263,10 @@ def gerador_cod_interno():
         # Apagando o que está escrito, e inserindo o código depois
         ean_codigo_final_entry.delete(0, 'end')
         ean_codigo_final_entry.insert(0, codigo_ean_final)
+        return codigo_ean_final
+
+    def copiar():
+        pyperclip.copy(ean_codigo_final_entry.get())
 
     ############ TKINTER #############
     new4 = Toplevel(window)
@@ -292,6 +293,9 @@ def gerador_cod_interno():
 
     ttk.Button(new4, text="Gerar", command=program, width=20) \
         .place(x=140, y=300, width=120, height=40)
+
+    ttk.Button(new4, text="Copiar", command=copiar, width=20) \
+        .place(x=310, y=180, width=60, height=30)
 
 
 def cadastro_kit():
