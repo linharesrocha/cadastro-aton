@@ -296,6 +296,42 @@ def gerador_cod_interno():
         .place(x=310, y=180, width=60, height=30)
 
 
+def gerador_cod_interno_kit():
+    def program():
+        print('oi')
+
+    def copiar():
+        pyperclip.copy(ean_codigo_final_entry.get())
+
+        ############ TKINTER #############
+        new4 = Toplevel(window)
+        new4.geometry("400x350")
+        new4.title("Gerador")
+
+        ean_codigo = StringVar()
+
+        heading3 = Label(new4, text="Gerador Código Interno", bg="#4682b4", fg="white", width="100", height="2",
+                         font=("Helvetica", 16))
+        heading3.pack()
+
+        ean_codigo_text = Label(new4, text="Digite o código EAN")
+        ean_codigo_final_text = Label(new4, text="Resultado")
+
+        ean_codigo_text.place(x=140, y=70)
+        ean_codigo_final_text.place(x=140, y=160)
+
+        ean_codigo_entry = Entry(new4, textvariable=ean_codigo)
+        ean_codigo_final_entry = Entry(new4)
+
+        ean_codigo_entry.place(x=140, y=90)
+        ean_codigo_final_entry.place(x=140, y=180, height=40)
+
+        ttk.Button(new4, text="Gerar", command=program, width=20) \
+            .place(x=140, y=300, width=120, height=40)
+
+        ttk.Button(new4, text="Copiar", command=copiar, width=20) \
+            .place(x=310, y=180, width=60, height=30)
+
 def cadastro_kit():
     def program2():
         matar_ambar()
@@ -666,9 +702,13 @@ if __name__ == '__main__':
     ttk.Button(tab2, text="CONVERSÃO IMG PADRÃO", command=conversor_imagem, width=20) \
         .place(x=30, y=110, width=200, height=100)
 
-    # Cadastro Kit
-    ttk.Button(tab2, text="GERADOR COD. INTERNO", command=gerador_cod_interno, width=20) \
-        .place(x=270, y=110, width=200, height=100)
+    # Gerador COD. Interno
+    ttk.Button(tab2, text="GERAR COD. INTERNO", command=gerador_cod_interno, width=20) \
+        .place(x=30, y=250, width=160, height=50)
+
+    # Gerador COD. Interno KIT
+    ttk.Button(tab2, text="GERAR COD. INTERNO KIT", command=gerador_cod_interno_kit, width=20) \
+        .place(x=270, y=250, width=160, height=50)
 
     # Consultar Produtos Aton
     ttk.Button(tab3, text="CONSULTAR PRODUTOS ATON", command=consulta_produtos_aton, width=20) \
