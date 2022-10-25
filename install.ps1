@@ -1,3 +1,6 @@
+# Instalar o GIT
+# Instalar o Python
+
 # Criando a Pasta workspace
 
 cd ..\..\

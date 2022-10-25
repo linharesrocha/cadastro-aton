@@ -1,7 +1,7 @@
 import os
 from time import sleep
 from tkinter import messagebox
-# from ctypes import windll
+from ctypes import windll
 import pyautogui as pg
 
 

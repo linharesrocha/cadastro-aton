@@ -1,4 +1,5 @@
 import random
+from credentials import *
 from auxiliar import *
 from datetime import datetime
 from tkinter import *
@@ -16,9 +17,6 @@ DESCRICAO_INICIAL = 'Receba em sua casa o melhor em qualidade e preço de materi
                     'realizados antes de 11 horas, serão despachados no mesmo dia! Nós somos excelência em ' \
                     'atendimentos aos nossos clientes, mande suas dúvidas ou perguntas, vamos responder ' \
                     'rápidamente. '
-
-LOGIN_USER = 'GUI'
-LOGIN_PASS = '2552'
 
 now = datetime.now()
 DATE_TIME = now.strftime("%Y%m%d")
@@ -249,7 +247,7 @@ def gerador_cod_interno():
         ean_codigo_info = ean_codigo.get()
 
         if len(ean_codigo_info) != 13:
-            validation = Label(new4, text="EAN deve conter 13 dígitos.", bg="red", bd="5", font=24, width=30, height=2)
+            validation = Label(new4, text="EAN deve conter 13 dígitos.", bg="red", bd="5", font=24, width=50, height=2)
             validation.place(x=0, y=3)
             return
 
@@ -636,7 +634,7 @@ if __name__ == '__main__':
     window.geometry("500x500")
     window.title("Mordomo")
     window['background'] = '#778899'
-    # window.iconbitmap("favicon.ico")
+    window.iconbitmap("favicon.ico")
     tabControl = ttk.Notebook(window)
 
     # Aton
