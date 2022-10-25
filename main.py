@@ -7,7 +7,6 @@ from tkinter import ttk
 import pyperclip
 from PIL import Image
 
-
 # Strings Global
 NOME_DO_PRODUTO = '[NOME DO PRODUTO]'
 NOME_DO_KIT = '[NOME DO KIT COMPLETO]'
@@ -245,6 +244,56 @@ def conversor_imagem():
         messagebox.showinfo("Pronto!", "Conversão concluida!")
 
 
+def gerador_cod_interno():
+    def program():
+        ean_codigo_info = ean_codigo.get()
+
+        if len(ean_codigo_info) != 13:
+            validation = Label(new4, text="EAN deve conter 13 dígitos.", bg="red", bd="5", font=24, width=30, height=2)
+            validation.place(x=0, y=3)
+            return
+
+        # Transformando no padrão
+        codigo_ean_montagem = []
+        codigo_ean_montagem.append("DG")
+        codigo_ean_montagem.append(ean_codigo_info[0])
+        codigo_ean_montagem.append(ean_codigo_info[8:])
+        codigo_ean_montagem = list(map(str, codigo_ean_montagem))
+
+        # Junta a lista em um código único
+        codigo_ean_final = ''.join(codigo_ean_montagem)
+
+        # Apagando o que está escrito, e inserindo o código depois
+        ean_codigo_final_entry.delete(0, 'end')
+        ean_codigo_final_entry.insert(0, codigo_ean_final)
+
+    ############ TKINTER #############
+    new4 = Toplevel(window)
+    new4.geometry("400x350")
+    new4.title("Gerador")
+
+    ean_codigo = StringVar()
+
+    heading3 = Label(new4, text="Gerador Código Interno", bg="#4682b4", fg="white", width="100", height="2",
+                     font=("Helvetica", 16))
+    heading3.pack()
+
+    ean_codigo_text = Label(new4, text="Digite o código EAN")
+    ean_codigo_final_text = Label(new4, text="Resultado")
+
+    ean_codigo_text.place(x=140, y=70)
+    ean_codigo_final_text.place(x=140, y=160)
+
+    ean_codigo_entry = Entry(new4, textvariable=ean_codigo)
+    ean_codigo_final_entry = Entry(new4)
+
+    ean_codigo_entry.place(x=140, y=90)
+    ean_codigo_final_entry.place(x=140, y=180, height=40)
+
+    ttk.Button(new4, text="Gerar", command=program, width=20) \
+        .place(x=140, y=300, width=120, height=40)
+
+
 def cadastro_kit():
     def program2():
         matar_ambar()
@@ -459,7 +508,6 @@ def cadastro_kit():
         # Seta do Grupo
         cadastro_produtos_seta_grupo(grupo_info)
 
-
         # Descrição
         cadastro_produtos_descricao()
         pyperclip.copy(NOME_DO_KIT)
@@ -587,8 +635,13 @@ if __name__ == '__main__':
     # window.iconbitmap("favicon.ico")
     tabControl = ttk.Notebook(window)
 
+    # Aton
     tab1 = ttk.Frame(tabControl)
+
+    # Auxiliares
     tab2 = ttk.Frame(tabControl)
+
+    # Atalhos
     tab3 = ttk.Frame(tabControl)
 
     heading = Label(text="Mordomo", bg="#4682b4", fg="white", width="200", height="3", font=("Helvetica", 16))
@@ -609,7 +662,11 @@ if __name__ == '__main__':
 
     # Cadastro Kit
     ttk.Button(tab2, text="CONVERSÃO IMG PADRÃO", command=conversor_imagem, width=20) \
-        .place(x=150, y=110, width=200, height=100)
+        .place(x=30, y=110, width=200, height=100)
+
+    # Cadastro Kit
+    ttk.Button(tab2, text="GERADOR COD. INTERNO", command=gerador_cod_interno, width=20) \
+        .place(x=270, y=110, width=200, height=100)
 
     # Consultar Produtos Aton
     ttk.Button(tab3, text="CONSULTAR PRODUTOS ATON", command=consulta_produtos_aton, width=20) \
@@ -622,7 +679,5 @@ if __name__ == '__main__':
     # Consultar Produtos Aton
     ttk.Button(tab1, text="CONSULTAR PRODUTOS ATON", command=consulta_produtos_aton, width=20) \
         .place(x=280, y=340, width=210, height=50)
-
-
 
     window.mainloop()
