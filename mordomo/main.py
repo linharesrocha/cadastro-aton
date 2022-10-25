@@ -634,7 +634,7 @@ if __name__ == '__main__':
     window.geometry("500x500")
     window.title("Mordomo")
     window['background'] = '#778899'
-    window.iconbitmap("favicon.ico")
+    window.iconbitmap("C:\workspace\cadastro-aton\\favicon.ico")
     tabControl = ttk.Notebook(window)
 
     # Aton

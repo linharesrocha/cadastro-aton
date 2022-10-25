@@ -1,11 +1,9 @@
 # Instalar o GIT
 # Instalar o Python
-# Rodar Script
-# Configurar Arquivo .env
 
 # Criando a Pasta workspace
 
-cd ..\..\
+Set-Location ..\..\
 $Folder = 'C:\workspace'
 if (Test-Path -Path $Folder) {
 	"ALERT: workspace ja existe"
@@ -13,13 +11,13 @@ if (Test-Path -Path $Folder) {
 }
 else {
 	New-Item -Path 'C:\workspace' -ItemType Directory
-	Write-Host " "	
+	Write-Host " "
 	"SUCESS: workspace criada"
 }
 Write-Host " "
 
 # Clonando arquivos
-cd ..\..\workspace
+Set-Location ..\..\workspace
 
 $Folder = 'C:\workspace\cadastro-aton'
 if (Test-Path -Path $Folder) {
@@ -34,7 +32,7 @@ Write-Host "SUCESS: arquivos clonados"
 
 
 # Instalando aplicativo
-cd ..\..\..\workspace\cadastro-aton\
+Set-Location ..\..\..\workspace\cadastro-aton\
 py -m ensurepip --upgrade
 python -m pip install -U pip
 pip install -r requirements.txt

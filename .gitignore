@@ -5,4 +5,3 @@ dist/
 Mordomo.spec
 **/__pycache__/
 __pycache__/
-setup.py

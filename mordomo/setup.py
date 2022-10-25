@@ -4,13 +4,12 @@ from pathlib import Path
 from time import sleep
 from dotenv import load_dotenv
 
-
 # Load Variables
-
-env_path = Path('.') / '.env'
+env_path = Path('..') / 'C:\workspace\cadastro-aton\.env'
 load_dotenv(dotenv_path=env_path)
 login = os.environ['LOGIN_USER']
 senha = os.environ['LOGIN_PASS']
+
 
 def login_aton():
     # Campo de Usuário
@@ -27,4 +26,4 @@ def login_aton():
     pg.moveTo(1550, 601)
     pg.doubleClick()
 
-    sleep(5)
+    sleep(6)
