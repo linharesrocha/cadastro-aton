@@ -126,9 +126,15 @@ def cadastro_produtos_ncm():
     pg.click()
 
 
-def cadastro_produtos_seta_grupo():
+def cadastro_produtos_seta_grupo(grupo_info):
     pg.moveTo(707, 538)
     pg.click()
+    if grupo_info == 'LEAL':
+        cadastro_produtos_opcao_grupo_leal()
+    if grupo_info == 'MADZ':
+        cadastro_produtos_opcao_grupo_madz()
+    if grupo_info == 'PISSTE':
+        cadastro_produtos_opcao_grupo_pisste()
 
 
 def cadastro_produtos_opcao_grupo_leal():

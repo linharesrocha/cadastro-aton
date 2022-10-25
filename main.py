@@ -119,14 +119,7 @@ def cadastro_basico():
         pg.typewrite(ncm_info)
 
         # Seta do Grupo
-        cadastro_produtos_seta_grupo()
-
-        if grupo_info == 'LEAL':
-            cadastro_produtos_opcao_grupo_leal()
-        if grupo_info == 'MADZ':
-            cadastro_produtos_opcao_grupo_madz()
-        if grupo_info == 'PISSTE':
-            cadastro_produtos_opcao_grupo_pisste()
+        cadastro_produtos_seta_grupo(grupo_info)
 
         # Categoria
         if autocateogoria_info == 1:
@@ -464,13 +457,8 @@ def cadastro_kit():
             pg.hotkey('ctrl', 'v')
 
         # Seta do Grupo
-        cadastro_produtos_seta_grupo()
-        if grupo_info == 'LEAL':
-            cadastro_produtos_opcao_grupo_leal()
-        if grupo_info == 'MADZ':
-            cadastro_produtos_opcao_grupo_madz()
-        if grupo_info == 'PISSTE':
-            cadastro_produtos_opcao_grupo_pisste()
+        cadastro_produtos_seta_grupo(grupo_info)
+
 
         # Descrição
         cadastro_produtos_descricao()
