@@ -1,9 +1,8 @@
 import os
-from ctypes import windll
-
-import pyautogui as pg
 from time import sleep
-import pyperclip
+from tkinter import messagebox
+# from ctypes import windll
+import pyautogui as pg
 
 
 # Funções Auxiliares
@@ -17,6 +16,9 @@ def matar_ambar():
 
 
 def minimiza_janelas(main, janela=0):
+    # Mensagem de Atenção
+    mensagem_atencao()
+
     # Minimiza o Tkinter
     main.iconify()
     if janela != 0:
@@ -26,6 +28,10 @@ def minimiza_janelas(main, janela=0):
     pg.hotkey('winleft', 'd')
 
     pg.FAILSAFE = False
+
+
+def mensagem_atencao():
+    messagebox.showwarning(title='Atenção!', message='Mantenha a mão fora do mouse, e pressione ENTER para iniciar.')
 
 
 def executa_icone_aton():

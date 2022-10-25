@@ -1,12 +1,12 @@
+import random
+from auxiliar import *
+from datetime import datetime
 from tkinter import *
+from tkinter import filedialog as fd
 from tkinter import ttk
 import pyperclip
 from PIL import Image
-from tkinter import filedialog as fd
-from tkinter import messagebox
-from auxiliar import *
-from datetime import datetime
-import random
+
 
 # Strings Global
 NOME_DO_PRODUTO = '[NOME DO PRODUTO]'
@@ -596,7 +596,7 @@ if __name__ == '__main__':
     window.geometry("500x500")
     window.title("Mordomo")
     window['background'] = '#778899'
-    window.iconbitmap("favicon.ico")
+    # window.iconbitmap("favicon.ico")
     tabControl = ttk.Notebook(window)
 
     tab1 = ttk.Frame(tabControl)
@@ -625,7 +625,7 @@ if __name__ == '__main__':
 
     # Consultar Produtos Aton
     ttk.Button(tab3, text="CONSULTAR PRODUTOS ATON", command=consulta_produtos_aton, width=20) \
-        .place(x=30, y=110, width=200, height=100)
+        .place(x=30, y=110, width=210, height=100)
 
     # Consultar Produtos Aton
     ttk.Button(tab3, text="MATAR ATON", command=matar_ambar, width=20) \
@@ -633,6 +633,8 @@ if __name__ == '__main__':
 
     # Consultar Produtos Aton
     ttk.Button(tab1, text="CONSULTAR PRODUTOS ATON", command=consulta_produtos_aton, width=20) \
-        .place(x=310, y=340, width=180, height=50)
+        .place(x=280, y=340, width=210, height=50)
+
+
 
     window.mainloop()
