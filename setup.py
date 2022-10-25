@@ -1,11 +1,18 @@
 import pyautogui as pg
+import os
+from pathlib import Path
 from time import sleep
-
-LOGIN_USER = 'GUI'
-LOGIN_PASS = '1234'
+from dotenv import load_dotenv
 
 
-def login_aton(login, senha):
+# Load Variables
+
+env_path = Path('.') / '.env'
+load_dotenv(dotenv_path=env_path)
+login = os.environ['LOGIN_USER']
+senha = os.environ['LOGIN_PASS']
+
+def login_aton():
     # Campo de Usuário
     pg.moveTo(1583, 532)
     pg.click()

@@ -71,7 +71,7 @@ def cadastro_basico():
 
         executa_icone_aton()
 
-        login_aton(LOGIN_USER, LOGIN_PASS)
+        login_aton()
 
         menu_produtos()
 
@@ -362,7 +362,7 @@ def cadastro_kit():
 
         executa_icone_aton()
 
-        login_aton(LOGIN_USER, LOGIN_PASS)
+        login_aton()
 
         menu_produtos()
 
@@ -620,7 +620,7 @@ def consulta_produtos_aton():
     matar_ambar()
     minimiza_janelas(window)
     executa_icone_aton()
-    login_aton(LOGIN_USER, LOGIN_PASS)
+    login_aton()
     menu_produtos()
     opcao_cadastro_produtos()
     cadastro_produtos_botao_consultar()

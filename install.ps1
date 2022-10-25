@@ -1,5 +1,7 @@
 # Instalar o GIT
 # Instalar o Python
+# Rodar Script
+# Configurar Arquivo .env
 
 # Criando a Pasta workspace
 
@@ -36,5 +38,3 @@ cd ..\..\..\workspace\cadastro-aton\
 py -m ensurepip --upgrade
 python -m pip install -U pip
 pip install -r requirements.txt
-pyinstaller --noconsole --name="Mordomo" --icon="favicon.ico" .\main.py
-cp favicon.ico C:\workspace\cadastro-aton\dist\Mordomo

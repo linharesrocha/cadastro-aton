@@ -1,0 +1,5 @@
+# Renomeie esse arquivo para --> .env
+# Altere as credenciais
+
+LOGIN_USER=''
+LOGIN_PASS=''
