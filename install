@@ -1,6 +1,0 @@
- pyinstaller --noconsole --name="Mordomo" --icon="icon.ico" .\main.py
-
- # Move Icon
- cd ..
- cd ..
- cp .\workspace\pyautogui\icon.ico .\workspace\pyautogui\dist\Mordomo

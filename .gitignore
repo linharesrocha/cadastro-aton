@@ -3,3 +3,5 @@ test.py
 build/
 dist/
 Mordomo.spec
+**/__pycache__/
+__pycache__/
