@@ -1,2 +1,0 @@
-LOGIN_USER = ''
-LOGIN_PASS = ''

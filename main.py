@@ -1,5 +1,5 @@
 import random
-from credentials import *
+from setup import *
 from auxiliar import *
 from datetime import datetime
 from tkinter import *
