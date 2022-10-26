@@ -5,3 +5,6 @@ dist/
 Mordomo.spec
 **/__pycache__/
 __pycache__/
+vincular-categoria.py
+produtos.xlsx
+produtos_pai.xlsx

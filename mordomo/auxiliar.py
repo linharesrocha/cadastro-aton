@@ -241,3 +241,4 @@ def entrar_na_tela_f8():
 
 def f8_botao_limpar():
     pg.moveTo(982, 101)
+    pg.click()

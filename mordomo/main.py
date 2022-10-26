@@ -27,7 +27,6 @@ INICIAL_KIT = 'KIT '
 
 def cadastro_basico():
     def program():
-        matar_ambar()
 
         # Pega informações do Cadastro
         nome_info = nome.get()
@@ -57,6 +56,8 @@ def cadastro_basico():
             validation = Label(new1, text="NCM deve conter 8 dígitos.", bg="red", bd="5", font=24, width=30, height=2)
             validation.place(x=0, y=3)
             return
+
+        matar_ambar()
 
         minimiza_janelas(window, new1)
 
@@ -332,15 +333,29 @@ def abrir_garantia():
         checkbox_produto_unico_info = checkbox_produto_unico.get()
         motivo_info = motivo.get()
 
+
+        # Validações
+        # Obrigar a pessoa colocar um das três pesquisas
+
+
+        matar_ambar()
+
+        minimiza_janelas(window, new5)
+
+        executa_icone_aton()
+
+        login_aton()
+
+        entrar_na_tela_f8()
+
+        f8_botao_limpar()
+
         if pedido_aton_info != '':
             print('oi')
         if pedido_loja_info != '':
             print('oi')
         if pedido_esc_info != '':
             print('oi')
-        # Validações
-        # Obrigar a pessoa colocar um das três pesquisas
-
 
     ############ TKINTER #############
 
