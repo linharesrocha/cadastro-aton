@@ -335,9 +335,6 @@ def cadastro_kit():
         nomes_list = []
         descricoes_list = []
         peso_list = []
-        altura_list = []
-        largura_list = []
-        comprimento_list = []
 
         codigointerno1_info = codigointerno1.get()
         codigointerno2_info = codigointerno2.get()
@@ -346,9 +343,6 @@ def cadastro_kit():
         list_codigointerno_info = list(filter(None, list_codigointerno_info))
 
         grupo_info = grupo.get()
-        checkbox_altura_info = checkbox_altura.get()
-        checkbox_comprimento_info = checkbox_comprimento.get()
-        checkbox_largura_info = checkbox_largura.get()
 
         quantidade1_info = quantidade1.get()
         quantidade2_info = quantidade2.get()
@@ -439,24 +433,6 @@ def cadastro_kit():
             info = pyperclip.paste()
             peso_list.append(info.replace(',', '.'))
 
-            cadastro_produtos_altura()
-            pg.hotkey('ctrl', 'a')
-            pg.hotkey('ctrl', 'c')
-            info = pyperclip.paste()
-            altura_list.append(info.replace(',', '.'))
-
-            cadastro_produtos_largura()
-            pg.hotkey('ctrl', 'a')
-            pg.hotkey('ctrl', 'c')
-            info = pyperclip.paste()
-            largura_list.append(info.replace(',', '.'))
-
-            cadastro_produtos_comprimento()
-            pg.hotkey('ctrl', 'a')
-            pg.hotkey('ctrl', 'c')
-            info = pyperclip.paste()
-            comprimento_list.append(info.replace(',', '.'))
-
             cadastro_produtos_descricao()
             pg.hotkey('ctrl', 'a')
             pg.hotkey('ctrl', 'c')
@@ -466,15 +442,8 @@ def cadastro_kit():
             cadastro_produtos_botao_cancelar()
             cadastro_produtos_botao_consultar()
 
-        # Soma dimensões
+        # Soma Peso
         peso_total = str(sum(map(float, peso_list)))
-        altura_total = int(sum(map(float, altura_list)))
-        largura_total = int(sum(map(float, largura_list)))
-        comprimento_total = int(sum(map(float, comprimento_list)))
-
-        altura_maior = int(max(map(float, altura_list)))
-        largura_maior = int(max(map(float, largura_list)))
-        comprimento_maior = int(max(map(float, comprimento_list)))
 
         # Criando Produto Kit
         button_close_aton()
@@ -512,32 +481,6 @@ def cadastro_kit():
         cadastro_produtos_peso()
         pg.typewrite(peso_total)
 
-        # Altura
-        cadastro_produtos_altura()
-        if checkbox_altura_info == 1:
-            pyperclip.copy(altura_total)
-            pg.hotkey('ctrl', 'v')
-        else:
-            pyperclip.copy(altura_maior)
-            pg.hotkey('ctrl', 'v')
-
-        # Largura
-        cadastro_produtos_largura()
-        if checkbox_largura_info == 1:
-            pyperclip.copy(largura_total)
-            pg.hotkey('ctrl', 'v')
-        else:
-            pyperclip.copy(largura_maior)
-            pg.hotkey('ctrl', 'v')
-
-        # Comprimento
-        cadastro_produtos_comprimento()
-        if checkbox_comprimento_info == 1:
-            pyperclip.copy(comprimento_total)
-            pg.hotkey('ctrl', 'v')
-        else:
-            pyperclip.copy(comprimento_maior)
-            pg.hotkey('ctrl', 'v')
 
         # Seta do Grupo
         cadastro_produtos_seta_grupo(grupo_info)
@@ -593,9 +536,6 @@ def cadastro_kit():
     quantidade2 = StringVar()
     quantidade3 = StringVar()
     grupo = StringVar()
-    checkbox_altura = IntVar()
-    checkbox_comprimento = IntVar()
-    checkbox_largura = IntVar()
 
     heading3 = Label(new3, text="Cadastro Kit", bg="#4682b4", fg="white", width="100", height="2",
                      font=("Helvetica", 16))
@@ -625,12 +565,6 @@ def cadastro_kit():
     grupo_entry['values'] = ('LEAL',
                              'MADZ',
                              'PISSTE')
-    checkbox_altura_entry = Checkbutton(new3, text="Altura", variable=checkbox_altura,
-                                        onvalue=1, offvalue=0)
-    checkbox_comprimento_entry = Checkbutton(new3, text="Comprimento", variable=checkbox_comprimento,
-                                             onvalue=1, offvalue=0)
-    checkbox_largura_entry = Checkbutton(new3, text="Largura", variable=checkbox_largura,
-                                         onvalue=1, offvalue=0)
 
     codigointerno1_entry.place(x=140, y=90)
     codigointerno2_entry.place(x=140, y=160)
@@ -640,9 +574,6 @@ def cadastro_kit():
     quantidade3_entry.place(x=290, y=230, width=40)
     grupo_entry.place(x=25, y=90, width=100)
     grupo_entry.current()
-    checkbox_altura_entry.place(x=20, y=160)
-    checkbox_comprimento_entry.place(x=20, y=180)
-    checkbox_largura_entry.place(x=20, y=200)
 
     ttk.Button(new3, text="Cadastrar", command=program2, width=20) \
         .place(x=140, y=300, width=120, height=40)
