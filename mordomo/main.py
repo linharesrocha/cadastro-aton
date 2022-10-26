@@ -24,8 +24,6 @@ DATE_TIME = now.strftime("%Y%m%d")
 INICIAL_KITDG = 'KITDG'
 INICIAL_KIT = 'KIT '
 
-RANDOM = random.randint(0, 9)
-
 
 def cadastro_basico():
     def program():
@@ -298,39 +296,36 @@ def gerador_cod_interno():
 
 def gerador_cod_interno_kit():
     def program():
-        print('oi')
+        RANDOM = random.randint(0, 99)
+        codigo_final = INICIAL_KITDG + str(DATE_TIME) + str(RANDOM)
+        ean_codigo_final_entry.delete(0, 'end')
+        ean_codigo_final_entry.insert(0, codigo_final)
+        return codigo_final
 
     def copiar():
         pyperclip.copy(ean_codigo_final_entry.get())
 
-        ############ TKINTER #############
-        new4 = Toplevel(window)
-        new4.geometry("400x350")
-        new4.title("Gerador")
+    ############ TKINTER #############
+    new4 = Toplevel(window)
+    new4.geometry("400x250")
+    new4.title("Gerador Código Kit")
 
-        ean_codigo = StringVar()
+    heading3 = Label(new4, text="Gerador Código Interno Kit", bg="#4682b4", fg="white", width="100", height="2",
+                     font=("Helvetica", 16))
+    heading3.pack()
 
-        heading3 = Label(new4, text="Gerador Código Interno", bg="#4682b4", fg="white", width="100", height="2",
-                         font=("Helvetica", 16))
-        heading3.pack()
+    ttk.Button(new4, text="Gerar", command=program, width=20) \
+        .place(x=140, y=70, width=120, height=40)
 
-        ean_codigo_text = Label(new4, text="Digite o código EAN")
-        ean_codigo_final_text = Label(new4, text="Resultado")
+    ean_codigo_final_text = Label(new4, text="Resultado")
+    ean_codigo_final_text.place(x=140, y=160)
 
-        ean_codigo_text.place(x=140, y=70)
-        ean_codigo_final_text.place(x=140, y=160)
+    ean_codigo_final_entry = Entry(new4)
+    ean_codigo_final_entry.place(x=140, y=180, height=40)
 
-        ean_codigo_entry = Entry(new4, textvariable=ean_codigo)
-        ean_codigo_final_entry = Entry(new4)
+    ttk.Button(new4, text="Copiar", command=copiar, width=20) \
+        .place(x=310, y=180, width=60, height=30)
 
-        ean_codigo_entry.place(x=140, y=90)
-        ean_codigo_final_entry.place(x=140, y=180, height=40)
-
-        ttk.Button(new4, text="Gerar", command=program, width=20) \
-            .place(x=140, y=300, width=120, height=40)
-
-        ttk.Button(new4, text="Copiar", command=copiar, width=20) \
-            .place(x=310, y=180, width=60, height=30)
 
 def cadastro_kit():
     def program2():
@@ -492,6 +487,7 @@ def cadastro_kit():
         pyperclip.copy(INICIAL_KITDG)
         pg.hotkey('ctrl', 'c')
         pg.hotkey('ctrl', 'v')
+        RANDOM = random.randint(0, 99)
         pg.typewrite(str(DATE_TIME) + str(RANDOM))
 
         # Nome
@@ -670,7 +666,7 @@ if __name__ == '__main__':
     window.geometry("500x500")
     window.title("Mordomo")
     window['background'] = '#778899'
-    window.iconbitmap("C:\workspace\cadastro-aton\\favicon.ico")
+    # window.iconbitmap("C:\workspace\cadastro-aton\\favicon.ico")
     tabControl = ttk.Notebook(window)
 
     # Aton
