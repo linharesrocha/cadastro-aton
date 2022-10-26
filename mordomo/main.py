@@ -31,7 +31,6 @@ def cadastro_basico():
 
         # Pega informações do Cadastro
         nome_info = nome.get()
-        codigo_info = codigo.get()
         ean_info = ean.get()
         peso_info = peso.get()
         altura_info = altura.get()
@@ -45,12 +44,6 @@ def cadastro_basico():
         # Validação
         if len(nome_info) == 0:
             validation = Label(new1, text="Nome do produto é obrigatório!", bg="red", bd="5", font=24, width=30,
-                               height=2)
-            validation.place(x=0, y=3)
-            return
-
-        if len(codigo_info) == 0:
-            validation = Label(new1, text="Código do produto é obrigatório!", bg="red", bd="5", font=24, width=30,
                                height=2)
             validation.place(x=0, y=3)
             return
@@ -79,9 +72,12 @@ def cadastro_basico():
         cadastro_produtos_botao_novo()
 
         # Código Interno
+        codigo_ean_montagem = ["DG", ean_info[0], ean_info[8:]]
+        codigo_ean_montagem = list(map(str, codigo_ean_montagem))
+        codigo_ean_final = ''.join(codigo_ean_montagem)
         cadastro_produtos_codigo_interno()
+        pyperclip.copy(codigo_ean_final)
         pg.typewrite(['backspace', 'backspace', 'backspace', 'backspace'])
-        pyperclip.copy(codigo_info)
         pg.hotkey('ctrl', 'v')
 
         # Nome do Produto
@@ -148,7 +144,6 @@ def cadastro_basico():
     new1.title("Cadastro")
 
     nome = StringVar()
-    codigo = StringVar()
     ean = StringVar()
     peso = StringVar()
     altura = StringVar()
@@ -185,7 +180,7 @@ def cadastro_basico():
     grupo_text.place(x=200, y=120)
 
     nome_entry = Entry(new1, textvariable=nome, width=70)
-    codigo_entry = Entry(new1, textvariable=codigo)
+    codigo_entry = Entry(new1, state='disabled')
     ean_entry = Entry(new1, textvariable=ean)
     peso_entry = Entry(new1, textvariable=peso)
     altura_entry = Entry(new1, textvariable=altura)
