@@ -322,6 +322,78 @@ def gerador_cod_interno_kit():
         .place(x=310, y=180, width=60, height=30)
 
 
+def abrir_garantia():
+    def program():
+        pedido_aton_info = pedido_aton.get()
+        pedido_loja_info = pedido_loja.get()
+        pedido_esc_info = pedido_esc.get()
+        quantidade_produto_info = quantidade_produto.get()
+        checkbox_garantia_info = checkbox_garantia.get()
+        checkbox_produto_unico_info = checkbox_produto_unico.get()
+        motivo_info = motivo.get()
+
+        print(pedido_aton_info)
+        print(pedido_loja_info)
+        print(pedido_esc_info)
+        print(quantidade_produto_info)
+        print(checkbox_garantia_info)
+        print(checkbox_produto_unico_info)
+        print(motivo_info)
+
+    ############ TKINTER #############
+
+    new5 = Toplevel(window)
+    new5.geometry("550x300")
+    new5.title("Abrir Garantia")
+
+    pedido_aton = StringVar()
+    pedido_loja = StringVar()
+    pedido_esc = StringVar()
+    quantidade_produto = StringVar()
+    checkbox_garantia = IntVar()
+    checkbox_produto_unico = IntVar()
+    motivo = StringVar()
+
+    heading3 = Label(new5, text="Abrir Garantia", bg="#4682b4", fg="white", width="100", height="2",
+                     font=("Helvetica", 16))
+    heading3.pack()
+
+    pedido_aton_text = Label(new5, text="Pedido Aton")
+    pedido_loja_text = Label(new5, text="Pedido Loja")
+    pedido_esc_text = Label(new5, text="Pedido ESC")
+    quantidade_produto_text = Label(new5, text="Quantidade")
+    motivo_text = Label(new5, text="Motivo")
+
+    pedido_aton_text.place(x=40, y=70)
+    pedido_loja_text.place(x=40, y=140)
+    pedido_esc_text.place(x=40, y=210)
+    quantidade_produto_text.place(x=220, y=70)
+    motivo_text.place(x=220, y=140)
+
+    pedido_aton_entry = Entry(new5, textvariable=pedido_aton)
+    pedido_loja_entry = Entry(new5, textvariable=pedido_loja)
+    pedido_esc_entry = Entry(new5, textvariable=pedido_esc)
+    quantidade_produto_entry = Entry(new5, textvariable=quantidade_produto)
+    checkbox_garantia_entry = Checkbutton(new5, text="Abrir Garantia?", variable=checkbox_garantia, onvalue=1, offvalue=0)
+    checkbox_produto_unico_entry = Checkbutton(new5, text="Produto único?", variable=checkbox_produto_unico, onvalue=1, offvalue=0)
+    motivo_entry = ttk.Combobox(new5, width=27, textvariable=motivo)
+    motivo_entry['values'] = ('CANCELADO 7 DIAS',
+                             'BLA',
+                             'BLA2')
+
+    pedido_aton_entry.place(x=40, y=90)
+    pedido_loja_entry.place(x=40, y=160)
+    pedido_esc_entry.place(x=40, y=230)
+    quantidade_produto_entry.place(x=220, y=90, width=40)
+    checkbox_garantia_entry.place(x=360, y=90)
+    checkbox_produto_unico_entry.place(x=360, y=140)
+    motivo_entry.place(x=220, y=160, width=100)
+    motivo_entry.current()
+
+    ttk.Button(new5, text="Aplicar", command=program, width=20) \
+        .place(x=230, y=220, width=260, height=40)
+
+
 def cadastro_kit():
     def program2():
         matar_ambar()
@@ -476,7 +548,6 @@ def cadastro_kit():
         cadastro_produtos_peso()
         pg.typewrite(peso_total)
 
-
         # Seta do Grupo
         cadastro_produtos_seta_grupo(grupo_info)
 
@@ -620,16 +691,24 @@ if __name__ == '__main__':
     ttk.Button(tab1, text="CADASTRO KIT ATON", command=cadastro_kit, width=20) \
         .place(x=270, y=110, width=200, height=100)
 
+    # Abrir Garantia
+    ttk.Button(tab1, text="ABRIR GARANTIA", command=abrir_garantia, width=20) \
+        .place(x=30, y=240, width=200, height=100)
+
+    # Consultar Produtos Aton
+    ttk.Button(tab1, text="CONSULTAR PRODUTOS ATON", command=consulta_produtos_aton, width=20) \
+        .place(x=280, y=340, width=210, height=50)
+
     # Cadastro Kit
     ttk.Button(tab2, text="CONVERSÃO IMG PADRÃO", command=conversor_imagem, width=20) \
         .place(x=30, y=110, width=200, height=100)
 
     # Gerador COD. Interno
-    ttk.Button(tab2, text="GERAR COD. INTERNO", command=gerador_cod_interno, width=20) \
+    ttk.Button(tab2, text="GERAR COD. SIMPLES", command=gerador_cod_interno, width=20) \
         .place(x=30, y=250, width=160, height=50)
 
     # Gerador COD. Interno KIT
-    ttk.Button(tab2, text="GERAR COD. INTERNO KIT", command=gerador_cod_interno_kit, width=20) \
+    ttk.Button(tab2, text="GERAR COD. KIT", command=gerador_cod_interno_kit, width=20) \
         .place(x=270, y=250, width=160, height=50)
 
     # Consultar Produtos Aton
@@ -639,9 +718,5 @@ if __name__ == '__main__':
     # Consultar Produtos Aton
     ttk.Button(tab3, text="MATAR ATON", command=matar_ambar, width=20) \
         .place(x=270, y=110, width=200, height=100)
-
-    # Consultar Produtos Aton
-    ttk.Button(tab1, text="CONSULTAR PRODUTOS ATON", command=consulta_produtos_aton, width=20) \
-        .place(x=280, y=340, width=210, height=50)
 
     window.mainloop()
