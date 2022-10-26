@@ -229,4 +229,15 @@ def cadastro_produtos_composicao_botao_salvar():
     pg.moveTo(1312, 353)
     pg.click()
 
+
 ###################################################
+
+# Tela F8
+
+def entrar_na_tela_f8():
+    pg.hotkey('f8')
+    sleep(1)
+
+
+def f8_botao_limpar():
+    pg.moveTo(982, 101)

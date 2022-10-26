@@ -332,13 +332,15 @@ def abrir_garantia():
         checkbox_produto_unico_info = checkbox_produto_unico.get()
         motivo_info = motivo.get()
 
-        print(pedido_aton_info)
-        print(pedido_loja_info)
-        print(pedido_esc_info)
-        print(quantidade_produto_info)
-        print(checkbox_garantia_info)
-        print(checkbox_produto_unico_info)
-        print(motivo_info)
+        if pedido_aton_info != '':
+            print('oi')
+        if pedido_loja_info != '':
+            print('oi')
+        if pedido_esc_info != '':
+            print('oi')
+        # Validações
+        # Obrigar a pessoa colocar um das três pesquisas
+
 
     ############ TKINTER #############
 
@@ -367,26 +369,34 @@ def abrir_garantia():
     pedido_aton_text.place(x=40, y=70)
     pedido_loja_text.place(x=40, y=140)
     pedido_esc_text.place(x=40, y=210)
-    quantidade_produto_text.place(x=220, y=70)
+    quantidade_produto_text.place(x=360, y=140)
     motivo_text.place(x=220, y=140)
 
     pedido_aton_entry = Entry(new5, textvariable=pedido_aton)
     pedido_loja_entry = Entry(new5, textvariable=pedido_loja)
     pedido_esc_entry = Entry(new5, textvariable=pedido_esc)
     quantidade_produto_entry = Entry(new5, textvariable=quantidade_produto)
-    checkbox_garantia_entry = Checkbutton(new5, text="Abrir Garantia?", variable=checkbox_garantia, onvalue=1, offvalue=0)
-    checkbox_produto_unico_entry = Checkbutton(new5, text="Produto único?", variable=checkbox_produto_unico, onvalue=1, offvalue=0)
-    motivo_entry = ttk.Combobox(new5, width=27, textvariable=motivo)
-    motivo_entry['values'] = ('CANCELADO 7 DIAS',
-                             'BLA',
-                             'BLA2')
+    checkbox_garantia_entry = Checkbutton(new5, text="Abrir Garantia?", variable=checkbox_garantia, onvalue=1,
+                                          offvalue=0)
+    checkbox_produto_unico_entry = Checkbutton(new5, text="Produto único?", variable=checkbox_produto_unico, onvalue=1,
+                                               offvalue=0)
+    motivo_entry = ttk.Combobox(new5, width=45, textvariable=motivo)
+    motivo_entry['values'] = ('DESISTENCIA 7D',
+                              'END. INCORRETO',
+                              'GARANTIA',
+                              'PROD C/ DEFEITO',
+                              'PROD DIVERGENTE',
+                              'PROD FALTANTE',
+                              'PROD QUEBRADO',
+                              'RECUSADO',
+                              'AO REMETENTE')
 
     pedido_aton_entry.place(x=40, y=90)
     pedido_loja_entry.place(x=40, y=160)
     pedido_esc_entry.place(x=40, y=230)
-    quantidade_produto_entry.place(x=220, y=90, width=40)
-    checkbox_garantia_entry.place(x=360, y=90)
-    checkbox_produto_unico_entry.place(x=360, y=140)
+    quantidade_produto_entry.place(x=360, y=160, width=40)
+    checkbox_garantia_entry.place(x=215, y=90)
+    checkbox_produto_unico_entry.place(x=360, y=90)
     motivo_entry.place(x=220, y=160, width=100)
     motivo_entry.current()
 
@@ -663,7 +673,7 @@ if __name__ == '__main__':
     window.geometry("500x500")
     window.title("Mordomo")
     window['background'] = '#778899'
-    # window.iconbitmap("C:\workspace\cadastro-aton\\favicon.ico")
+    window.iconbitmap("C:\workspace\cadastro-aton\\favicon.ico")
     tabControl = ttk.Notebook(window)
 
     # Aton
