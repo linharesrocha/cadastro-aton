@@ -230,10 +230,10 @@ def conversor_imagem():
 
         # Conversion and Save
         pic = Image.open(path)
-        pic = pic.resize((1000, 1000))
+        pic = pic.resize((1000, 1000), Image.Resampling.LANCZOS)
         pic.convert("RGB").save(path_original + 'novo_' + name_split_list[0] + '.jpg')
 
-        messagebox.showinfo("Pronto!", "Conversão concluida!")
+        messagebox.showinfo("Conversão concluida!", "A imagem foi salva no mesmo diretório da imagem original!")
 
 
 def gerador_cod_interno():
