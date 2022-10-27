@@ -245,7 +245,8 @@ def gerador_cod_interno():
         aux = 1.0
         for ean in lista_de_ean:
             if len(ean) != 13:
-                validation = Label(new4, text="EAN deve conter 13 dígitos.", bg="red", bd="5", font=24, width=80, height=2)
+                validation = Label(new4, text="EAN deve conter 13 dígitos.", bg="red", bd="5", font=24, width=80,
+                                   height=2)
                 validation.place(x=0, y=3)
                 return
 
@@ -333,10 +334,8 @@ def abrir_garantia():
         checkbox_produto_unico_info = checkbox_produto_unico.get()
         motivo_info = motivo.get()
 
-
         # Validações
         # Obrigar a pessoa colocar um das três pesquisas
-
 
         matar_ambar()
 
@@ -358,10 +357,24 @@ def abrir_garantia():
             print('oi')
 
     def enable_produto_unico():
-        checkbox_produto_unico_entry.config(state="active")
+        checkbox_garantia_info = checkbox_garantia.get()
+        if checkbox_garantia_info == 0:
+            checkbox_produto_unico_entry.deselect()
+            checkbox_produto_unico_entry.config(state="disabled")
+            quantidade_produto_entry.delete(0, END)
+            quantidade_produto_entry.config(state="disabled")
+        else:
+            checkbox_produto_unico_entry.config(state="active")
 
     def enable_quantidade():
-        quantidade_produto_entry.config(state="normal")
+        checkbox_produto_unico_info = checkbox_produto_unico.get()
+        if checkbox_produto_unico_info == 0:
+            quantidade_produto_entry.delete(0, END)
+            quantidade_produto_entry.config(state="disabled")
+        else:
+            quantidade_produto_entry.config(state="normal")
+            quantidade_produto_entry.insert(0, '1')
+
     ############ TKINTER #############
 
     new5 = Toplevel(window)
@@ -398,8 +411,8 @@ def abrir_garantia():
     checkbox_garantia_entry = Checkbutton(new5, text="Abrir Garantia?", variable=checkbox_garantia, onvalue=1,
                                           offvalue=0, command=enable_produto_unico)
 
-    checkbox_produto_unico_entry = Checkbutton(new5, text="Produto único?", variable=checkbox_produto_unico,  onvalue=1,
-                                                   offvalue=0, state='disabled', command=enable_quantidade)
+    checkbox_produto_unico_entry = Checkbutton(new5, text="Produto único?", variable=checkbox_produto_unico, onvalue=1,
+                                               offvalue=0, state='disabled', command=enable_quantidade)
     quantidade_produto_entry = Entry(new5, textvariable=quantidade_produto, state='disabled')
     motivo_entry = ttk.Combobox(new5, width=45, textvariable=motivo)
     motivo_entry['values'] = ('DESISTENCIA 7D',
