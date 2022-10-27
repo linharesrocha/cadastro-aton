@@ -357,6 +357,11 @@ def abrir_garantia():
         if pedido_esc_info != '':
             print('oi')
 
+    def enable_produto_unico():
+        checkbox_produto_unico_entry.config(state="active")
+
+    def enable_quantidade():
+        quantidade_produto_entry.config(state="normal")
     ############ TKINTER #############
 
     new5 = Toplevel(window)
@@ -390,11 +395,12 @@ def abrir_garantia():
     pedido_aton_entry = Entry(new5, textvariable=pedido_aton)
     pedido_loja_entry = Entry(new5, textvariable=pedido_loja)
     pedido_esc_entry = Entry(new5, textvariable=pedido_esc)
-    quantidade_produto_entry = Entry(new5, textvariable=quantidade_produto)
     checkbox_garantia_entry = Checkbutton(new5, text="Abrir Garantia?", variable=checkbox_garantia, onvalue=1,
-                                          offvalue=0)
-    checkbox_produto_unico_entry = Checkbutton(new5, text="Produto único?", variable=checkbox_produto_unico, onvalue=1,
-                                               offvalue=0)
+                                          offvalue=0, command=enable_produto_unico)
+
+    checkbox_produto_unico_entry = Checkbutton(new5, text="Produto único?", variable=checkbox_produto_unico,  onvalue=1,
+                                                   offvalue=0, state='disabled', command=enable_quantidade)
+    quantidade_produto_entry = Entry(new5, textvariable=quantidade_produto, state='disabled')
     motivo_entry = ttk.Combobox(new5, width=45, textvariable=motivo)
     motivo_entry['values'] = ('DESISTENCIA 7D',
                               'END. INCORRETO',
