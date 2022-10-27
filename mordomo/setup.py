@@ -5,11 +5,12 @@ from time import sleep
 from dotenv import load_dotenv
 
 # Load Variables
-env_path = Path('..') / 'C:\workspace\cadastro-aton\.env'
-load_dotenv(dotenv_path=env_path)
-login = os.environ['LOGIN_USER']
-senha = os.environ['LOGIN_PASS']
-
+# env_path = Path('..') / 'C:\workspace\cadastro-aton\.env'
+# load_dotenv(dotenv_path=env_path)
+# login = os.environ['LOGIN_USER']
+# senha = os.environ['LOGIN_PASS']
+login = ''
+senha = ''
 
 def login_aton():
     # Campo de Usuário

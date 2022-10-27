@@ -238,31 +238,33 @@ def conversor_imagem():
 
 def gerador_cod_interno():
     def program():
-        ean_codigo_info = ean_codigo.get()
+        ean_codigo_info = ean_codigo_entry.get("1.0", END)
+        lista_de_ean = ean_codigo_info.splitlines()
+        lista_de_ean = list(filter(None, lista_de_ean))
 
-        if len(ean_codigo_info) != 13:
-            validation = Label(new4, text="EAN deve conter 13 dígitos.", bg="red", bd="5", font=24, width=50, height=2)
-            validation.place(x=0, y=3)
-            return
+        aux = 1.0
+        for ean in lista_de_ean:
+            if len(ean) != 13:
+                validation = Label(new4, text="EAN deve conter 13 dígitos.", bg="red", bd="5", font=24, width=80, height=2)
+                validation.place(x=0, y=3)
+                return
 
-        # Transformando no padrão
-        codigo_ean_montagem = ["DG", ean_codigo_info[0], ean_codigo_info[8:]]
-        codigo_ean_montagem = list(map(str, codigo_ean_montagem))
+            # Transformando no padrão
+            codigo_ean_montagem = ["DG", ean[0], ean[8:]]
+            codigo_ean_montagem = list(map(str, codigo_ean_montagem))
 
-        # Junta a lista em um código único
-        codigo_ean_final = ''.join(codigo_ean_montagem)
+            # Junta a lista em um código único
+            codigo_ean_final = ''.join(codigo_ean_montagem)
 
-        # Apagando o que está escrito, e inserindo o código depois
-        ean_codigo_final_entry.delete(0, 'end')
-        ean_codigo_final_entry.insert(0, codigo_ean_final)
-        return codigo_ean_final
+            # Apagando o que está escrito, e inserindo o código depois
+            ean_codigo_final_entry.insert(END, codigo_ean_final + '\n')
 
-    def copiar():
-        pyperclip.copy(ean_codigo_final_entry.get())
+    def limpar():
+        ean_codigo_final_entry.delete("1.0", "end")
 
     ############ TKINTER #############
     new4 = Toplevel(window)
-    new4.geometry("400x350")
+    new4.geometry("600x580")
     new4.title("Gerador")
 
     ean_codigo = StringVar()
@@ -272,22 +274,20 @@ def gerador_cod_interno():
     heading3.pack()
 
     ean_codigo_text = Label(new4, text="Digite o código EAN")
+    ean_codigo_entry = Text(new4, font=('Helvetica', 10), width=30)
+    ean_codigo_text.place(x=110, y=70)
+    ean_codigo_entry.place(x=70, y=90)
+
     ean_codigo_final_text = Label(new4, text="Resultado")
-
-    ean_codigo_text.place(x=140, y=70)
-    ean_codigo_final_text.place(x=140, y=160)
-
-    ean_codigo_entry = Entry(new4, textvariable=ean_codigo)
-    ean_codigo_final_entry = Entry(new4)
-
-    ean_codigo_entry.place(x=140, y=90)
-    ean_codigo_final_entry.place(x=140, y=180, height=40)
+    ean_codigo_final_entry = Text(new4, font=('Helvetica', 10), width=30)
+    ean_codigo_final_text.place(x=390, y=70)
+    ean_codigo_final_entry.place(x=320, y=90)
 
     ttk.Button(new4, text="Gerar", command=program, width=20) \
-        .place(x=140, y=300, width=120, height=40)
+        .place(x=70, y=470, width=215, height=40)
 
-    ttk.Button(new4, text="Copiar", command=copiar, width=20) \
-        .place(x=310, y=180, width=60, height=30)
+    ttk.Button(new4, text="Limpar", command=limpar, width=20) \
+        .place(x=320, y=470, width=215, height=40)
 
 
 def gerador_cod_interno_kit():
@@ -688,7 +688,7 @@ if __name__ == '__main__':
     window.geometry("500x500")
     window.title("Mordomo")
     window['background'] = '#778899'
-    window.iconbitmap("C:\workspace\cadastro-aton\\favicon.ico")
+    # window.iconbitmap("C:\workspace\cadastro-aton\\favicon.ico")
     tabControl = ttk.Notebook(window)
 
     # Aton
