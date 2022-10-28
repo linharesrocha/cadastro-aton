@@ -3,7 +3,7 @@
 
 # Criando a Pasta workspace
 
-Set-Location ..\..\
+Set-Location /
 $Folder = 'C:\workspace'
 if (Test-Path -Path $Folder) {
 	"ALERT: workspace ja existe"
@@ -17,22 +17,28 @@ else {
 Write-Host " "
 
 # Clonando arquivos
-Set-Location ..\..\workspace
+Set-Location C:\workspace
 
 $Folder = 'C:\workspace\cadastro-aton'
 if (Test-Path -Path $Folder) {
 	"ALERT: cadastro-aton ja existe"
-	"ALERT: removendo pasta"
-	Remove-Item 'C:\workspace\cadastro-aton' -Recurse -Force
+	"ALERT: dando pull"
+	git pull
 }
 
-git clone https://github.com/linharesrocha/cadastro-aton.git
-Write-Host " "
-Write-Host "SUCESS: arquivos clonados"
+else {
+	git clone https://github.com/linharesrocha/cadastro-aton.git
+	Write-Host " "
+	Write-Host "SUCESS: arquivos clonados"
+}
 
 
 # Instalando aplicativo
-Set-Location ..\..\..\workspace\cadastro-aton\
+Set-Location C:\workspace\cadastro-aton\
+git init
+git remote add origin https://github.com/linharesrocha/cadastro-aton.git
 py -m ensurepip --upgrade
 python -m pip install -U pip
 pip install -r requirements.txt
+
+pause
