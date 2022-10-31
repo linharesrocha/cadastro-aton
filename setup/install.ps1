@@ -41,4 +41,9 @@ py -m ensurepip --upgrade
 python -m pip install -U pip
 pip install -r requirements.txt
 
+Write-Host " "
+Write-Host "Instalando Icone.exe"
+pyinstaller --noconsole --name="Mordomo" --noconfirm --icon="C:\workspace\cadastro-aton\favicon.ico" C:\workspace\cadastro-aton\mordomo\main.py
+Copy-Item "C:\workspace\cadastro-aton\favicon.ico" -Destination C:\workspace\cadastro-aton\dist\Mordomo
+
 pause
