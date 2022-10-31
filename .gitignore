@@ -8,3 +8,4 @@ __pycache__/
 vincular-categoria.py
 produtos.xlsx
 produtos_pai.xlsx
+.env
