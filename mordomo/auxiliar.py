@@ -52,6 +52,9 @@ def menu_produtos():
     pg.moveTo(283, 37)
     pg.click()
 
+def cadastro_produtos_aba_cadastro_produtos():
+    pg.moveTo(546, 221)
+    pg.click()
 
 def opcao_cadastro_produtos():
     # Cadastro de produtos
@@ -198,8 +201,48 @@ def consultar_produtos_menu_cod_id():
     sleep(1)
 
 
-# Cadastro Produtos Composicao
+# Cadastro Produtos Ficha Técnica
+def cadastro_produtos_aba_ficha_tecnica():
+    # aba_ficha_tecnica
+    pg.moveTo(673, 219)
+    pg.click()
 
+
+def cadastro_produtos_ficha_tecnica_menu_skyhub():
+    pg.moveTo(530, 475)
+    pg.click()
+
+
+def cadastro_produtos_ficha_tecnica_menu_magalu():
+    pg.moveTo(527, 355)
+    pg.click()
+
+
+def cadastro_produtos_ficha_tecnica_botao_adicionar():
+    pg.moveTo(676, 562)
+    pg.click()
+
+
+def cadastro_produtos_ficha_tecnica_campo_nome():
+    pg.moveTo(777, 281)
+    pg.click()
+
+
+def cadastro_produtos_ficha_tecnica_campo_valor():
+    pg.moveTo(963, 280)
+    pg.click()
+
+
+def cadastro_produtos_ficha_tecnica_botao_salvar():
+    pg.moveTo(735, 559)
+    pg.click()
+
+
+# botao salvar
+pg.moveTo(735, 559)
+
+
+# Cadastro Produtos Composicao
 def cadastro_produtos_aba_composicao():
     pg.moveTo(931, 217)
     pg.click()
