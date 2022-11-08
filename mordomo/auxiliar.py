@@ -137,6 +137,95 @@ def publicar_anuncio_aba_consulta_produtos():
     pg.click()
 
 
+def publicar_anuncio_aba_produtos_selecionados_asterisco():
+    pg.moveTo(7, 132)
+    pg.click()
+
+
+def publicar_anuncio_aba_produtos_selecionados_asterisco_tudo():
+    pg.moveTo(15, 172)
+    pg.click()
+
+
+def publicar_anuncio_aba_produtos_selecionados_asterisco_auto_id():
+    pg.moveTo(10, 216)
+    pg.click()
+
+
+def publicar_anuncio_aba_produtos_selecionados_filtro_auto_id():
+    pg.moveTo(32, 133)
+    pg.doubleClick()
+    pg.click()
+
+
+def publicar_anuncio_produtos_selecionado_remove_filtros_ruins():
+    pg.moveTo(13, 549)
+    pg.click()
+
+    pg.moveTo(13, 569)
+    pg.click()
+
+    pg.moveTo(13, 589)
+    pg.click()
+
+    pg.moveTo(13, 609)
+    pg.click()
+
+    pg.moveTo(13, 634)
+    pg.click()
+
+    pg.moveTo(13, 659)
+    pg.click()
+    #
+    pg.moveTo(13, 680)
+    pg.click()
+
+    pg.moveTo(13, 700)
+    pg.click()
+
+    pg.moveTo(13, 720)
+    pg.click()
+
+    pg.moveTo(13, 740)
+    pg.click()
+
+    pg.moveTo(13, 800)
+    pg.click()
+
+    pg.moveTo(13, 844)
+    pg.click()
+
+    pg.moveTo(13, 864)
+    pg.click()
+
+def publicar_anuncio_produtos_selecionado_sobe_barra():
+    sleep(1)
+    pg.moveTo(1904, 140)
+    pg.click()
+    pg.click()
+    pg.click()
+    pg.click()
+    pg.click()
+    pg.click()
+    pg.click()
+    pg.click()
+    pg.click()
+    pg.click()
+    pg.click()
+    pg.click()
+
+
+def publicar_anuncio_aba_produtos_sobe_barra():
+    pg.moveTo(1900, 258)
+    pg.click()
+    pg.click()
+    pg.click()
+    pg.click()
+    pg.click()
+    pg.click()
+    pg.click()
+
+
 def menu_produtos():
     pg.moveTo(283, 37)
     pg.click()
