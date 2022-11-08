@@ -9,7 +9,8 @@ while True:
         xCursor = pyautogui.position().x
         yCursor = pyautogui.position().y
 
-        print('# ' + response)
-        print('pg.moveTo({0}, {1})'.format(xCursor, yCursor))
+        print('def ' + response + '():')
+        print(' pg.moveTo({0}, {1})'.format(xCursor, yCursor))
+        print(' pg.click()')
     else:
         break

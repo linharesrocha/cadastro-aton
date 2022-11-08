@@ -47,14 +47,115 @@ def button_close_aton():
     sleep(1)
 
 
+def menu_integracao():
+    pg.moveTo(474, 39)
+    pg.click()
+
+
+def opcao_publicar_anuncio():
+    pg.moveTo(517, 270)
+    pg.click()
+    sleep(1)
+
+
+def publicar_anuncio_filtro_verde():
+    pg.moveTo(881, 84)
+    pg.click()
+
+
+def publicar_anuncio_seleciona_seta_grupo():
+    pg.moveTo(410, 127)
+    pg.click()
+
+
+def publicar_anuncio_seleciona_madz_grupo():
+    pg.moveTo(283, 189)
+    pg.click()
+
+
+def publicar_anuncio_seleciona_leal_grupo():
+    pg.moveTo(276, 170)
+    pg.click()
+
+
+def publicar_anuncio_seleciona_marktplace_magalu_madz():
+    pg.moveTo(152, 408)
+    pg.click()
+
+
+def publicar_anuncio_seleciona_marketplace_magalu_leal():
+    pg.moveTo(125, 372)
+    pg.click()
+
+
+def publicar_anuncio_estoque_positivo():
+    pg.moveTo(176, 180)
+    pg.click()
+
+
+def publicar_anuncio_botao_consultar():
+    pg.moveTo(676, 80)
+    pg.click()
+    sleep(4)
+
+
+def publicar_anuncio_clica_filtro_existe():
+    pg.moveTo(318, 240)
+    pg.click()
+
+
+def publicar_anuncio_seleciona_resultado_botao_direito():
+    sleep(1)
+    pg.moveTo(1146, 280)
+    pg.rightClick()
+
+
+def publicar_anuncio_seleciona_resultado_produto():
+    pg.moveTo(1201, 316)
+    pg.click()
+    sleep(3)
+
+
+def publicar_anuncio_seleciona_resultado_f2():
+    pg.moveTo(1211, 296)
+    pg.click()
+    sleep(1)
+
+
+def publicar_anuncio_aba_produtos_selecionados():
+    pg.moveTo(320, 34)
+    pg.click()
+
+
+def publicar_anuncio_aba_produtos_selecionados_filtro_id():
+    pg.moveTo(277, 130)
+    pg.click()
+
+
+def publicar_anuncio_aba_consulta_produtos():
+    pg.moveTo(107, 33)
+    pg.click()
+
+
 def menu_produtos():
-    # Menu Produtos
     pg.moveTo(283, 37)
     pg.click()
+
+
+def publicar_anuncio_aba_selecionados_valor_preco_de():
+    pg.moveTo(1472, 162)
+    pg.click()
+
+
+def publicar_anuncio_aba_selecionados_valor_preco_por():
+    pg.moveTo(1567, 162)
+    pg.click()
+
 
 def cadastro_produtos_aba_cadastro_produtos():
     pg.moveTo(546, 221)
     pg.click()
+
 
 def opcao_cadastro_produtos():
     # Cadastro de produtos
@@ -78,6 +179,12 @@ def cadastro_produtos_codigo_interno():
 def cadastro_produtos_nome_produto():
     pg.moveTo(905, 316)
     pg.click()
+
+
+def cadastro_produtos_valor_custo():
+    sleep(1)
+    pg.moveTo(1087, 589)
+    pg.doubleClick()
 
 
 def cadastro_produtos_ean():
@@ -152,6 +259,11 @@ def cadastro_produtos_botao_salvar():
     sleep(2)
 
 
+def cadastro_produtos_fechar():
+    pg.moveTo(1441, 161)
+    pg.click()
+
+
 def cadastro_produtos_botao_consultar():
     pg.moveTo(766, 859)
     pg.click()
@@ -160,6 +272,7 @@ def cadastro_produtos_botao_consultar():
 def cadastro_produtos_botao_alterar():
     pg.moveTo(617, 857)
     pg.click()
+    sleep(1)
 
 
 def cadastro_produtos_botao_cancelar():
