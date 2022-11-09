@@ -68,8 +68,8 @@ while stop < 72:
         print(valor_custo_final)
 
         # Float To String
-        valor_custo_final = str(valor_custo_final).replace('.',',')
-        valor_custo_pre = str(valor_custo_pre).replace('.',',')
+        valor_custo_final = str(valor_custo_final).replace('.', ',')
+        valor_custo_pre = str(valor_custo_pre).replace('.', ',')
         print(valor_custo_pre)
         print(valor_custo_final)
 
@@ -152,7 +152,6 @@ while stop < 72:
         pg.moveTo(1510, START_PRECO_DE)
         pg.click()
         START_PRECO_DE = START_PRECO_DE + 22
-
 
     # Preenche Preço Por
     START_PRECO_POR = 187
