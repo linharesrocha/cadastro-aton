@@ -1,7 +1,7 @@
+import pyperclip
 from main import *
 from auxiliar import *
 from mordomo.setup import *
-import re
 
 matar_ambar()
 executa_icone_aton()
@@ -22,7 +22,7 @@ publicar_anuncio_produtos_selecionado_remove_filtros_ruins()
 publicar_anuncio_aba_produtos_selecionados_filtro_auto_id()
 
 stop = 1
-while stop < 2:
+while stop < 5:
     publicar_anuncio_aba_consulta_produtos()
     publicar_anuncio_aba_produtos_sobe_barra()
     publicar_anuncio_seleciona_resultado_botao_direito()
@@ -98,14 +98,12 @@ while stop < 2:
         pg.click()
         pg.hotkey('ctrl', 'c')
         cabecalho = pyperclip.paste()
-        cabecalho = cabecalho.replace('-', '')
-        lista_valores_cabecalho = re.findall(r'\d+', cabecalho)
-        lista_valores_cabecalho = lista_valores_cabecalho[6:8]
-        valor_custo = '.'.join(lista_valores_cabecalho)
+        lista_valores_cabecalho = cabecalho.split("\t")
+        valor_custo = lista_valores_cabecalho[-3]
+        valor_custo = valor_custo.replace(',', '.')
         lista_valores_custo.append(valor_custo)
         START_VALOR_CUSTO_Y = START_VALOR_CUSTO_Y + 22
 
-    print(lista_valores_custo)
     # Cálculo valor Preço De e Preço Por
     lista_valores_preco_de = []
     lista_valores_preco_por = []
@@ -172,4 +170,27 @@ while stop < 2:
 
         lista_valores_preco_por.append(valor_por_final)
         lista_valores_preco_de.append(valor_pre_final)
+
+    # Preenchendo Preço De
+    START_PRECO_DE = 187
+    pg.moveTo(1510, 165)
+    pg.click()
+    for valor_preco_de in lista_valores_preco_de:
+        pyperclip.copy(valor_preco_de)
+        pg.hotkey('ctrl', 'v')
+        pg.moveTo(1510, START_PRECO_DE)
+        pg.click()
+        START_PRECO_DE = START_PRECO_DE + 22
+
+    # Preenche Preço Por
+    START_PRECO_POR = 187
+    pg.moveTo(1610, 165)
+    pg.click()
+    for valor_preco_por in lista_valores_preco_por:
+        pyperclip.copy(valor_preco_por)
+        pg.hotkey('ctrl', 'v')
+        pg.moveTo(1610, START_PRECO_POR)
+        pg.click()
+        START_PRECO_POR = START_PRECO_POR + 22
+
     stop = stop + 1
