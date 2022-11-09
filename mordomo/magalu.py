@@ -21,8 +21,8 @@ publicar_anuncio_aba_produtos_selecionados_asterisco_auto_id()
 publicar_anuncio_produtos_selecionado_remove_filtros_ruins()
 publicar_anuncio_aba_produtos_selecionados_filtro_auto_id()
 
-pareiCaralho = 1
-while pareiCaralho < 72:
+stop = 1
+while stop < 72:
     publicar_anuncio_aba_consulta_produtos()
     publicar_anuncio_aba_produtos_sobe_barra()
     publicar_anuncio_seleciona_resultado_botao_direito()
@@ -162,5 +162,5 @@ while pareiCaralho < 72:
         pg.click()
         START_PRECO_POR = START_PRECO_POR + 22
 
-    pareiCaralho = pareiCaralho + 1
-    print(pareiCaralho)
+    stop = stop + 1
+    print(stop)
