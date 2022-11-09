@@ -11,7 +11,7 @@ opcao_publicar_anuncio()
 publicar_anuncio_filtro_verde()
 publicar_anuncio_seleciona_seta_grupo()
 publicar_anuncio_seleciona_leal_grupo()
-publicar_anuncio_seleciona_marketplace_magalu_leal()
+publicar_anuncio_seleciona_marketplace_b2w_leal()
 publicar_anuncio_estoque_positivo()
 publicar_anuncio_botao_consultar()
 publicar_anuncio_clica_filtro_existe()
@@ -22,7 +22,7 @@ publicar_anuncio_produtos_selecionado_remove_filtros_ruins()
 publicar_anuncio_aba_produtos_selecionados_filtro_auto_id()
 
 stop = 1
-while stop < 5:
+while stop < 73:
     publicar_anuncio_aba_consulta_produtos()
     publicar_anuncio_aba_produtos_sobe_barra()
     publicar_anuncio_seleciona_resultado_botao_direito()
