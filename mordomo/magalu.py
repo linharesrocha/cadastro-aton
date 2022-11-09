@@ -1,6 +1,6 @@
 from main import *
 from auxiliar import *
-from setup import *
+from mordomo.setup import *
 import pandas as pd
 
 matar_ambar()
@@ -77,6 +77,7 @@ while stop < 72:
         valor_custo_pre = '0'
         valor_custo_final = '0'
 
+    # Pegando nome do produto na descricao
     cadastro_produtos_descricao()
     pg.press('up', presses=100)
     pg.press('end')
@@ -90,6 +91,8 @@ while stop < 72:
 
     titulo_produto = pyperclip.paste()
     titulo_produto = titulo_produto.strip('"')
+    if titulo_produto.isupper():
+        titulo_produto = titulo_produto.title()
 
     cadastro_produtos_fechar()
     publicar_anuncio_seleciona_resultado_botao_direito()
