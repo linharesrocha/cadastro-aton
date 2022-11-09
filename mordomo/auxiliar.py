@@ -202,13 +202,13 @@ def publicar_anuncio_produtos_selecionado_remove_filtros_ruins():
 def publicar_anuncio_produtos_selecionado_sobe_barra():
     sleep(1)
     pg.moveTo(1904, 140)
-    for i in range(30):
+    for i in range(40):
         pg.tripleClick()
 
 
 def publicar_anuncio_aba_produtos_sobe_barra():
     pg.moveTo(1900, 258)
-    for i in range(30):
+    for i in range(40):
         pg.tripleClick()
 
 
