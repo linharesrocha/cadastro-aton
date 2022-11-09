@@ -1,7 +1,7 @@
 import pyperclip
-from main import *
-from auxiliar import *
-from mordomo.setup import *
+from ..main import *
+from ..auxiliar import *
+from mordomo.login import *
 
 matar_ambar()
 executa_icone_aton()
