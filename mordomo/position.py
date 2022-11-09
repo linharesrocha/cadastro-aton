@@ -1,6 +1,5 @@
 import pyautogui
 import time
-time.sleep(2)
 
 print('ESCREVA O NOME DA FUNCIONALIDADE: ')
 while True:

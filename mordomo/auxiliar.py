@@ -198,6 +198,7 @@ def publicar_anuncio_produtos_selecionado_remove_filtros_ruins():
     pg.moveTo(13, 864)
     pg.click()
 
+
 def publicar_anuncio_produtos_selecionado_sobe_barra():
     sleep(1)
     pg.moveTo(1904, 140)
