@@ -342,6 +342,12 @@ def abrir_garantia():
             validation.place(x=0, y=3)
             return
 
+        if pedido_aton_info.isnumeric() == False:
+            validation = Label(new5, text="Pedido Aton é apenas númerico!", bg="red", bd="5", font=24, width=70,
+                               height=3)
+            validation.place(x=0, y=3)
+            return
+
         matar_ambar()
 
         minimiza_janelas(window, new5)
@@ -356,6 +362,7 @@ def abrir_garantia():
 
         if len(pedido_aton_info) != 0:
             pyperclip.copy(pedido_aton_info)
+            print(pedido_aton_info)
             f8_caixa_pesquisa_pedido()
             pg.hotkey('ctrl', 'v')
 

@@ -1,10 +1,8 @@
 import pyperclip
-from mordomo.login import *
-from mordomo.main import *
 from mordomo.auxiliar import *
 import pandas as pd
 
-dados = pd.read_excel('magalu_leal.xlsx')
+dados = pd.read_excel('excel/magalu_leal.xlsx')
 cod_id_lista = dados['cod_id'].tolist()
 nomes_lista = dados['titulo'].tolist()
 preco_de_lista = dados['preco_de'].tolist()
@@ -36,17 +34,16 @@ for id in cod_id_lista:
     pyperclip.copy(nomes_lista[aux])
     pg.hotkey('ctrl', 'v')
 
-
     # Preenchendo Preço De
     pg.moveTo(1510, 165)
     pg.click()
-    pyperclip.copy(preco_de_lista[aux].replace('.',','))
+    pyperclip.copy(preco_de_lista[aux].replace('.', ','))
     pg.hotkey('ctrl', 'v')
 
     # Preenche Preço Por
     pg.moveTo(1610, 165)
     pg.click()
-    pyperclip.copy(preco_por_lista[aux].replace('.',','))
+    pyperclip.copy(preco_por_lista[aux].replace('.', ','))
     pg.hotkey('ctrl', 'v')
     pg.press('up')
     aux = aux + 1
