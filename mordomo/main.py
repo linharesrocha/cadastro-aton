@@ -1,6 +1,6 @@
 import random
-from login import *
-from auxiliar import *
+from mordomo.login import *
+from mordomo.auxiliar import *
 from datetime import datetime
 from tkinter import *
 from tkinter import filedialog as fd
