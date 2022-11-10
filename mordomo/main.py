@@ -378,6 +378,10 @@ def abrir_garantia():
             pg.hotkey('ctrl', 'v')
 
         f8_botao_consultar()
+        f8_seleciona_resultado_botao_direito()
+
+        if checkbox_garantia_info == 1:
+            f8_seleciona_opcao_abrir_garantia()
 
     def enable_produto_unico():
         checkbox_garantia_info = checkbox_garantia.get()

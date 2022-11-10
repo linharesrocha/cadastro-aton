@@ -500,5 +500,14 @@ def f8_botao_consultar():
     pg.click()
     sleep(1)
     pg.press('enter')
-    sleep(6)
+    sleep(8)
 
+
+def f8_seleciona_resultado_botao_direito():
+    pg.moveTo(625, 245)
+    pg.rightClick()
+
+
+def f8_seleciona_opcao_abrir_garantia():
+    pg.moveTo(755, 478)
+    pg.click()
