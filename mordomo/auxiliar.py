@@ -477,7 +477,7 @@ def cadastro_produtos_composicao_botao_salvar():
 
 def entrar_na_tela_f8():
     pg.hotkey('f8')
-    sleep(2)
+    sleep(3)
 
 
 def f8_botao_limpar():
@@ -493,3 +493,12 @@ def f8_caixa_pesquisa_pedido():
 def f8_caixa_select_box_pedido():
     pg.moveTo(21, 35)
     pg.click()
+
+
+def f8_botao_consultar():
+    pg.moveTo(871, 97)
+    pg.click()
+    sleep(1)
+    pg.press('enter')
+    sleep(6)
+

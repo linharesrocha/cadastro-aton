@@ -336,17 +336,18 @@ def abrir_garantia():
 
         # Validações
         # Obrigar a pessoa colocar um das três pesquisas
-        if len(pedido_aton_info) == 0 and len(pedido_loja_info) == 0 and len(pedido_esc_info) == 0:
-            validation = Label(new5, text="Pedido é obrigatorio!", bg="red", bd="5", font=24, width=70,
-                               height=3)
-            validation.place(x=0, y=3)
-            return
+        # if len(pedido_aton_info) == 0 and len(pedido_loja_info) == 0 and len(pedido_esc_info) == 0:
+        #     validation = Label(new5, text="Pedido é obrigatorio!", bg="red", bd="5", font=24, width=70,
+        #                        height=3)
+        #     validation.place(x=0, y=3)
+        #     return
 
-        if pedido_aton_info.isnumeric() == False:
-            validation = Label(new5, text="Pedido Aton é apenas númerico!", bg="red", bd="5", font=24, width=70,
-                               height=3)
-            validation.place(x=0, y=3)
-            return
+        if len(pedido_aton_info) != 0:
+            if pedido_aton_info.isnumeric() == False:
+                validation = Label(new5, text="Pedido Aton é apenas númerico!", bg="red", bd="5", font=24, width=70,
+                                   height=3)
+                validation.place(x=0, y=3)
+                return
 
         matar_ambar()
 
@@ -362,7 +363,6 @@ def abrir_garantia():
 
         if len(pedido_aton_info) != 0:
             pyperclip.copy(pedido_aton_info)
-            print(pedido_aton_info)
             f8_caixa_pesquisa_pedido()
             pg.hotkey('ctrl', 'v')
 
@@ -376,6 +376,8 @@ def abrir_garantia():
             pyperclip.copy(pedido_esc_info)
             pg.press('esc')
             pg.hotkey('ctrl', 'v')
+
+        f8_botao_consultar()
 
     def enable_produto_unico():
         checkbox_garantia_info = checkbox_garantia.get()
