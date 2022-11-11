@@ -2,7 +2,7 @@ import pyperclip
 from mordomo.auxiliar import *
 import pandas as pd
 
-dados = pd.read_excel('excel/magalu_leal.xlsx')
+dados = pd.read_excel('excel/b2w_madz.xlsx')
 cod_id_lista = dados['cod_id'].tolist()
 nomes_lista = dados['titulo'].tolist()
 preco_de_lista = dados['preco_de'].tolist()
@@ -13,7 +13,6 @@ preco_por_lista = list(map(str, preco_por_lista))
 
 tamanho_dados = len(dados)
 
-aux = 0
 for id in cod_id_lista:
     # ID
     pg.moveTo(76, 87)
@@ -23,27 +22,30 @@ for id in cod_id_lista:
     pyperclip.copy(id)
     pg.hotkey('ctrl', 'v')
 
+    # Procurando o Index do Id
+    index = dados[dados['cod_id'] == id].index.values
+    index = index[0]
+
     # Botao consultar
     pg.moveTo(774, 81)
     pg.click()
     sleep(1)
 
-    # Pegando o primeiro para armazenar o original
+    # Preenche nome
     pg.moveTo(825, 165)
     pg.click()
-    pyperclip.copy(nomes_lista[aux])
+    pyperclip.copy(nomes_lista[index])
     pg.hotkey('ctrl', 'v')
 
     # Preenchendo Preço De
     pg.moveTo(1510, 165)
     pg.click()
-    pyperclip.copy(preco_de_lista[aux].replace('.', ','))
+    pyperclip.copy(preco_de_lista[index].replace('.', ','))
     pg.hotkey('ctrl', 'v')
 
     # Preenche Preço Por
     pg.moveTo(1610, 165)
     pg.click()
-    pyperclip.copy(preco_por_lista[aux].replace('.', ','))
+    pyperclip.copy(preco_por_lista[index].replace('.', ','))
     pg.hotkey('ctrl', 'v')
     pg.press('up')
-    aux = aux + 1
