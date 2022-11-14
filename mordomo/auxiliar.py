@@ -189,7 +189,7 @@ def publicar_anuncio_aba_produtos_selecionados_filtro_auto_id():
 
 
 def publicar_anuncio_produtos_selecionado_remove_filtros_ruins():
-    pg.moveTo(13, 549)
+    pg.moveTo(8, 488)
     pg.click()
 
     pg.moveTo(13, 569)
