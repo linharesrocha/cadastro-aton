@@ -1,6 +1,6 @@
 import pyperclip
-from ..main import *
-from ..auxiliar import *
+from mordomo.main import *
+from mordomo.auxiliar import *
 from mordomo.login import *
 
 matar_ambar()
@@ -10,8 +10,8 @@ menu_integracao()
 opcao_publicar_anuncio()
 publicar_anuncio_filtro_verde()
 publicar_anuncio_seleciona_seta_grupo()
-publicar_anuncio_seleciona_leal_grupo()
-publicar_anuncio_seleciona_marketplace_b2w_leal()
+publicar_anuncio_seleciona_pisste_grupo()
+publicar_anuncio_seleciona_marketplace_shopee_pisste()
 publicar_anuncio_estoque_positivo()
 publicar_anuncio_botao_consultar()
 publicar_anuncio_clica_filtro_existe()
@@ -194,3 +194,4 @@ while stop < 73:
         START_PRECO_POR = START_PRECO_POR + 22
 
     stop = stop + 1
+    break

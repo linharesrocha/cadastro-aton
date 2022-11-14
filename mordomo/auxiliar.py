@@ -78,6 +78,11 @@ def publicar_anuncio_seleciona_leal_grupo():
     pg.click()
 
 
+def publicar_anuncio_seleciona_pisste_grupo():
+    pg.moveTo(262, 205)
+    pg.click()
+
+
 def publicar_anuncio_seleciona_marktplace_magalu_madz():
     pg.moveTo(152, 408)
     pg.click()
@@ -95,6 +100,21 @@ def publicar_anuncio_seleciona_marketplace_b2w_leal():
 
 def publicar_anuncio_seleciona_marketplace_b2w_madz():
     pg.moveTo(104, 184)
+    pg.click()
+
+
+def publicar_anuncio_seleciona_marketplace_shopee_leal():
+    pg.moveTo(108, 643)
+    pg.click()
+
+
+def publicar_anuncio_seleciona_marketplace_shopee_madz():
+    pg.moveTo(110, 6)
+    pg.click()
+
+
+def publicar_anuncio_seleciona_marketplace_shopee_pisste():
+    pg.moveTo(117, 702)
     pg.click()
 
 
@@ -186,7 +206,7 @@ def publicar_anuncio_produtos_selecionado_remove_filtros_ruins():
 
     pg.moveTo(13, 659)
     pg.click()
-    #
+
     pg.moveTo(13, 680)
     pg.click()
 
@@ -196,13 +216,16 @@ def publicar_anuncio_produtos_selecionado_remove_filtros_ruins():
     pg.moveTo(13, 720)
     pg.click()
 
+    pg.moveTo(11, 757)
+    pg.click()
+
+    pg.moveTo(11, 822)
+    pg.click()
+
+    pg.moveTo(13, 886)
+    pg.click()
+
     pg.moveTo(13, 740)
-    pg.click()
-
-    pg.moveTo(13, 800)
-    pg.click()
-
-    pg.moveTo(13, 844)
     pg.click()
 
     pg.moveTo(13, 864)
