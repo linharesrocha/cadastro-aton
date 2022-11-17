@@ -438,6 +438,9 @@ def cadastro_produtos_ficha_tecnica_menu_magalu():
     pg.moveTo(527, 355)
     pg.click()
 
+def cadastro_produtos_ficha_tecnica_menu_netshoes():
+    pg.moveTo(527, 431)
+    pg.click()
 
 def cadastro_produtos_ficha_tecnica_botao_adicionar():
     pg.moveTo(676, 562)

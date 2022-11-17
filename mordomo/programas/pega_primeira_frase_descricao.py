@@ -10,7 +10,6 @@ for descritivo in descritivo_lista:
     primeiro_nome.append(titulo_descricao)
 
 aux = 0
-
 for nome in primeiro_nome:
     if nome.isupper():
         nome = nome.title()
