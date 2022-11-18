@@ -118,6 +118,21 @@ def publicar_anuncio_seleciona_marketplace_shopee_pisste():
     pg.click()
 
 
+def publicar_anuncio_seleciona_marketplace_netshoes_leal():
+    pg.moveTo(95, 556)
+    pg.click()
+
+
+def publicar_anuncio_seleciona_marketplace_netshoes_madz():
+    pg.moveTo(124, 580)
+    pg.click()
+
+
+def publicar_anuncio_seleciona_marketplace_netshoes_pisste():
+    pg.moveTo(119, 612)
+    pg.click()
+
+
 def publicar_anuncio_estoque_positivo():
     pg.moveTo(176, 180)
     pg.click()
@@ -438,9 +453,11 @@ def cadastro_produtos_ficha_tecnica_menu_magalu():
     pg.moveTo(527, 355)
     pg.click()
 
+
 def cadastro_produtos_ficha_tecnica_menu_netshoes():
     pg.moveTo(527, 431)
     pg.click()
+
 
 def cadastro_produtos_ficha_tecnica_botao_adicionar():
     pg.moveTo(676, 562)

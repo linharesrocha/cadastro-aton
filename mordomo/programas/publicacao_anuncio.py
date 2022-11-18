@@ -3,28 +3,32 @@ from mordomo.main import *
 from mordomo.auxiliar import *
 from mordomo.login import *
 
-matar_ambar()
-executa_icone_aton()
-login_aton()
-menu_integracao()
-opcao_publicar_anuncio()
-publicar_anuncio_filtro_verde()
-publicar_anuncio_seleciona_seta_grupo()
-publicar_anuncio_seleciona_pisste_grupo()
-publicar_anuncio_seleciona_marketplace_shopee_pisste()
-publicar_anuncio_estoque_positivo()
-publicar_anuncio_botao_consultar()
-publicar_anuncio_clica_filtro_existe()
-publicar_anuncio_aba_produtos_selecionados()
-publicar_anuncio_aba_produtos_selecionados_asterisco()
-publicar_anuncio_aba_produtos_selecionados_asterisco_auto_id()
-publicar_anuncio_produtos_selecionado_remove_filtros_ruins()
-publicar_anuncio_aba_produtos_selecionados_filtro_auto_id()
+# matar_ambar()
+# executa_icone_aton()
+# login_aton()
+# menu_integracao()
+# opcao_publicar_anuncio()
+# publicar_anuncio_filtro_verde()
+# publicar_anuncio_seleciona_seta_grupo()
+# publicar_anuncio_seleciona_pisste_grupo()
+# publicar_anuncio_seleciona_marketplace_netshoes_pisste()
+# publicar_anuncio_estoque_positivo()
+# publicar_anuncio_botao_consultar()
+# publicar_anuncio_clica_filtro_existe()
+# publicar_anuncio_aba_produtos_selecionados()
+# publicar_anuncio_aba_produtos_selecionados_asterisco()
+# publicar_anuncio_aba_produtos_selecionados_asterisco_auto_id()
+# publicar_anuncio_produtos_selecionado_remove_filtros_ruins()
+# publicar_anuncio_aba_produtos_selecionados_filtro_auto_id()
+
+# PISSTE 50
+# MADZ 200
+# LEAL 71
 
 stop = 1
-while stop < 73:
-    publicar_anuncio_aba_consulta_produtos()
-    publicar_anuncio_aba_produtos_sobe_barra()
+while stop < 51:
+    # publicar_anuncio_aba_consulta_produtos()
+    # publicar_anuncio_aba_produtos_sobe_barra()
     publicar_anuncio_seleciona_resultado_botao_direito()
     publicar_anuncio_seleciona_resultado_produto()
     cadastro_produtos_botao_alterar()
@@ -49,7 +53,7 @@ while stop < 73:
     publicar_anuncio_aba_produtos_selecionados()
     publicar_anuncio_produtos_selecionado_sobe_barra()
 
-    FIX_MOVE = 22
+    FIX_MOVE = 20
     START = 187
     qntd_variacoes = 1
 
@@ -72,7 +76,7 @@ while stop < 73:
         if primeiro_nome_teste == primeiro_nome_original:
             if primeiro_nome_teste.isupper():
                 qntd_variacoes = qntd_variacoes + 1
-                START = START + 22
+                START = START + 20
                 verification = 1
             else:
                 verification = 0
@@ -88,7 +92,7 @@ while stop < 73:
         pg.hotkey('ctrl', 'v')
         pg.moveTo(825, START_NOME)
         pg.click()
-        START_NOME = START_NOME + 22
+        START_NOME = START_NOME + 20
 
     # Pegando valor de custo
     lista_valores_custo = []
@@ -102,7 +106,7 @@ while stop < 73:
         valor_custo = lista_valores_cabecalho[-3]
         valor_custo = valor_custo.replace(',', '.')
         lista_valores_custo.append(valor_custo)
-        START_VALOR_CUSTO_Y = START_VALOR_CUSTO_Y + 22
+        START_VALOR_CUSTO_Y = START_VALOR_CUSTO_Y + 20
 
     # Cálculo valor Preço De e Preço Por
     lista_valores_preco_de = []
@@ -180,7 +184,7 @@ while stop < 73:
         pg.hotkey('ctrl', 'v')
         pg.moveTo(1510, START_PRECO_DE)
         pg.click()
-        START_PRECO_DE = START_PRECO_DE + 22
+        START_PRECO_DE = START_PRECO_DE + 20
 
     # Preenche Preço Por
     START_PRECO_POR = 187
@@ -191,7 +195,10 @@ while stop < 73:
         pg.hotkey('ctrl', 'v')
         pg.moveTo(1610, START_PRECO_POR)
         pg.click()
-        START_PRECO_POR = START_PRECO_POR + 22
+        START_PRECO_POR = START_PRECO_POR + 19
+
+    # Salvando
+    pg.hotkey('down')
+    pg.hotkey('up')
 
     stop = stop + 1
-    break
