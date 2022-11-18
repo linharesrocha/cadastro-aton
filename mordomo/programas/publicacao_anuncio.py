@@ -97,6 +97,7 @@ while stop < 51:
     pg.moveTo(1428, 165)
     pg.click()
     for i in range(qntd_variacoes):
+        sleep(1)
         pg.hotkey('ctrl', 'c')
         cabecalho = pyperclip.paste()
         lista_valores_cabecalho = cabecalho.split("\t")
