@@ -1,5 +1,4 @@
 import pyperclip
-
 from mordomo.main import *
 from mordomo.auxiliar import *
 import pandas as pd
