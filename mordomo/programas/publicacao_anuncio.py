@@ -3,23 +3,23 @@ from mordomo.main import *
 from mordomo.auxiliar import *
 from mordomo.login import *
 
-matar_ambar()
-executa_icone_aton()
-login_aton()
-menu_integracao()
-opcao_publicar_anuncio()
-publicar_anuncio_filtro_verde()
-publicar_anuncio_seleciona_seta_grupo()
-publicar_anuncio_seleciona_pisste_grupo()
-publicar_anuncio_seleciona_marketplace_netshoes_pisste()
-publicar_anuncio_estoque_positivo()
-publicar_anuncio_botao_consultar()
-publicar_anuncio_clica_filtro_existe()
-publicar_anuncio_aba_produtos_selecionados()
-publicar_anuncio_aba_produtos_selecionados_asterisco()
-publicar_anuncio_aba_produtos_selecionados_asterisco_auto_id()
-publicar_anuncio_produtos_selecionado_remove_filtros_ruins()
-publicar_anuncio_aba_produtos_selecionados_filtro_auto_id()
+# matar_ambar()
+# executa_icone_aton()
+# login_aton()
+# menu_integracao()
+# opcao_publicar_anuncio()
+# publicar_anuncio_filtro_verde()
+# publicar_anuncio_seleciona_seta_grupo()
+# publicar_anuncio_seleciona_madz_grupo()
+# publicar_anuncio_seleciona_marketplace_netshoes_madz()
+# publicar_anuncio_estoque_positivo()
+# publicar_anuncio_botao_consultar()
+# publicar_anuncio_clica_filtro_existe()
+# publicar_anuncio_aba_produtos_selecionados()
+# publicar_anuncio_aba_produtos_selecionados_asterisco()
+# publicar_anuncio_aba_produtos_selecionados_asterisco_auto_id()
+# publicar_anuncio_produtos_selecionado_remove_filtros_ruins()
+# publicar_anuncio_aba_produtos_selecionados_filtro_auto_id()
 
 # PISSTE 50
 # MADZ 200
@@ -84,29 +84,26 @@ while stop < 51:
             verification = 0
 
     # Preenche Nome
-    START_NOME = 187
     pg.moveTo(825, 165)
     pg.click()
     pyperclip.copy(titulo_produto)
     for i in range(qntd_variacoes):
         pg.hotkey('ctrl', 'v')
-        pg.moveTo(825, START_NOME)
-        pg.click()
-        START_NOME = START_NOME + 20
+        pg.press('enter')
+        pg.press('down')
 
     # Pegando valor de custo
     lista_valores_custo = []
-    START_VALOR_CUSTO_Y = 165
+    pg.moveTo(1428, 165)
+    pg.click()
     for i in range(qntd_variacoes):
-        pg.moveTo(1428, START_VALOR_CUSTO_Y)
-        pg.click()
         pg.hotkey('ctrl', 'c')
         cabecalho = pyperclip.paste()
         lista_valores_cabecalho = cabecalho.split("\t")
         valor_custo = lista_valores_cabecalho[-3]
         valor_custo = valor_custo.replace(',', '.')
         lista_valores_custo.append(valor_custo)
-        START_VALOR_CUSTO_Y = START_VALOR_CUSTO_Y + 20
+        pg.press('down')
 
     # Cálculo valor Preço De e Preço Por
     lista_valores_preco_de = []
@@ -176,29 +173,22 @@ while stop < 51:
         lista_valores_preco_de.append(valor_pre_final)
 
     # Preenchendo Preço De
-    START_PRECO_DE = 187
     pg.moveTo(1510, 165)
     pg.click()
     for valor_preco_de in lista_valores_preco_de:
         pyperclip.copy(valor_preco_de)
         pg.hotkey('ctrl', 'v')
-        pg.moveTo(1510, START_PRECO_DE)
-        pg.click()
-        START_PRECO_DE = START_PRECO_DE + 20
+        pg.press('enter')
+        pg.press('down')
 
     # Preenche Preço Por
-    START_PRECO_POR = 187
     pg.moveTo(1610, 165)
     pg.click()
     for valor_preco_por in lista_valores_preco_por:
         pyperclip.copy(valor_preco_por)
         pg.hotkey('ctrl', 'v')
-        pg.moveTo(1610, START_PRECO_POR)
-        pg.click()
-        START_PRECO_POR = START_PRECO_POR + 19
+        pg.press('enter')
+        pg.press('down')
 
     # Salvando
-    pg.hotkey('down')
-    pg.hotkey('up')
-
     stop = stop + 1

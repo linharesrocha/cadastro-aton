@@ -150,7 +150,7 @@ def publicar_anuncio_clica_filtro_existe():
 
 
 def publicar_anuncio_seleciona_resultado_botao_direito():
-    sleep(1)
+    sleep(2)
     pg.moveTo(1146, 280)
     pg.rightClick()
 

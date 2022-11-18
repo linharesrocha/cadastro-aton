@@ -2,13 +2,12 @@ from mordomo.auxiliar import *
 import pandas as pd
 from time import sleep
 
-for i in range(65):
+for i in range(224):
     # Seleciona filtro
     pg.moveTo(254, 270)
     sleep(1)
     pg.click()
     sleep(2)
-
     # Lixeira
     pg.moveTo(1645, 206)
     sleep(1)
@@ -18,13 +17,15 @@ for i in range(65):
     # Confirma
     pg.moveTo(1123, 640)
     pg.click()
-    sleep(6)
+    sleep(30)
 
     # Altera pagina
-    pg.moveTo(887, 431)
+    pg.moveTo(878, 383)
     pg.click()
 
     # Seleciona segunda página
-    pg.moveTo(883, 471)
+    pg.moveTo(876, 429)
     pg.click()
     sleep(2)
+
+    pg.press('pageup', presses=10)
