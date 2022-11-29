@@ -459,6 +459,11 @@ def cadastro_produtos_ficha_tecnica_menu_netshoes():
     pg.click()
 
 
+def cadastro_produtos_ficha_tecnica_menu_mercadolivre():
+    pg.moveTo(522, 413)
+    pg.click()
+
+
 def cadastro_produtos_ficha_tecnica_botao_adicionar():
     pg.moveTo(676, 562)
     pg.click()

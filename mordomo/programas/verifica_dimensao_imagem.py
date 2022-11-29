@@ -77,4 +77,4 @@ data_pronto = data[['cod_id', 'cod_interno', 'url', 'dimensao1',
                     'url2', 'dimensao2', 'url3', 'dimensao3', 'url4', 'dimensao4',
                     'url5', 'dimensao5']]
 
-data_pronto.to_excel('verifica_dimensao_pronto.xls', index=False)
+data_pronto.to_excel('converte_dimensao_download.xls', index=False)
