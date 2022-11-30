@@ -429,6 +429,49 @@ def consultar_produtos_select_resultado():
     sleep(2)
 
 
+def menu_vendas():
+    pg.moveTo(166, 39)
+    pg.click()
+
+
+def vendas_relatorios_gerenciais():
+    pg.moveTo(253, 122)
+    pg.click()
+
+
+def vendas_relatorios_vendas_pedidos():
+    pg.moveTo(485, 120)
+    pg.click()
+    sleep(2)
+
+
+def relatorio_analise_venda_checkbox_abertos():
+    pg.moveTo(87, 116)
+    pg.click()
+
+
+def relatorio_analise_venda_botao_consultar():
+    pg.moveTo(758, 114)
+    pg.click()
+    sleep(3)
+
+
+def relatorio_analise_venda_gerar_relatorio():
+    pg.moveTo(1878, 994)
+    pg.click()
+    sleep(2)
+
+
+def relatorio_analise_venda_menu_origem():
+    pg.moveTo(513, 69)
+    pg.click()
+
+
+def relatorio_analise_venda_opcao_netshoes_madz():
+    pg.moveTo(486, 99)
+    pg.click()
+
+
 def consultar_produtos_menu_cod_id():
     pg.moveTo(35, 120)
     pg.click()
@@ -441,6 +484,11 @@ def consultar_produtos_menu_cod_id():
 def cadastro_produtos_aba_ficha_tecnica():
     # aba_ficha_tecnica
     pg.moveTo(673, 219)
+    pg.click()
+
+
+def cadastro_produtos_aba_variacao():
+    pg.moveTo(1057, 220)
     pg.click()
 
 
