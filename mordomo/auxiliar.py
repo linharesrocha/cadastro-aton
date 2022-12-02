@@ -5,11 +5,19 @@ import pyautogui as pg
 
 
 # Funções Auxiliares
+def matar_slack():
+    try:
+        # Kill Ambar
+        os.system("taskkill /im Slack.exe /F")
+        os.system("taskkill /im Slack.exe /F")
+    except:
+        print('Slack não está aberto.')
+
 def matar_ambar():
     try:
         # Kill Ambar
-        os.system("taskkill /im Ambar.exe")
-        os.system("taskkill /im Ambar.exe")
+        os.system("taskkill /im Ambar.exe /F")
+        os.system("taskkill /im Ambar.exe /F")
     except:
         print('Ambar não está aberto.')
 
@@ -581,6 +589,32 @@ def f8_botao_limpar():
     pg.click()
 
 
+def f8_limpa_empresas():
+    pg.moveTo(45, 82)
+    pg.doubleClick()
+
+
+def f8_menu_origem():
+    pg.moveTo(294, 103)
+    pg.click()
+
+
+
+def f8_gerar_relatorio_excel():
+    pg.moveTo(1896, 1012)
+    pg.click()
+
+
+def f8_checkbox_faturados():
+    pg.moveTo(630, 105)
+    pg.click()
+
+
+def f8_data_pre():
+    pg.moveTo(192, 57)
+    pg.click()
+
+
 def f8_caixa_pesquisa_pedido():
     pg.moveTo(86, 58)
     pg.click()
@@ -594,9 +628,17 @@ def f8_caixa_select_box_pedido():
 def f8_botao_consultar():
     pg.moveTo(871, 97)
     pg.click()
-    sleep(1)
-    pg.press('enter')
-    sleep(8)
+    sleep(3)
+
+
+def f8_menu_etiquetas():
+    pg.moveTo(643, 144)
+    pg.click()
+
+
+def f8_menu_etiquetas_opcao_pendentes_impressao():
+    pg.moveTo(647, 184)
+    pg.click()
 
 
 def f8_seleciona_resultado_botao_direito():
