@@ -1,17 +1,18 @@
-import numpy
+from pathlib import Path
 import slack
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
+from dotenv import load_dotenv
 from mordomo.auxiliar import *
-from mordomo.main import *
 import pandas as pd
-import time
-
-
+from mordomo.login import login_aton
 
 # Data
+dia_da_semana = str(datetime.today().strftime('%A'))
+remove_dias = 1
+if dia_da_semana == 'Monday':
+    remove_dias = 3
 today = date.today()
-old_d1 = today - timedelta(1)
-
+old_d1 = today - timedelta(remove_dias)
 old_d1 = old_d1.strftime("%d-%m-%Y")
 d1 = today.strftime("%d-%m-%Y")
 

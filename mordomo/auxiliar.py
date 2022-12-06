@@ -428,7 +428,7 @@ def consultar_produtos_pesquisa():
 def consultar_produtos_botao_consultar():
     pg.moveTo(632, 61)
     pg.click()
-    sleep(1)
+    sleep(3)
 
 
 def consultar_produtos_select_resultado():
@@ -639,6 +639,18 @@ def f8_menu_etiquetas():
 def f8_menu_etiquetas_opcao_pendentes_impressao():
     pg.moveTo(647, 184)
     pg.click()
+
+
+def cadastro_produtos_botao_skus():
+    pg.moveTo(864, 859)
+    pg.click()
+    sleep(2)
+
+
+def cadastro_produtos_skus_botao_refresh():
+    pg.moveTo(1409, 294)
+    pg.click()
+    sleep(40)
 
 
 def f8_seleciona_resultado_botao_direito():
