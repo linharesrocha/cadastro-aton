@@ -49,8 +49,8 @@ ORDER BY CODID
 
 data = pd.read_sql(comando, conexao)
 
-# Replace Null na coluna ATIVO por 'N'
-data['ATIVO'].fillna('N', inplace=True)
+# Replace Null na coluna ATIVO'
+data['ATIVO'].fillna('N_EXISTE', inplace=True)
 
 
 print('Segundo SQL')
