@@ -32,12 +32,12 @@ cursor = conexao.cursor()
 
 print('Primeiro SQL')
 comando = '''
-SELECT
+SELECT 
 A.VLR_SITE2, A.VLR_SITE1, A.PRODMKTP_ID, A.SKU, A.SKUVARIACAO_MASTER, A.ATIVO,
 B.CODID, B.COD_INTERNO,  B.DESCRICAO, B.VLR_CUSTO,
-C.ESTOQUE,
-D.ORIGEM_NOME, GRUPO,
-E.DESCRICAO
+C.ESTOQUE, 
+D.ORIGEM_NOME,
+E.DESCRICAO AS GRUPO
 FROM ECOM_SKU A
 LEFT JOIN MATERIAIS B ON A.MATERIAL_ID = B.CODID
 LEFT JOIN ESTOQUE_MATERIAIS C ON B.CODID = C.MATERIAL_ID
@@ -81,13 +81,13 @@ print('Fazendo Merge')
 data_completo = pd.merge(data, data_h_30, on=['COD_INTERNO'], how='left')
 data_completo = pd.merge(data_completo, data_h_90, on=['COD_INTERNO'], how='left')
 
-data_completo = data_completo.rename(columns={'QUANT_x': 'QNTD_VENDAS_30', 'QUANT_y': 'QNTD_VENDAS_90'})
+data_completo = data_completo.rename(columns={'QUANT_x': 'QNTD_VENDAS_30', 'QUANT_y': 'QNTD_VENDAS_90', 'VLR_SITE2': 'PRECO_DE', 'VLR_SITE1': 'PRECO_POR'})
 data_completo['QNTD_VENDAS_30'].fillna(0, inplace=True)
 data_completo['QNTD_VENDAS_90'].fillna(0, inplace=True)
 
 data_completo = data_completo[['CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
              'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO',
-             'ESTOQUE', 'QNTD_VENDAS_30', 'QNTD_VENDAS_90','ATIVO', 'ORIGEM_NOME', 'VLR_SITE2', 'VLR_SITE1']]
+             'ESTOQUE', 'QNTD_VENDAS_30', 'QNTD_VENDAS_90','ATIVO', 'ORIGEM_NOME', 'PRECO_POR', 'PRECO_DE']]
 
 
 data_completo.to_excel('Relatorio-Personalizado.xls', index=False)
