@@ -55,7 +55,7 @@ data['ATIVO'].fillna('N_EXISTE', inplace=True)
 
 print('Segundo SQL')
 comando = '''
-SELECT A.PEDIDO, A.COD_INTERNO, A.QUANT, B.DATA
+SELECT A.PEDIDO, A.COD_INTERNO, A.QUANT, A.COD_PEDIDO AS SKU, B.DATA
 FROM PEDIDO_MATERIAIS_ITENS_CLIENTE A
 LEFT JOIN PEDIDO_MATERIAIS_CLIENTE B ON A.PEDIDO = B.PEDIDO
 '''
@@ -66,7 +66,7 @@ data_h = pd.read_sql(comando, conexao)
 # Removendo coluna pois só serviu para o JOIN SQL
 data_h.drop('PEDIDO', axis=1, inplace=True)
 
-print('Fazendo Groupby')
+print('Fazendo Groupby Aton')
 # Fazendo o Groupby de 90 e 30 dias
 data_h_30 = data_h[(data_h['DATA'] > date_30)]
 data_h_30 = data_h_30.groupby('COD_INTERNO').sum()
@@ -76,18 +76,42 @@ data_h_90 = data_h[(data_h['DATA'] > date_90)]
 data_h_90 = data_h_90.groupby('COD_INTERNO').sum()
 data_h_90 = data_h_90.reset_index()
 
-print('Fazendo Merge')
+print('Fazendo Merge Aton')
 # Fazendo merge
 data_completo = pd.merge(data, data_h_30, on=['COD_INTERNO'], how='left')
 data_completo = pd.merge(data_completo, data_h_90, on=['COD_INTERNO'], how='left')
 
-data_completo = data_completo.rename(columns={'QUANT_x': 'QNTD_VENDAS_30', 'QUANT_y': 'QNTD_VENDAS_90', 'VLR_SITE2': 'PRECO_DE', 'VLR_SITE1': 'PRECO_POR'})
-data_completo['QNTD_VENDAS_30'].fillna(0, inplace=True)
-data_completo['QNTD_VENDAS_90'].fillna(0, inplace=True)
+data_completo = data_completo.rename(columns={'QUANT_x': '30_ATON', 'QUANT_y': '90_ATON', 'VLR_SITE2': 'PRECO_DE', 'VLR_SITE1': 'PRECO_POR'})
+data_completo['30_ATON'].fillna(0, inplace=True)
+data_completo['90_ATON'].fillna(0, inplace=True)
+
+data = data_completo[['CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
+             'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO',
+             'ESTOQUE', '30_ATON', '90_ATON','ATIVO', 'ORIGEM_NOME', 'PRECO_POR', 'PRECO_DE']]
+
+
+
+print('Fazendo Groupby Marketplace')
+# Fazendo o Groupby de 90 e 30 dias
+data_h_30_sku = data_h[(data_h['DATA'] > date_30)]
+data_h_30_sku = data_h_30_sku.groupby('SKU').sum()
+data_h_30_sku = data_h_30_sku.reset_index()
+
+data_h_90_sku = data_h[(data_h['DATA'] > date_90)]
+data_h_90_sku = data_h_90_sku.groupby('SKU').sum()
+data_h_90_sku = data_h_90_sku.reset_index()
+
+print('Fazendo Merge Marketplace')
+# Fazendo merge
+data_completo = pd.merge(data, data_h_30_sku, on=['SKU'], how='left')
+data_completo = pd.merge(data_completo, data_h_90_sku, on=['SKU'], how='left')
+data_completo = data_completo.rename(columns={'QUANT_x': '30_MKTP', 'QUANT_y': '90_MKTP'})
+data_completo['30_MKTP'].fillna(0, inplace=True)
+data_completo['90_MKTP'].fillna(0, inplace=True)
 
 data_completo = data_completo[['CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
              'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO',
-             'ESTOQUE', 'QNTD_VENDAS_30', 'QNTD_VENDAS_90','ATIVO', 'ORIGEM_NOME', 'PRECO_POR', 'PRECO_DE']]
+             'ESTOQUE', '30_ATON', '90_ATON', '30_MKTP', '90_MKTP', 'ATIVO', 'ORIGEM_NOME', 'PRECO_POR', 'PRECO_DE']]
 
 
 data_completo.to_excel('Relatorio-Personalizado.xls', index=False)
