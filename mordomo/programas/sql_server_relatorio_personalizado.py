@@ -20,9 +20,9 @@ PWD=os.environ['PWD']
 
 dados_conexao = ("Driver={SQL Server};"
             "Server=erp.ambarxcall.com.br;"
-            "Database=AmbarDagg;"
-            "UID=dagg;"
-            "PWD=dagg*123;")
+            "Database="+DATABASE+";"
+            "UID="+UID+";"
+            "PWD="+PWD+";")
 
 
 conexao = pyodbc.connect(dados_conexao)
