@@ -33,7 +33,7 @@ cursor = conexao.cursor()
 print('Primeiro SQL')
 comando = '''
 SELECT 
-A.VLR_SITE2, A.VLR_SITE1, A.PRODMKTP_ID, A.SKU, A.SKUVARIACAO_MASTER, A.ATIVO,
+A.AUTOID, A.VLR_SITE2, A.VLR_SITE1, A.PRODMKTP_ID, A.SKU, A.SKUVARIACAO_MASTER, A.ATIVO,
 B.CODID, B.COD_INTERNO,  B.DESCRICAO, B.VLR_CUSTO,
 C.ESTOQUE, 
 D.ORIGEM_NOME,
@@ -85,7 +85,7 @@ data_completo = data_completo.rename(columns={'QUANT_x': '30_ATON', 'QUANT_y': '
 data_completo['30_ATON'].fillna(0, inplace=True)
 data_completo['90_ATON'].fillna(0, inplace=True)
 
-data = data_completo[['CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
+data = data_completo[['AUTOID','CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
              'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO',
              'ESTOQUE', '30_ATON', '90_ATON','ATIVO', 'ORIGEM_NOME', 'PRECO_POR', 'PRECO_DE']]
 
@@ -109,7 +109,7 @@ data_completo = data_completo.rename(columns={'QUANT_x': '30_MKTP', 'QUANT_y': '
 data_completo['30_MKTP'].fillna(0, inplace=True)
 data_completo['90_MKTP'].fillna(0, inplace=True)
 
-data_completo = data_completo[['CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
+data_completo = data_completo[['AUTOID', 'CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
              'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO',
              'ESTOQUE', '30_ATON', '90_ATON', '30_MKTP', '90_MKTP', 'ATIVO', 'ORIGEM_NOME', 'PRECO_POR', 'PRECO_DE']]
 
