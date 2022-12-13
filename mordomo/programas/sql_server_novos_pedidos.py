@@ -9,10 +9,6 @@ from time import sleep
 
 warnings.filterwarnings('ignore')
 
-DATABASE = 'Dagg'
-UID = 'dagg'
-PWD = 'dagg*123'
-
 # SLACK SETUP
 env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path)

@@ -315,7 +315,9 @@ def cadastro_produtos_nome_produto():
 def cadastro_produtos_valor_custo():
     sleep(1)
     pg.moveTo(1087, 589)
-    pg.doubleClick()
+    pg.click()
+    pg.hotkey('ctrl', 'a')
+    pg.typewrite(['backspace'])
 
 
 def cadastro_produtos_ean():

@@ -15,3 +15,5 @@ testando_conexoes.py
 .env-sql
 mordomo/programas/.env-sql
 mordomo/programas/Relatorio-Personalizado.xls
+mordomo/programas/vincalacoes_sku_netshoes.py
+mordomo/programas/excel/vincalacoes_sku_netshoes.xlsx
