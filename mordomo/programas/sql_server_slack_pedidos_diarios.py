@@ -85,6 +85,9 @@ total_pedidos = round(data['TOTAL_PEDIDO'].sum(), 2)
 
 for marketplace in lista_marketplaces:
     data_marketplace = data[data['VENDEDOR'].str.contains(marketplace, na=False)]
+    data_marketplace_madz = data_marketplace.loc[data_marketplace['EMPRESA'] == 1]
+    data_marketplace_red =  data_marketplace.loc[data_marketplace['EMPRESA'] == 2]
+    data_marketplace_pisste = data_marketplace.loc[data_marketplace['EMPRESA'] == 3]
     break
 
     # SLACK
