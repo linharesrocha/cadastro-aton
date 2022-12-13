@@ -21,15 +21,20 @@ d1 = date_today.strftime("%d-%m-%Y")
 warnings.filterwarnings('ignore')
 
 lista_marketplaces = [
-    'NETSHOES MADZ', 'NETSHOES LEAL', 'NETSHOES PISSTE',
-    'DAFITI MADZ', 'DAFITI LEAL', 'DAFITI PISSTE',
-    'ML MADZ', 'ML LEAL', 'ML PISSTE',
-    'SHOPEE MADZ', 'SHOPEE LEAL', 'SHOPEE PISSTE',
-    'CARREFOUR MADZ', 'CARREFOUR LEAL', 'CARREFOUR PISSTE',
-    'B2W MADZ', 'B2W LEAL', 'B2W PISSTE',
-    'AMAZON MADZ', 'AMAZON LEAL', 'AMAZON PISSTE',
-    'MAGALU MADZ', 'MAGALU LEAL', 'MAGALU PISSTE',
-    'VIA VAREJO MADZ', 'TRAY', 'DECATHLON']
+    'NETSHOES',
+    'DAFITI',
+    'MERCADO LIVRE',
+    'SHOPEE',
+    'CARREFOUR',
+    'LOJASAMERICANAS',
+    'AMAZON',
+    'MAGAZINE LUIZA',
+    'VIA VAREJO',
+    'TRAY',
+    'DECATHLON',
+    'SHOPTIME',
+    'OLIST',
+    'SUBMARINO']
 
 lista_quantidade_total = []
 lista_valores_total = []
@@ -52,14 +57,14 @@ dados_conexao = ("Driver={SQL Server};"
             "PWD="+PWD+";")
 
 conexao = pyodbc.connect(dados_conexao)
-print("Conexão com o Banco de Dados Bem Sucedida!")
 cursor = conexao.cursor()
+print("Conexão com o Banco de Dados Bem Sucedida!")
 
 
 comando = f'''
-    SELECT *
+    SELECT PEDIDO, EMPRESA, DATA, ORIGEM, VENDEDOR, TOTAL_PEDIDO
     FROM PEDIDO_MATERIAIS_CLIENTE
-    WHERE DATA BETWEEN '12-12-2022' AND '14-12-2022'
+    WHERE DATA BETWEEN '{old_d1}' AND '{d1}'
     AND POSICAO = 'EMITIDO'
     '''
 
@@ -77,8 +82,9 @@ total_pedidos = round(data['TOTAL_PEDIDO'].sum(), 2)
 # app.chat_postMessage(channel='tendencias-test', text='======================================')
 # app.chat_postMessage(channel='tendencias-test', text=' ')
 
-aux = 1
+
 for marketplace in lista_marketplaces:
+    data_marketplace = data[data['VENDEDOR'].str.contains(marketplace, na=False)]
     break
 
     # SLACK
