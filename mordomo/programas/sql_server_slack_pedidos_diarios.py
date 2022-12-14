@@ -66,7 +66,9 @@ comando = f'''
     FROM PEDIDO_MATERIAIS_CLIENTE
     WHERE DATA BETWEEN '{old_d1}' AND '{d1}'
     AND POSICAO = 'EMITIDO'
+    
     '''
+    # AND POSICAO_ETQ = '1'
 
 data = pd.read_sql(comando, conexao)
 
@@ -101,31 +103,36 @@ for marketplace in lista_marketplaces:
     quantidade_pedidos_total_mktp_pisste = data_marketplace_pisste.shape[0]
     pedidos_total_mktp_pisste = round(data_marketplace_pisste['TOTAL_PEDIDO'].sum(), 2)
 
-
     # SLACK
-    str_1 = f"{marketplace} MADZ" \
-            f"\nQuantidade Pedidos = {str(quantidade_pedidos_total_mktp_madz)}" \
-            f"\nValor Total Pedido = R${str(pedidos_total_mktp_madz)}" \
-            f"\n. " \
-            f"\n" \
-            f"{marketplace} LEAL" \
-            f"\nQuantidade Pedidos = {str(quantidade_pedidos_total_mktp_leal)}" \
-            f"\nValor Total Pedido = R${str(pedidos_total_mktp_leal)}" \
-            f"\n. " \
-            f"\n" \
-            f"{marketplace} PISSTE" \
-            f"\nQuantidade Pedidos = {str(quantidade_pedidos_total_mktp_pisste)}" \
-            f"\nValor Total Pedido = R${str(pedidos_total_mktp_pisste)}" \
-            f"\n." \
-            f"\n" \
+    if quantidade_pedidos_total_mktp_madz > 0:
+        str_1 = f"{marketplace} MADZ" \
+                f"\nQuantidade Pedidos = {str(quantidade_pedidos_total_mktp_madz)}" \
+                f"\nValor Total Pedido = R${str(pedidos_total_mktp_madz)}" \
+                f"\n. " \
 
-    app.chat_postMessage(channel='tendencias-test', text=str_1)
-    break
+        app.chat_postMessage(channel='tendencias-test', text=str_1)
+
+    if quantidade_pedidos_total_mktp_leal > 0:
+        str_2 = f"{marketplace} LEAL" \
+                f"\nQuantidade Pedidos = {str(quantidade_pedidos_total_mktp_leal)}" \
+                f"\nValor Total Pedido = R${str(pedidos_total_mktp_leal)}" \
+                f"\n. " \
+
+        app.chat_postMessage(channel='tendencias-test', text=str_2)
+
+    if quantidade_pedidos_total_mktp_pisste > 0:
+        str_3 = f"{marketplace} PISSTE" \
+                f"\nQuantidade Pedidos = {str(quantidade_pedidos_total_mktp_pisste)}" \
+                f"\nValor Total Pedido = R${str(pedidos_total_mktp_pisste)}" \
+                f"\n. " \
+
+        app.chat_postMessage(channel='tendencias-test', text=str_3)
 
 
-# # Somar Valores
-# app.chat_postMessage(channel='tendencias-test', text=' ')
-# app.chat_postMessage(channel='tendencias-test', text='======================================')
-# app.chat_postMessage(channel='tendencias-test', text='Quantidade de Pedidos Total: ' + str(quantidade_pedidos_total))
-# app.chat_postMessage(channel='tendencias-test', text='Quantidade de Valor Total: R$' + str(pedidos_total_mktp))
-# app.chat_postMessage(channel='tendencias-test', text='======================================')
+# Somar Valores
+str_final = f"." \
+            f"\n======================================" \
+            f"\nQuantidade de Pedidos Total: {str(quantidade_pedidos_total)}" \
+            f"\nQuantidade de Valor Total: R${str(float(pedidos_total))}" \
+            f"\n======================================"
+app.chat_postMessage(channel='tendencias-test', text=str_final)
