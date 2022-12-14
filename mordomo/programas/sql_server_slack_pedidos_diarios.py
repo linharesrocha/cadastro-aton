@@ -18,7 +18,7 @@ old_d1 = old_d1.strftime("%d-%m-%Y")
 date_today = today + timedelta(1)
 d1 = date_today.strftime("%d-%m-%Y")
 
-warnings.filterwarnings('ignore')
+# warnings.filterwarnings('ignore')
 
 lista_marketplaces = [
     'NETSHOES',
@@ -66,9 +66,8 @@ comando = f'''
     FROM PEDIDO_MATERIAIS_CLIENTE
     WHERE DATA BETWEEN '{old_d1}' AND '{d1}'
     AND POSICAO = 'EMITIDO'
-    
+    AND POSICAO_ETQ = '1'
     '''
-    # AND POSICAO_ETQ = '1'
 
 data = pd.read_sql(comando, conexao)
 
@@ -76,13 +75,16 @@ data = pd.read_sql(comando, conexao)
 quantidade_pedidos_total = data.shape[0]
 pedidos_total = round(data['TOTAL_PEDIDO'].sum(), 2)
 
-# app.chat_postMessage(channel='tendencias-test', text=' ')
-# app.chat_postMessage(channel='tendencias-test', text='======================================')
-# for i in range(5):
-#     app.chat_postMessage(channel='tendencias-test', text=d1)
-#
-# app.chat_postMessage(channel='tendencias-test', text='======================================')
-# app.chat_postMessage(channel='tendencias-test', text=' ')
+
+str_start = f". " \
+            f"\n======================================" \
+            f"\n{d1}" \
+            f"\n{d1}" \
+            f"\n{d1}" \
+            f"\n{d1}" \
+            f"\n======================================"
+app.chat_postMessage(channel='tendencias-test', text=str_start)
+
 
 
 for marketplace in lista_marketplaces:
@@ -129,7 +131,10 @@ for marketplace in lista_marketplaces:
         app.chat_postMessage(channel='tendencias-test', text=str_3)
 
 
-# Somar Valores
+# Relatório em cada CNPJ
+
+
+# Somar Valores Três CNPJ
 str_final = f"." \
             f"\n======================================" \
             f"\nQuantidade de Pedidos Total: {str(quantidade_pedidos_total)}" \
