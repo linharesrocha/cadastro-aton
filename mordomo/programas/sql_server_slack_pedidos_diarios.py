@@ -68,7 +68,7 @@ print("Conexão com o Banco de Dados Bem Sucedida!")
 comando = f'''
     SELECT PEDIDO, EMPRESA, DATA, ORIGEM, VENDEDOR, TOTAL_PEDIDO
     FROM PEDIDO_MATERIAIS_CLIENTE
-    WHERE DATA BETWEEN '{old_d1}' AND '{d1}'
+    WHERE DATA >= '{old_d1}'
     AND POSICAO = 'EMITIDO'
     AND POSICAO_ETQ = '1'
     '''
@@ -134,6 +134,16 @@ for marketplace in lista_marketplaces:
                 f"\n. "
         app.chat_postMessage(channel='tendencias-test', text=str_3)
 
+# Relatório Full
+data_marketplace_full = data.loc[data['EMPRESA'] == 4]
+qntd_pedidos_full = data_marketplace_full.shape[0]
+qntd_vendas_full = round(data_marketplace_full['TOTAL_PEDIDO'].sum(), 2)
+if qntd_pedidos_full > 0:
+    str_full = f"MERCADO LIVRE FULL" \
+               f"\nQntd:  {qntd_pedidos_full}" \
+               f"\nValor: R${qntd_vendas_full}"
+    app.chat_postMessage(channel='tendencias-test', text=str_full)
+
 # Relatório em cada CNPJ
 qntd_pedidos_madz = sum(lista_quantidade_total_cnpj_madz)
 qntd_pedidos_leal = sum(lista_quantidade_total_cnpj_leal)
@@ -153,6 +163,9 @@ str_cnpj = f"======================================" \
            f"\n MADZ:  R${qntd_vendas_madz}" \
            f"\n LEAL:  R${qntd_vendas_leal}" \
            f"\n PISSTE:  R${qntd_vendas_pisste}" \
+           f"\n ." \
+           f"\n FULL QNTD:  R${qntd_pedidos_full}" \
+           f"\n FULL VALOR:  R${qntd_vendas_full}" \
 
     # Somar Valores Três CNPJ
 str_final = f"\n======================================" \
