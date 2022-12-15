@@ -138,11 +138,6 @@ for marketplace in lista_marketplaces:
 data_marketplace_full = data.loc[data['EMPRESA'] == 4]
 qntd_pedidos_full = data_marketplace_full.shape[0]
 qntd_vendas_full = round(data_marketplace_full['TOTAL_PEDIDO'].sum(), 2)
-if qntd_pedidos_full > 0:
-    str_full = f"MERCADO LIVRE FULL" \
-               f"\nQntd:  {qntd_pedidos_full}" \
-               f"\nValor: R${qntd_vendas_full}"
-    app.chat_postMessage(channel='tendencias-test', text=str_full)
 
 # Relatório em cada CNPJ
 qntd_pedidos_madz = sum(lista_quantidade_total_cnpj_madz)
@@ -164,14 +159,22 @@ str_cnpj = f"======================================" \
            f"\n LEAL:  R${qntd_vendas_leal}" \
            f"\n PISSTE:  R${qntd_vendas_pisste}" \
            f"\n ." \
-           f"\n FULL QNTD:  R${qntd_pedidos_full}" \
-           f"\n FULL VALOR:  R${qntd_vendas_full}" \
 
-    # Somar Valores Três CNPJ
+
 str_final = f"\n======================================" \
             f"\nQntd Pedidos Totais:  {str(quantidade_pedidos_total)}" \
             f"\nValor Pedidos Totais:  R${str(float(pedidos_total))}" \
             f"\n======================================"
 
+# CNPJ
 app.chat_postMessage(channel='tendencias-test', text= str_cnpj)
+
+# FULL
+if qntd_pedidos_full > 0:
+    str_full = f"\nFULL QNTD:  R${qntd_pedidos_full}" \
+               f"\nFULL VALOR:  R${qntd_vendas_full}"
+
+    app.chat_postMessage(channel='tendencias-test', text=str_full)
+
+# RELATORIO FINAL
 app.chat_postMessage(channel='tendencias-test', text=str_final)
