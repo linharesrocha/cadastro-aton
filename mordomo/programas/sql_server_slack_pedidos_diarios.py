@@ -86,7 +86,7 @@ str_start = f"\n======================================" \
             f"\n{d1}" \
             f"\n{d1}" \
             f"\n======================================"
-app.chat_postMessage(channel='tendencias-test', text=str_start)
+app.chat_postMessage(channel='pedidos-diarios', text=str_start)
 
 for marketplace in lista_marketplaces:
     data_marketplace = data[data['VENDEDOR'].str.contains(marketplace, na=False)]
@@ -118,21 +118,21 @@ for marketplace in lista_marketplaces:
                 f"\nQntd:  {str(quantidade_pedidos_total_mktp_madz)}" \
                 f"\nValor:  R${str(pedidos_total_mktp_madz)}" \
                 f"\n. "
-        app.chat_postMessage(channel='tendencias-test', text=str_1)
+        app.chat_postMessage(channel='pedidos-diarios', text=str_1)
 
     if quantidade_pedidos_total_mktp_leal > 0:
         str_2 = f"{marketplace} LEAL" \
                 f"\nQntd:  {str(quantidade_pedidos_total_mktp_leal)}" \
                 f"\nValor:  R${str(pedidos_total_mktp_leal)}" \
                 f"\n. "
-        app.chat_postMessage(channel='tendencias-test', text=str_2)
+        app.chat_postMessage(channel='pedidos-diarios', text=str_2)
 
     if quantidade_pedidos_total_mktp_pisste > 0:
         str_3 = f"{marketplace} PISSTE" \
                 f"\nQntd:  {str(quantidade_pedidos_total_mktp_pisste)}" \
                 f"\nValor:  R${str(pedidos_total_mktp_pisste)}" \
                 f"\n. "
-        app.chat_postMessage(channel='tendencias-test', text=str_3)
+        app.chat_postMessage(channel='pedidos-diarios', text=str_3)
 
 # Relatório Full
 data_marketplace_full = data.loc[data['EMPRESA'] == 4]
@@ -167,14 +167,14 @@ str_final = f"\n======================================" \
             f"\n======================================"
 
 # CNPJ
-app.chat_postMessage(channel='tendencias-test', text= str_cnpj)
+app.chat_postMessage(channel='pedidos-diarios', text= str_cnpj)
 
 # FULL
 if qntd_pedidos_full > 0:
     str_full = f"\nFULL QNTD:  R${qntd_pedidos_full}" \
                f"\nFULL VALOR:  R${qntd_vendas_full}"
 
-    app.chat_postMessage(channel='tendencias-test', text=str_full)
+    app.chat_postMessage(channel='pedidos-diarios', text=str_full)
 
 # RELATORIO FINAL
-app.chat_postMessage(channel='tendencias-test', text=str_final)
+app.chat_postMessage(channel='pedidos-diarios', text=str_final)
