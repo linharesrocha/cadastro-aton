@@ -315,7 +315,9 @@ def cadastro_produtos_nome_produto():
 def cadastro_produtos_valor_custo():
     sleep(1)
     pg.moveTo(1087, 589)
-    pg.click()
+    pg.click(
+
+    )
     pg.hotkey('ctrl', 'a')
     pg.typewrite(['backspace'])
 
@@ -430,7 +432,7 @@ def consultar_produtos_pesquisa():
 def consultar_produtos_botao_consultar():
     pg.moveTo(632, 61)
     pg.click()
-    sleep(3)
+    sleep(1.5)
 
 
 def consultar_produtos_select_resultado():
