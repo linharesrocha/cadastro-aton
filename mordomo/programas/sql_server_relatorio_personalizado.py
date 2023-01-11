@@ -5,11 +5,14 @@ import pandas as pd
 import warnings
 from datetime import datetime, date, timedelta
 from dotenv import load_dotenv
+today = date.today()
 
-date_30 = datetime.now() - timedelta(30)
-print(date_30)
-date_90 = datetime.now() - timedelta(90)
-print(date_90)
+dt = date.today()
+datetime_midnight = datetime.combine(dt, datetime.min.time())
+date_30 = datetime_midnight - timedelta(30)
+print('Date 30: ' + str(date_30))
+date_90 = datetime_midnight - timedelta(90)
+print('Date 90: ' + str(date_90))
 
 warnings.filterwarnings('ignore')
 
@@ -57,7 +60,9 @@ print('Segundo SQL')
 comando = '''
 SELECT A.PEDIDO, A.COD_INTERNO, A.QUANT, A.COD_PEDIDO AS SKU, B.DATA
 FROM PEDIDO_MATERIAIS_ITENS_CLIENTE A
-LEFT JOIN PEDIDO_MATERIAIS_CLIENTE B ON A.PEDIDO = B.PEDIDO
+LEFT JOIN PEDIDO_MATERIAIS_CLIENTE B
+ON A.PEDIDO = B.PEDIDO
+WHERE B.TIPO = 'PEDIDO'
 '''
 
 # Lendo o SQL
@@ -132,7 +137,6 @@ data_completo = data_completo[['AUTOID', 'CODID', 'COD_INTERNO', 'SKU', 'SKUVARI
                                'ESTOQUE', '30_ATON', '90_ATON', '30_MKTP', '90_MKTP', 'ATIVO','INATIVO', 'ORIGEM_NOME',
                                'PRECO_POR', 'PRECO_DE']]
 
-today = date.today()
 d1 = today.strftime("%d-%m-%Y")
-data_completo.to_excel('Relatorio-Personalizado-'+ str(d1) + '.xls', index=False)
+data_completo.to_excel('excel/Planilha-de-Campanha-'+ str(d1) + '.xls', index=False)
 print('Relatório Gerado!')
