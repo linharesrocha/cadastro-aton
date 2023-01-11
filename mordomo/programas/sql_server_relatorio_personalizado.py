@@ -33,7 +33,7 @@ print("Conexão com o Banco de Dados Bem Sucedida!")
 
 cursor = conexao.cursor()
 
-print('Primeiro SQL')
+print('SQL de Produtos Aton e Marketplace')
 comando = '''
 SELECT 
 A.AUTOID, A.VLR_SITE2, A.VLR_SITE1, A.PRODMKTP_ID, A.SKU, A.SKUVARIACAO_MASTER, A.ATIVO, B.INATIVO,
@@ -56,13 +56,14 @@ data = pd.read_sql(comando, conexao)
 # Replace Null na coluna ATIVO'
 # data['ATIVO'].fillna('N_EXISTE', inplace=True)
 
-print('Segundo SQL')
+print('SQL de Pedidos')
 comando = '''
 SELECT A.PEDIDO, A.COD_INTERNO, A.QUANT, A.COD_PEDIDO AS SKU, B.DATA
 FROM PEDIDO_MATERIAIS_ITENS_CLIENTE A
 LEFT JOIN PEDIDO_MATERIAIS_CLIENTE B
 ON A.PEDIDO = B.PEDIDO
 WHERE B.TIPO = 'PEDIDO'
+AND B.POSICAO != 'CANCELADO'
 '''
 
 # Lendo o SQL
@@ -71,7 +72,7 @@ data_h = pd.read_sql(comando, conexao)
 # Removendo coluna pois só serviu para o JOIN SQL
 data_h.drop('PEDIDO', axis=1, inplace=True)
 
-print('Extraindo quantidades')
+print('Extraindo quantidades de produto')
 # Pegando os códigos interno com mais de 1 quantidade no mesmo pedido, e preenchendo no df original
 data_h_aux = data_h[(data_h['QUANT'] > 1)]
 data_h_aux['QUANT'] = data_h_aux['QUANT'] - 1
@@ -81,11 +82,9 @@ for i in range(len(data_h_aux)):
     sku = data_h_aux['SKU'].iloc[i]
     data_venda = data_h_aux['DATA'].iloc[i]
     for j in range(quantidade):
-        row1 = pd.Series([cod_interno, 1, sku, data_venda], index=data_h_aux.columns)
-        data_h_aux = data_h_aux.append(row1, ignore_index=True)
+        row1 = pd.Series([cod_interno, 1, sku + 'COPIA', data_venda], index=data_h.columns)
+        data_h = data_h.append(row1, ignore_index=True)
 
-# Juntando dataframes
-data_h = pd.concat([data_h, data_h_aux])
 
 # Removendo quantidade de COD interno
 # data_h.drop('QUANT', axis=1, inplace=True)
@@ -116,11 +115,11 @@ data = data_completo[['AUTOID', 'CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MAST
 
 print('Fazendo Groupby Marketplace')
 # Fazendo o Groupby de 90 e 30 dias
-data_h_30_sku = data_h[(data_h['DATA'] > date_30)]
+data_h_30_sku = data_h[(data_h['DATA'] >= date_30)]
 data_h_30_sku = data_h_30_sku.groupby('SKU').sum()
 data_h_30_sku = data_h_30_sku.reset_index()
 
-data_h_90_sku = data_h[(data_h['DATA'] > date_90)]
+data_h_90_sku = data_h[(data_h['DATA'] >= date_90)]
 data_h_90_sku = data_h_90_sku.groupby('SKU').sum()
 data_h_90_sku = data_h_90_sku.reset_index()
 
