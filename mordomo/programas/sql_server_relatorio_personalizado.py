@@ -115,23 +115,31 @@ data = data_completo[['AUTOID', 'CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MAST
                       'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO',
                       'ESTOQUE', '30_ATON', '90_ATON', 'ATIVO','INATIVO', 'ORIGEM_NOME', 'PRECO_POR', 'PRECO_DE']]
 
+# REFAZER ESSA PARTE - INICIO
 print('Fazendo Groupby Marketplace')
 # Fazendo o Groupby de 90 e 30 dias
-data_h_30_sku = data_h[(data_h['DATA'] >= date_30)]
-data_h_30_sku = data_h_30_sku.groupby('SKU').sum()
-data_h_30_sku = data_h_30_sku.reset_index()
-
-data_h_90_sku = data_h[(data_h['DATA'] >= date_90)]
-data_h_90_sku = data_h_90_sku.groupby('SKU').sum()
-data_h_90_sku = data_h_90_sku.reset_index()
-
-print('Fazendo Merge Marketplace')
-# Fazendo merge
-data_completo = pd.merge(data, data_h_30_sku, on=['SKU'], how='left')
-data_completo = pd.merge(data_completo, data_h_90_sku, on=['SKU'], how='left')
+# data_h_30_sku = data_h[(data_h['DATA'] >= date_30)]
+# data_completo.to_excel('test.xls', index=False)
+# data_h_30_sku.to_excel('test.xls', index=False)
+# data_h_30_sku = data_h_30_sku.groupby('SKU').count()
+# data_h_30_sku = data_h_30_sku.reset_index()
+# data_h_30_sku.drop(['COD_INTERNO','DATA'], axis=1, inplace=True)
+#
+# data_h_90_sku = data_h[(data_h['DATA'] >= date_90)]
+# data_h_90_sku = data_h_90_sku.groupby('SKU').count()
+# data_h_90_sku = data_h_90_sku.reset_index()
+# data_h_90_sku.drop(['COD_INTERNO','DATA'], axis=1, inplace=True)
+#
+# print('Fazendo Merge Marketplace')
+# # Fazendo merge
+# data_completo = pd.merge(data, data_h_30_sku, on=['SKU'], how='left')
+# data_completo = pd.merge(data_completo, data_h_90_sku, on=['SKU'], how='left')
+data_completo['QUANT_x'] = 'MANUTENCAO'
+data_completo['QUANT_y'] = 'MANUTENCAO'
 data_completo = data_completo.rename(columns={'QUANT_x': '30_MKTP', 'QUANT_y': '90_MKTP'})
-data_completo['30_MKTP'].fillna(0, inplace=True)
-data_completo['90_MKTP'].fillna(0, inplace=True)
+# data_completo['30_MKTP'].fillna(0, inplace=True)
+# data_completo['90_MKTP'].fillna(0, inplace=True)
+# REFAZER ESSA PARTE - FIM
 
 data_completo = data_completo[['AUTOID', 'CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
                                'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO',
