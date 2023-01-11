@@ -82,7 +82,7 @@ for i in range(len(data_h_aux)):
     sku = data_h_aux['SKU'].iloc[i]
     data_venda = data_h_aux['DATA'].iloc[i]
     for j in range(quantidade):
-        row1 = pd.Series([cod_interno, 1, sku + 'COPIA', data_venda], index=data_h.columns)
+        row1 = pd.Series([cod_interno, 1, sku, data_venda], index=data_h.columns)
         data_h = data_h.append(row1, ignore_index=True)
 
 
@@ -92,12 +92,14 @@ for i in range(len(data_h_aux)):
 print('Fazendo Groupby Aton')
 # Fazendo o Groupby de 90 e 30 dias
 data_h_30 = data_h[(data_h['DATA'] >= date_30)]
-data_h_30 = data_h_30.groupby('COD_INTERNO').sum()
+data_h_30 = data_h_30.groupby('COD_INTERNO').count()
 data_h_30 = data_h_30.reset_index()
+data_h_30.drop(['SKU', 'DATA'], axis=1, inplace=True)
 
 data_h_90 = data_h[(data_h['DATA'] >= date_90)]
-data_h_90 = data_h_90.groupby('COD_INTERNO').sum()
+data_h_90 = data_h_90.groupby('COD_INTERNO').count()
 data_h_90 = data_h_90.reset_index()
+data_h_90.drop(['SKU', 'DATA'], axis=1, inplace=True)
 
 print('Fazendo Merge Aton')
 # Fazendo merge
