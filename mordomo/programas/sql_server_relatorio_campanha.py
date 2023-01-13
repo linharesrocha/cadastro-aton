@@ -10,9 +10,9 @@ today = date.today()
 dt = date.today()
 datetime_midnight = datetime.combine(dt, datetime.min.time())
 date_30 = datetime_midnight - timedelta(30)
-print('Date 30: ' + str(date_30))
+print('Date 30: ' + str(date_30.strftime("%d-%m-%Y")))
 date_90 = datetime_midnight - timedelta(90)
-print('Date 90: ' + str(date_90))
+print('Date 90: ' + str(date_90.strftime("%d-%m-%Y")))
 
 warnings.filterwarnings('ignore')
 
@@ -40,12 +40,14 @@ A.AUTOID, A.VLR_SITE2, A.VLR_SITE1, A.PRODMKTP_ID, A.SKU, A.SKUVARIACAO_MASTER, 
 B.CODID, B.COD_INTERNO,  B.DESCRICAO, B.VLR_CUSTO,
 C.ESTOQUE, 
 D.ORIGEM_NOME,
-E.DESCRICAO AS GRUPO
+E.DESCRICAO AS GRUPO,
+F.CATEG_MKTP_DESC AS CATEGORIAS, F.DEPARTAMENTO, F.PRODUTO_TIPO
 FROM ECOM_SKU A
 LEFT JOIN MATERIAIS B ON A.MATERIAL_ID = B.CODID
 LEFT JOIN ESTOQUE_MATERIAIS C ON B.CODID = C.MATERIAL_ID
 LEFT JOIN ECOM_ORIGEM D ON A.ORIGEM_ID = D.ORIGEM_ID
 LEFT JOIN GRUPO E ON B.GRUPO = E.CODIGO
+LEFT JOIN CATEGORIAS_MKTP F  ON F.CATEG_ATON = B.ECOM_CATEGORIA AND F.API = D.API
 WHERE C.ARMAZEM = 1
 AND B.INATIVO = 'N'
 ORDER BY CODID
@@ -71,7 +73,6 @@ data_h = pd.read_sql(comando, conexao)
 
 # Removendo coluna pois só serviu para o JOIN SQL
 data_h.drop('PEDIDO', axis=1, inplace=True)
-
 print('Extraindo quantidades de produto')
 # Pegando os códigos interno com mais de 1 quantidade no mesmo pedido, e preenchendo no df original
 data_h_aux = data_h[(data_h['QUANT'] > 1)]
@@ -113,37 +114,33 @@ data_completo['90_ATON'].fillna(0, inplace=True)
 
 data = data_completo[['AUTOID', 'CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
                       'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO',
-                      'ESTOQUE', '30_ATON', '90_ATON', 'ATIVO','INATIVO', 'ORIGEM_NOME', 'PRECO_POR', 'PRECO_DE']]
+                      'ESTOQUE', '30_ATON', '90_ATON', 'ATIVO','INATIVO', 'ORIGEM_NOME', 'CATEGORIAS', 'DEPARTAMENTO', 'PRODUTO_TIPO', 'PRECO_POR', 'PRECO_DE']]
 
-# REFAZER ESSA PARTE - INICIO
 print('Fazendo Groupby Marketplace')
 # Fazendo o Groupby de 90 e 30 dias
-# data_h_30_sku = data_h[(data_h['DATA'] >= date_30)]
-# data_completo.to_excel('test.xls', index=False)
-# data_h_30_sku.to_excel('test.xls', index=False)
-# data_h_30_sku = data_h_30_sku.groupby('SKU').count()
-# data_h_30_sku = data_h_30_sku.reset_index()
-# data_h_30_sku.drop(['COD_INTERNO','DATA'], axis=1, inplace=True)
-#
-# data_h_90_sku = data_h[(data_h['DATA'] >= date_90)]
-# data_h_90_sku = data_h_90_sku.groupby('SKU').count()
-# data_h_90_sku = data_h_90_sku.reset_index()
-# data_h_90_sku.drop(['COD_INTERNO','DATA'], axis=1, inplace=True)
-#
+data_h_30_sku = data_h[(data_h['DATA'] >= date_30)]
+
+# CODIGO MISSAO HERE
+
+
 # print('Fazendo Merge Marketplace')
-# # Fazendo merge
+# Fazendo merge
 # data_completo = pd.merge(data, data_h_30_sku, on=['SKU'], how='left')
 # data_completo = pd.merge(data_completo, data_h_90_sku, on=['SKU'], how='left')
-data_completo['QUANT_x'] = 'MANUTENCAO'
-data_completo['QUANT_y'] = 'MANUTENCAO'
-data_completo = data_completo.rename(columns={'QUANT_x': '30_MKTP', 'QUANT_y': '90_MKTP'})
+# data_completo = data_completo.rename(columns={'QUANT_x': '30_MKTP', 'QUANT_y': '90_MKTP'})
 # data_completo['30_MKTP'].fillna(0, inplace=True)
 # data_completo['90_MKTP'].fillna(0, inplace=True)
-# REFAZER ESSA PARTE - FIM
+
+# data_completo = data_completo[['AUTOID', 'CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
+#                                'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO',
+#                                'ESTOQUE', '30_ATON', '90_ATON', '30_MKTP', '90_MKTP', 'ATIVO','INATIVO', 'ORIGEM_NOME',
+#                                'PRECO_POR', 'PRECO_DE']]
+
 
 data_completo = data_completo[['AUTOID', 'CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
                                'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO',
-                               'ESTOQUE', '30_ATON', '90_ATON', '30_MKTP', '90_MKTP', 'ATIVO','INATIVO', 'ORIGEM_NOME',
+                               'ESTOQUE', '30_ATON', '90_ATON', 'ATIVO','INATIVO', 'ORIGEM_NOME',
+                                'CATEGORIAS', 'DEPARTAMENTO', 'PRODUTO_TIPO',
                                'PRECO_POR', 'PRECO_DE']]
 
 d1 = today.strftime("%d-%m-%Y")

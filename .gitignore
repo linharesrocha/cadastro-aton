@@ -18,3 +18,5 @@ mordomo/programas/Relatorio-Personalizado.xls
 mordomo/programas/confere_vinculacoes_campos_valores_produtos.py
 mordomo/programas/excel/vincalacoes_sku_netshoes.xlsx
 mordomo/programas/excel
+mordomo/programas/missao.py
+mordomo/programas/missao.xls
