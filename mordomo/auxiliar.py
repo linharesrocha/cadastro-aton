@@ -2,6 +2,22 @@ import os
 from time import sleep
 from tkinter import messagebox
 import pyautogui as pg
+from dotenv import load_dotenv
+from pathlib import Path
+import pyodbc
+
+
+def conexao_banco_sql():
+    env_path = Path('.') / '.env-sql'
+    load_dotenv(dotenv_path=env_path)
+    DATABASE = os.environ['DATABASE']
+    UID = os.environ['UID']
+    PWD = os.environ['PWD']
+    dados_conexao = ("Driver={SQL Server};"
+                     "Server=erp.ambarxcall.com.br;"
+                     "Database=" + DATABASE + ";"
+                                              "UID=" + UID + ";"
+                                                             "PWD=" + PWD + ";")
 
 
 # Funções Auxiliares
@@ -12,6 +28,7 @@ def matar_slack():
         os.system("taskkill /im Slack.exe /F")
     except:
         print('Slack não está aberto.')
+
 
 def matar_ambar():
     try:
@@ -601,7 +618,6 @@ def f8_limpa_empresas():
 def f8_menu_origem():
     pg.moveTo(294, 103)
     pg.click()
-
 
 
 def f8_gerar_relatorio_excel():
