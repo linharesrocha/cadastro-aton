@@ -112,9 +112,9 @@ data_completo = data_completo.rename(
 data_completo['30_ATON'].fillna(0, inplace=True)
 data_completo['90_ATON'].fillna(0, inplace=True)
 
-data = data_completo[['AUTOID', 'CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
+data = data_completo[['CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
                       'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO', 'PESO',
-                      'ESTOQUE', '30_ATON', '90_ATON', 'ATIVO','INATIVO', 'ORIGEM_NOME', 'CATEGORIAS', 'DEPARTAMENTO', 'PRODUTO_TIPO', 'PRECO_POR', 'PRECO_DE']]
+                      'ESTOQUE', '30_ATON', '90_ATON', 'ORIGEM_NOME', 'CATEGORIAS', 'DEPARTAMENTO', 'PRODUTO_TIPO', 'PRECO_POR', 'PRECO_DE']]
 
 print('Fazendo Groupby Marketplace')
 # Fazendo o Groupby de 90 e 30 dias
@@ -137,9 +137,9 @@ data_h_30_sku = data_h[(data_h['DATA'] >= date_30)]
 #                                'PRECO_POR', 'PRECO_DE']]
 
 
-data = data_completo[['AUTOID', 'CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
+data = data_completo[['CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
                       'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO', 'PESO',
-                      'ESTOQUE', '30_ATON', '90_ATON', 'ATIVO','INATIVO', 'ORIGEM_NOME', 'CATEGORIAS', 'DEPARTAMENTO', 'PRODUTO_TIPO', 'PRECO_POR', 'PRECO_DE']]
+                      'ESTOQUE', '30_ATON', '90_ATON', 'ORIGEM_NOME', 'CATEGORIAS', 'DEPARTAMENTO', 'PRODUTO_TIPO', 'PRECO_POR', 'PRECO_DE']]
 
 d1 = today.strftime("%d-%m-%Y")
 data_completo.to_excel('excel/Planilha-de-Campanha-'+ str(d1) + '.xls', index=False)
