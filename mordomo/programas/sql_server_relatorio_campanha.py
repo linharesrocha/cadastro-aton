@@ -36,8 +36,8 @@ cursor = conexao.cursor()
 print('SQL de Produtos Aton e Marketplace')
 comando = '''
 SELECT 
-A.AUTOID, A.VLR_SITE2, A.VLR_SITE1, A.PRODMKTP_ID, A.SKU, A.SKUVARIACAO_MASTER, A.ATIVO, B.INATIVO,
-B.CODID, B.COD_INTERNO,  B.DESCRICAO, B.VLR_CUSTO,
+A.AUTOID, A.VLR_SITE2, A.VLR_SITE1, A.PRODMKTP_ID, A.SKU, A.SKUVARIACAO_MASTER, A.ATIVO,
+B.INATIVO, B.CODID, B.COD_INTERNO,  B.DESCRICAO, B.VLR_CUSTO, B.PESO,
 C.ESTOQUE, 
 D.ORIGEM_NOME,
 E.DESCRICAO AS GRUPO,
@@ -113,7 +113,7 @@ data_completo['30_ATON'].fillna(0, inplace=True)
 data_completo['90_ATON'].fillna(0, inplace=True)
 
 data = data_completo[['AUTOID', 'CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
-                      'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO',
+                      'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO', 'PESO',
                       'ESTOQUE', '30_ATON', '90_ATON', 'ATIVO','INATIVO', 'ORIGEM_NOME', 'CATEGORIAS', 'DEPARTAMENTO', 'PRODUTO_TIPO', 'PRECO_POR', 'PRECO_DE']]
 
 print('Fazendo Groupby Marketplace')
@@ -137,11 +137,9 @@ data_h_30_sku = data_h[(data_h['DATA'] >= date_30)]
 #                                'PRECO_POR', 'PRECO_DE']]
 
 
-data_completo = data_completo[['AUTOID', 'CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
-                               'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO',
-                               'ESTOQUE', '30_ATON', '90_ATON', 'ATIVO','INATIVO', 'ORIGEM_NOME',
-                                'CATEGORIAS', 'DEPARTAMENTO', 'PRODUTO_TIPO',
-                               'PRECO_POR', 'PRECO_DE']]
+data = data_completo[['AUTOID', 'CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
+                      'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO', 'PESO',
+                      'ESTOQUE', '30_ATON', '90_ATON', 'ATIVO','INATIVO', 'ORIGEM_NOME', 'CATEGORIAS', 'DEPARTAMENTO', 'PRODUTO_TIPO', 'PRECO_POR', 'PRECO_DE']]
 
 d1 = today.strftime("%d-%m-%Y")
 data_completo.to_excel('excel/Planilha-de-Campanha-'+ str(d1) + '.xls', index=False)
