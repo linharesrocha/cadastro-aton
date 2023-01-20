@@ -118,7 +118,7 @@ data = data_completo[['CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
 
 print('Fazendo Groupby Marketplace')
 # Fazendo o Groupby de 90 e 30 dias
-data_h_30_sku = data_h[(data_h['DATA'] >= date_30)]
+# data_h_30_sku = data_h[(data_h['DATA'] >= date_30)]
 
 # CODIGO MISSAO HERE
 
@@ -137,10 +137,7 @@ data_h_30_sku = data_h[(data_h['DATA'] >= date_30)]
 #                                'PRECO_POR', 'PRECO_DE']]
 
 
-data = data_completo[['CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
-                      'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO', 'PESO',
-                      'ESTOQUE', '30_ATON', '90_ATON', 'ORIGEM_NOME', 'CATEGORIAS', 'DEPARTAMENTO', 'PRODUTO_TIPO', 'PRECO_POR', 'PRECO_DE']]
 
 d1 = today.strftime("%d-%m-%Y")
-data_completo.to_excel('excel/Planilha-de-Campanha-'+ str(d1) + '.xls', index=False)
+data.to_excel('excel/Planilha-de-Campanha-'+ str(d1) + '.xls', index=False)
 print('Relatório Gerado!')
