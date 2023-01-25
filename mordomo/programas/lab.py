@@ -1,45 +1,23 @@
-import os
-import warnings
-from pathlib import Path
-
 import pandas as pd
-import pyodbc
-import slack
-from colorama import *
-from dotenv import load_dotenv
-
-warnings.filterwarnings('ignore')
-# SLACK SETUP
-env_path = Path('.') / '.env'
-load_dotenv(dotenv_path=env_path)
-app = slack.WebClient(token=os.environ['SLACK_TOKEN'])
-
-env_path_sql = Path('.') / '.env-sql'
-load_dotenv(dotenv_path=env_path_sql)
-DATABASE=os.environ['DATABASE']
-UID=os.environ['UID']
-PWD=os.environ['PWD']
-
-dados_conexao = ("Driver={SQL Server};"
-            "Server=erp.ambarxcall.com.br;"
-            "Database="+DATABASE+";"
-            "UID="+UID+";"
-            "PWD="+PWD+";")
-
-conexao = pyodbc.connect(dados_conexao)
-
-cursor = conexao.cursor()
-
-# GET LAST ORDER
-comando = f'''
-SELECT CODID, COD_INTERNO, DESCRICAO, DESCRITIVO, LEN(CAST(DESCRITIVO AS nvarchar(MAX))) AS CONTAGEM
-FROM MATERIAIS
-WHERE INATIVO = 'N'
-AND DESCRITIVO IS NOT NULL
-AND CODID NOT IN(1425,1426)
-AND DESMEMBRA = 'N'
-'''
+import pyperclip
+import pyautogui as pg
 
 
-df = pd.read_sql(comando, conexao)
-df.to_excel('rel_qnt.xls', index=False)
+data = pd.read_excel('excel/precos-magalu.xlsx')
+pg.moveTo(530, 168)
+pg.click()
+pg.press('down')
+pg.press('up')
+
+for i in range(len(data)):
+    pg.hotkey('ctrl', 'c')
+    cabecalho = pyperclip.paste()
+    lista_valores_cabecalho = cabecalho.split("\t")
+    sku = lista_valores_cabecalho[-21]
+    sku = sku + '1'
+    print(sku)
+    pyperclip.copy(sku)
+    pg.hotkey('ctrl', 'v')
+    pg.press('enter')
+    pg.press('down')
+

@@ -41,7 +41,7 @@ B.INATIVO, B.CODID, B.COD_INTERNO,  B.DESCRICAO, B.VLR_CUSTO, B.PESO,
 C.ESTOQUE, 
 D.ORIGEM_NOME,
 E.DESCRICAO AS GRUPO,
-F.CATEG_MKTP_DESC AS CATEGORIAS, F.DEPARTAMENTO, F.PRODUTO_TIPO
+F.CATEG_MKTP_DESC AS DESCRICAON02, F.PRODUTO_TIPO, F.API
 FROM ECOM_SKU A
 LEFT JOIN MATERIAIS B ON A.MATERIAL_ID = B.CODID
 LEFT JOIN ESTOQUE_MATERIAIS C ON B.CODID = C.MATERIAL_ID
@@ -55,8 +55,18 @@ ORDER BY CODID
 
 data = pd.read_sql(comando, conexao)
 
-# Replace Null na coluna ATIVO'
-# data['ATIVO'].fillna('N_EXISTE', inplace=True)
+# Juntar categoria pai da Magalu
+comando = '''
+SELECT A.IDNIVEL01, B.IDNIVEL02, A.API, A.DESCRICAON01, B.DESCRICAON02
+FROM ECOM_CATEGORIAN01 A
+LEFT JOIN ECOM_CATEGORIAN02 B
+ON A.IDNIVEL01 = B.IDNIVEL01
+'''
+data_categoria_magalu_tmp = pd.read_sql(comando, conexao)
+data_categoria_magalu_tmp['API'].replace('Integra             ', 'IntegraCommerce', inplace=True)
+data = pd.merge(data, data_categoria_magalu_tmp, on=['DESCRICAON02', 'API'], how='left')
+data.rename(columns = {'DESCRICAON02':'CATEGORIAS'}, inplace=True)
+data.to_excel('test.xls', index=False)
 
 print('SQL de Pedidos')
 comando = '''
@@ -68,13 +78,10 @@ WHERE B.TIPO = 'PEDIDO'
 AND B.POSICAO != 'CANCELADO'
 '''
 
-# Lendo o SQL
+# Preenchendo pedidos
 data_h = pd.read_sql(comando, conexao)
-
-# Removendo coluna pois só serviu para o JOIN SQL
 data_h.drop('PEDIDO', axis=1, inplace=True)
 print('Extraindo quantidades de produto')
-# Pegando os códigos interno com mais de 1 quantidade no mesmo pedido, e preenchendo no df original
 data_h_aux = data_h[(data_h['QUANT'] > 1)]
 data_h_aux['QUANT'] = data_h_aux['QUANT'] - 1
 for i in range(len(data_h_aux)):
@@ -87,10 +94,7 @@ for i in range(len(data_h_aux)):
         data_h = data_h.append(row1, ignore_index=True)
 
 
-# Removendo quantidade de COD interno
-# data_h.drop('QUANT', axis=1, inplace=True)
-
-print('Fazendo Groupby Aton')
+print('Fazendo Groupby Aton para contabilizar as vendas do COD_INTERNO')
 # Fazendo o Groupby de 90 e 30 dias
 data_h_30 = data_h[(data_h['DATA'] >= date_30)]
 data_h_30 = data_h_30.groupby('COD_INTERNO').count()
@@ -102,41 +106,25 @@ data_h_90 = data_h_90.groupby('COD_INTERNO').count()
 data_h_90 = data_h_90.reset_index()
 data_h_90.drop(['SKU', 'DATA'], axis=1, inplace=True)
 
-print('Fazendo Merge Aton')
+print('Fazendo Merge das Vendas Aton na planilha Original')
 # Fazendo merge
 data_completo = pd.merge(data, data_h_30, on=['COD_INTERNO'], how='left')
 data_completo = pd.merge(data_completo, data_h_90, on=['COD_INTERNO'], how='left')
 
 data_completo = data_completo.rename(
-    columns={'QUANT_x': '30_ATON', 'QUANT_y': '90_ATON', 'VLR_SITE2': 'PRECO_DE', 'VLR_SITE1': 'PRECO_POR'})
+    columns={'QUANT_x': '30_ATON', 'QUANT_y': '90_ATON', 'VLR_SITE1': 'PRECO_DE', 'VLR_SITE2': 'PRECO_POR'})
 data_completo['30_ATON'].fillna(0, inplace=True)
 data_completo['90_ATON'].fillna(0, inplace=True)
 
+data_completo['30_MKTP'] = 'MANUTENCAO'
+data_completo['90_MKTP'] = 'MANUTENCAO'
+
 data = data_completo[['CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
                       'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO', 'PESO',
-                      'ESTOQUE', '30_ATON', '90_ATON', 'ORIGEM_NOME', 'CATEGORIAS', 'DEPARTAMENTO', 'PRODUTO_TIPO', 'PRECO_POR', 'PRECO_DE']]
+                      'ESTOQUE', '30_ATON', '90_ATON', '30_MKTP', '90_MKTP','ORIGEM_NOME', 'CATEGORIAS', 'PRODUTO_TIPO', 'PRECO_DE', 'PRECO_POR']]
 
-print('Fazendo Groupby Marketplace')
-# Fazendo o Groupby de 90 e 30 dias
-# data_h_30_sku = data_h[(data_h['DATA'] >= date_30)]
-
-# CODIGO MISSAO HERE
-
-
-# print('Fazendo Merge Marketplace')
-# Fazendo merge
-# data_completo = pd.merge(data, data_h_30_sku, on=['SKU'], how='left')
-# data_completo = pd.merge(data_completo, data_h_90_sku, on=['SKU'], how='left')
-# data_completo = data_completo.rename(columns={'QUANT_x': '30_MKTP', 'QUANT_y': '90_MKTP'})
-# data_completo['30_MKTP'].fillna(0, inplace=True)
-# data_completo['90_MKTP'].fillna(0, inplace=True)
-
-# data_completo = data_completo[['AUTOID', 'CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
-#                                'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO',
-#                                'ESTOQUE', '30_ATON', '90_ATON', '30_MKTP', '90_MKTP', 'ATIVO','INATIVO', 'ORIGEM_NOME',
-#                                'PRECO_POR', 'PRECO_DE']]
-
-
+print('Marketplace')
+data_h_30_mktp = data_h[(data_h['DATA'] >= date_30)]
 
 d1 = today.strftime("%d-%m-%Y")
 data.to_excel('excel/Planilha-de-Campanha-'+ str(d1) + '.xls', index=False)

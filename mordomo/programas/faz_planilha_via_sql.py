@@ -24,14 +24,10 @@ conexao = pyodbc.connect(dados_conexao)
 cursor = conexao.cursor()
 
 comando = '''
-SELECT A.PEDIDO, A.COD_INTERNO, A.DESCRICAOPROD, A.QUANT, A.COD_PEDIDO AS SKU, B.POSICAO
-FROM PEDIDO_MATERIAIS_ITENS_CLIENTE A
-LEFT JOIN PEDIDO_MATERIAIS_CLIENTE B
-ON A.PEDIDO = B.PEDIDO
-WHERE B.TIPO = 'PEDIDO'
-AND B.ORIGEM = '24'
-AND DATA >=  '01-10-2022'
+SELECT MATERIAL_ID AS CODID, PRODMKTP_ID,VLR_SITE1, VLR_SITE2, TITULO, ESTOQUE, ATIVO, EXISTE
+FROM ECOM_SKU
+WHERE ORIGEM_ID = '25'
 '''
 
 data = pd.read_sql(comando, conexao)
-data.to_excel('excel/relatorio_magalu_leal_vendas.xls', index=False)
+data.to_excel('excel/vinculacoes_magalu_pisste.xls', index=False)

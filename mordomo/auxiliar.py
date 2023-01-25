@@ -118,6 +118,11 @@ def publicar_anuncio_seleciona_marketplace_magalu_leal():
     pg.click()
 
 
+def publicar_anuncio_seleciona_marketplace_magalu_pisste():
+    pg.moveTo(105, 429)
+    pg.click()
+
+
 def publicar_anuncio_seleciona_marketplace_b2w_leal():
     pg.moveTo(78, 283)
     pg.click()

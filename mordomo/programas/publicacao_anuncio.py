@@ -10,8 +10,8 @@ menu_integracao()
 opcao_publicar_anuncio()
 publicar_anuncio_filtro_verde()
 publicar_anuncio_seleciona_seta_grupo()
-publicar_anuncio_seleciona_leal_grupo()
-publicar_anuncio_seleciona_marketplace_netshoes_leal()
+publicar_anuncio_seleciona_pisste_grupo()
+publicar_anuncio_seleciona_marketplace_magalu_pisste()
 publicar_anuncio_estoque_positivo()
 publicar_anuncio_botao_consultar()
 publicar_anuncio_clica_filtro_existe()
@@ -21,12 +21,12 @@ publicar_anuncio_aba_produtos_selecionados_asterisco_auto_id()
 publicar_anuncio_produtos_selecionado_remove_filtros_ruins()
 publicar_anuncio_aba_produtos_selecionados_filtro_auto_id()
 
-# PISSTE 50
+# PISSTE 36
 # MADZ 200
 # LEAL 71
 
 stop = 1
-while stop < 68:
+while stop < 36:
     publicar_anuncio_aba_consulta_produtos()
     publicar_anuncio_aba_produtos_sobe_barra()
     publicar_anuncio_seleciona_resultado_botao_direito()
