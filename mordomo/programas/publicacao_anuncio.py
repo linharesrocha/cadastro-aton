@@ -28,7 +28,9 @@ publicar_anuncio_aba_produtos_selecionados_filtro_auto_id()
 stop = 0
 quantidade_cnpj = 61
 # Preenche nomes
+print('PREENCHENDO NOMES.')
 while stop < quantidade_cnpj:
+    print(str(stop + 1) + '/' + str(quantidade_cnpj))
     publicar_anuncio_aba_consulta_produtos()
     publicar_anuncio_aba_produtos_sobe_barra()
     publicar_anuncio_seleciona_resultado_botao_direito()
@@ -97,6 +99,7 @@ while stop < quantidade_cnpj:
     # Salvando
     stop = stop + 1
 
+print('MUDANDO SKU...')
 # Muda SKU
 publicar_anuncio_aba_produtos_sobe_barra()
 stop = 0
@@ -106,6 +109,7 @@ pg.press('down')
 pg.press('up')
 
 while stop < quantidade_cnpj:
+    print(str(stop + 1) + '/' + str(quantidade_cnpj))
     pg.hotkey('ctrl', 'c')
     cabecalho = pyperclip.paste()
     lista_valores_cabecalho = cabecalho.split("\t")

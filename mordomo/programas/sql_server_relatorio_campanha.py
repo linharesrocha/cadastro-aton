@@ -123,6 +123,12 @@ data = data_completo[['CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
                       'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO', 'PESO',
                       'ESTOQUE', '30_ATON', '90_ATON', '30_MKTP', '90_MKTP','ORIGEM_NOME', 'CATEGORIAS', 'PRODUTO_TIPO', 'PRECO_DE', 'PRECO_POR']]
 
+# Removendo espaços em branco
+data['COD_INTERNO'] = data['COD_INTERNO'].str.strip()
+data['DESCRICAO'] = data['DESCRICAO'].str.strip()
+data['ORIGEM_NOME'] = data['ORIGEM_NOME'].str.strip()
+data['SKU'] = data['SKU'].str.strip()
+
 print('Marketplace')
 data_h_30_mktp = data_h[(data_h['DATA'] >= date_30)]
 
