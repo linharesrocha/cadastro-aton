@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from colorama import *
 
 lines = []
-print(Fore.YELLOW, 'COMANDO:')
+print(Fore.YELLOW, '\nCOMANDO:')
 while True:
     user_input  = input()
     if user_input  == '':
@@ -16,7 +16,7 @@ while True:
         lines.append(user_input  + '\n')
 COMANDO = ''.join(lines)
 
-print(Fore.YELLOW, 'NOME DA PLANILHA:')
+print(Fore.YELLOW, '\nNOME DA PLANILHA:')
 SHEET_NAME = input('')
 SHEET_NAME = SHEET_NAME.replace(' ', '_')
 SHEET_NAME = SHEET_NAME.upper()
@@ -48,4 +48,4 @@ worksheet = writer.sheets['Planilha1']
 column_settings = [{'header': column} for column in data.columns]
 worksheet.add_table(0, 0, max_row, max_col - 1, {'columns': column_settings, 'style': 'Table Style Medium 21'})
 writer.close()
-print(Fore.GREEN, 'PLANILHA GERADA!')
+print(Fore.GREEN, '\nPLANILHA GERADA!')
