@@ -37,7 +37,7 @@ print('SQL de Produtos Aton e Marketplace')
 comando = '''
 SELECT 
 A.AUTOID, A.VLR_SITE2, A.VLR_SITE1, A.PRODMKTP_ID, A.SKU, A.SKUVARIACAO_MASTER, A.ATIVO,
-B.INATIVO, B.CODID, B.COD_INTERNO,  B.DESCRICAO, B.VLR_CUSTO, B.PESO,
+B.INATIVO, B.CODID, B.COD_INTERNO,  B.PAI,B.DESCRICAO, B.VLR_CUSTO, B.PESO,
 C.ESTOQUE, 
 D.ORIGEM_NOME,
 E.DESCRICAO AS GRUPO,
@@ -52,8 +52,16 @@ WHERE C.ARMAZEM = 1
 AND B.INATIVO = 'N'
 ORDER BY CODID
 '''
-
 data = pd.read_sql(comando, conexao)
+
+# Juntar código pai
+comando = '''
+SELECT COD_INTERNO AS PAI_COD_INTERNO, CODID AS PAI FROM MATERIAIS
+WHERE PAI = '0'
+'''
+data_pai_aux = pd.read_sql(comando, conexao)
+data = pd.merge(data, data_pai_aux, on=['PAI'], how='left')
+data['PAI_COD_INTERNO'].fillna(data['COD_INTERNO'], inplace=True)
 
 # Juntar categoria pai da Magalu
 comando = '''
@@ -63,7 +71,8 @@ LEFT JOIN ECOM_CATEGORIAN02 B
 ON A.IDNIVEL01 = B.IDNIVEL01
 '''
 data_categoria_magalu_tmp = pd.read_sql(comando, conexao)
-data_categoria_magalu_tmp['API'].replace('Integra             ', 'IntegraCommerce', inplace=True)
+data_categoria_magalu_tmp['API'] = data_categoria_magalu_tmp['API'].str.strip()
+data_categoria_magalu_tmp['API'].replace('Integra', 'IntegraCommerce', inplace=True)
 data = pd.merge(data, data_categoria_magalu_tmp, on=['DESCRICAON02', 'API'], how='left')
 data.rename(columns = {'DESCRICAON02':'CATEGORIAS'}, inplace=True)
 data.to_excel('test.xls', index=False)
@@ -119,7 +128,7 @@ data_completo['90_ATON'].fillna(0, inplace=True)
 data_completo['30_MKTP'] = 'MANUTENCAO'
 data_completo['90_MKTP'] = 'MANUTENCAO'
 
-data = data_completo[['CODID', 'COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
+data = data_completo[['CODID', 'COD_INTERNO', 'PAI_COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
                       'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO', 'PESO',
                       'ESTOQUE', '30_ATON', '90_ATON', '30_MKTP', '90_MKTP','ORIGEM_NOME', 'CATEGORIAS', 'PRODUTO_TIPO', 'PRECO_DE', 'PRECO_POR']]
 
