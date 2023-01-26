@@ -5,15 +5,17 @@ import pandas as pd
 import warnings
 from datetime import datetime, date, timedelta
 from dotenv import load_dotenv
+from colorama import *
+
 today = date.today()
 
 dt = date.today()
 datetime_midnight = datetime.combine(dt, datetime.min.time())
 date_30 = datetime_midnight - timedelta(30)
-print('Date 30: ' + str(date_30.strftime("%d-%m-%Y")))
+print('30 Dias: ' + str(date_30.strftime("%d-%m-%Y")))
 date_90 = datetime_midnight - timedelta(90)
-print('Date 90: ' + str(date_90.strftime("%d-%m-%Y")))
-
+print('90 Dias: ' + str(date_90.strftime("%d-%m-%Y")))
+print(Fore.YELLOW, '\nCarregando...')
 warnings.filterwarnings('ignore')
 
 env_path = Path('.') / '.env-sql'
@@ -29,11 +31,9 @@ dados_conexao = ("Driver={SQL Server};"
                                                          "PWD=" + PWD + ";")
 
 conexao = pyodbc.connect(dados_conexao)
-print("Conexão com o Banco de Dados Bem Sucedida!")
 
 cursor = conexao.cursor()
 
-print('SQL de Produtos Aton e Marketplace')
 comando = '''
 SELECT 
 A.AUTOID, A.VLR_SITE2, A.VLR_SITE1, A.PRODMKTP_ID, A.SKU, A.SKUVARIACAO_MASTER, A.ATIVO,
@@ -76,7 +76,6 @@ data_categoria_magalu_tmp['API'].replace('Integra', 'IntegraCommerce', inplace=T
 data = pd.merge(data, data_categoria_magalu_tmp, on=['DESCRICAON02', 'API'], how='left')
 data.rename(columns = {'DESCRICAON02':'CATEGORIAS'}, inplace=True)
 
-print('SQL de Pedidos')
 comando = '''
 SELECT A.PEDIDO, A.COD_INTERNO, A.QUANT, A.COD_PEDIDO AS SKU, B.DATA
 FROM PEDIDO_MATERIAIS_ITENS_CLIENTE A
@@ -89,7 +88,6 @@ AND B.POSICAO != 'CANCELADO'
 # Preenchendo pedidos
 data_h = pd.read_sql(comando, conexao)
 data_h.drop('PEDIDO', axis=1, inplace=True)
-print('Extraindo quantidades de produto')
 data_h_aux = data_h[(data_h['QUANT'] > 1)]
 data_h_aux['QUANT'] = data_h_aux['QUANT'] - 1
 for i in range(len(data_h_aux)):
@@ -102,7 +100,6 @@ for i in range(len(data_h_aux)):
         data_h = data_h.append(row1, ignore_index=True)
 
 
-print('Fazendo Groupby Aton para contabilizar as vendas do COD_INTERNO')
 # Fazendo o Groupby de 90 e 30 dias
 data_h_30 = data_h[(data_h['DATA'] >= date_30)]
 data_h_30 = data_h_30.groupby('COD_INTERNO').count()
@@ -114,7 +111,6 @@ data_h_90 = data_h_90.groupby('COD_INTERNO').count()
 data_h_90 = data_h_90.reset_index()
 data_h_90.drop(['SKU', 'DATA'], axis=1, inplace=True)
 
-print('Fazendo Merge das Vendas Aton na planilha Original')
 # Fazendo merge
 data_completo = pd.merge(data, data_h_30, on=['COD_INTERNO'], how='left')
 data_completo = pd.merge(data_completo, data_h_90, on=['COD_INTERNO'], how='left')
@@ -137,9 +133,8 @@ data['DESCRICAO'] = data['DESCRICAO'].str.strip()
 data['ORIGEM_NOME'] = data['ORIGEM_NOME'].str.strip()
 data['SKU'] = data['SKU'].str.strip()
 
-print('Marketplace')
 data_h_30_mktp = data_h[(data_h['DATA'] >= date_30)]
 
 d1 = today.strftime("%d-%m-%Y")
 data.to_excel('excel/Planilha-de-Campanha-'+ str(d1) + '.xls', index=False)
-print('Relatório Gerado!')
+print(Fore.GREEN,'\nRelatório Gerado!')
