@@ -75,7 +75,6 @@ data_categoria_magalu_tmp['API'] = data_categoria_magalu_tmp['API'].str.strip()
 data_categoria_magalu_tmp['API'].replace('Integra', 'IntegraCommerce', inplace=True)
 data = pd.merge(data, data_categoria_magalu_tmp, on=['DESCRICAON02', 'API'], how='left')
 data.rename(columns = {'DESCRICAON02':'CATEGORIAS'}, inplace=True)
-data.to_excel('test.xls', index=False)
 
 print('SQL de Pedidos')
 comando = '''
