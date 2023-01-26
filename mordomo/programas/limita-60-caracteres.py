@@ -1,5 +1,12 @@
 import pyperclip
 import pandas as pd
+import os
+from pathlib import Path
+import pyodbc
+import pandas as pd
+import warnings
+from datetime import datetime, date, timedelta
+from dotenv import load_dotenv
 
 
 string_description = 'Mini Bola De Exercícios 25cm Fitness Com Canudo Para Inflar Yoga Pilates'
