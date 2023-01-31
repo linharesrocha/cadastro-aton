@@ -3,30 +3,30 @@ from mordomo.main import *
 from mordomo.auxiliar import *
 from mordomo.login import *
 
-matar_ambar()
-executa_icone_aton()
-login_aton()
-menu_integracao()
-opcao_publicar_anuncio()
-publicar_anuncio_filtro_verde()
-publicar_anuncio_seleciona_seta_grupo()
-publicar_anuncio_seleciona_leal_grupo()
-publicar_anuncio_seleciona_marketplace_magalu_leal()
-publicar_anuncio_estoque_positivo()
-publicar_anuncio_botao_consultar()
-publicar_anuncio_clica_filtro_existe()
-publicar_anuncio_aba_produtos_selecionados()
-publicar_anuncio_aba_produtos_selecionados_asterisco()
-publicar_anuncio_aba_produtos_selecionados_asterisco_auto_id()
-publicar_anuncio_produtos_selecionado_remove_filtros_ruins()
-publicar_anuncio_aba_produtos_selecionados_filtro_auto_id()
+# matar_ambar()
+# executa_icone_aton()
+# login_aton()
+# menu_integracao()
+# opcao_publicar_anuncio()
+# publicar_anuncio_filtro_verde()
+# publicar_anuncio_seleciona_seta_grupo()
+# publicar_anuncio_seleciona_madz_grupo()
+# publicar_anuncio_seleciona_marketplace_magalu_madz()
+# publicar_anuncio_estoque_positivo()
+# publicar_anuncio_botao_consultar()
+# publicar_anuncio_clica_filtro_existe()
+# publicar_anuncio_aba_produtos_selecionados()
+# publicar_anuncio_aba_produtos_selecionados_asterisco()
+# publicar_anuncio_aba_produtos_selecionados_asterisco_auto_id()
+# publicar_anuncio_produtos_selecionado_remove_filtros_ruins()
+# publicar_anuncio_aba_produtos_selecionados_filtro_auto_id()
 
 # PISSTE 36
-# MADZ
+# MADZ 171
 # LEAL 61
 
 stop = 0
-quantidade_cnpj = 61
+quantidade_cnpj = 81
 # Preenche nomes
 print('PREENCHENDO NOMES.')
 while stop < quantidade_cnpj:
@@ -97,26 +97,4 @@ while stop < quantidade_cnpj:
         pg.press('down')
 
     # Salvando
-    stop = stop + 1
-
-print('MUDANDO SKU...')
-# Muda SKU
-publicar_anuncio_aba_produtos_sobe_barra()
-stop = 0
-pg.moveTo(597, 166)
-pg.click()
-pg.press('down')
-pg.press('up')
-
-while stop < quantidade_cnpj:
-    print(str(stop + 1) + '/' + str(quantidade_cnpj))
-    pg.hotkey('ctrl', 'c')
-    cabecalho = pyperclip.paste()
-    lista_valores_cabecalho = cabecalho.split("\t")
-    sku = lista_valores_cabecalho[-7]
-    sku = sku + '7'
-    pyperclip.copy(sku)
-    pg.hotkey('ctrl', 'v')
-    pg.press('enter')
-    pg.press('down')
     stop = stop + 1
