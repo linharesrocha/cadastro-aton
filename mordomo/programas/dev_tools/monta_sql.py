@@ -5,7 +5,7 @@ import pandas as pd
 list_cod = [
 ]
 
-print(Fore.RED, '\nCOMANDO:')
+print(Fore.RED, '\nLISTA DE CÓDIGOS:')
 while True:
     user_input  = input()
     if user_input  == '':
