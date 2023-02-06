@@ -6,6 +6,8 @@ import warnings
 from dotenv import load_dotenv
 from colorama import *
 
+
+os.system('cls')
 lines = []
 print(Fore.RED, '\nCOMANDO:')
 while True:
@@ -22,11 +24,12 @@ SHEET_NAME = SHEET_NAME.replace(' ', '_')
 SHEET_NAME = SHEET_NAME.upper()
 print(Fore.RED, '\nPROCESSANDO...')
 # Excel
-writer = pd.ExcelWriter(f'excel/{SHEET_NAME}.xlsx', engine='xlsxwriter')
+writer = pd.ExcelWriter(f'C:/workspace/cadastro-aton/mordomo/programas/excel/{SHEET_NAME}.xlsx', engine='xlsxwriter')
 
 # Banco de Dados
 warnings.filterwarnings('ignore')
-env_path = Path('.') / '.env-sql'
+env_path = Path('.') / 'C:/workspace/cadastro-aton/mordomo/programas/.env-sql'
+print(env_path)
 load_dotenv(dotenv_path=env_path)
 DATABASE = os.environ['DATABASE']
 UID = os.environ['UID']

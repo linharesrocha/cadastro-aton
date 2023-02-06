@@ -1,7 +1,9 @@
 import colorama
 from colorama import Fore, Style
+import os
 import pandas as pd
 
+os.system('cls')
 list_cod = [
 ]
 

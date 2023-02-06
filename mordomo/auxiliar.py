@@ -18,7 +18,7 @@ def conexao_banco_sql():
                      "Database=" + DATABASE + ";"
                                               "UID=" + UID + ";"
                                                              "PWD=" + PWD + ";")
-
+    
 
 # Funções Auxiliares
 def matar_slack():
