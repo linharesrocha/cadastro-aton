@@ -24,12 +24,12 @@ SHEET_NAME = SHEET_NAME.replace(' ', '_')
 SHEET_NAME = SHEET_NAME.upper()
 print(Fore.RED, '\nPROCESSANDO...')
 # Excel
-writer = pd.ExcelWriter(f'C:/workspace/cadastro-aton/mordomo/programas/excel/{SHEET_NAME}.xlsx', engine='xlsxwriter')
+path_excel = f'C:/workspace/cadastro-aton/mordomo/programas/excel/{SHEET_NAME}.xlsx'
+writer = pd.ExcelWriter(path_excel, engine='xlsxwriter')
 
 # Banco de Dados
 warnings.filterwarnings('ignore')
 env_path = Path('.') / 'C:/workspace/cadastro-aton/mordomo/programas/.env-sql'
-print(env_path)
 load_dotenv(dotenv_path=env_path)
 DATABASE = os.environ['DATABASE']
 UID = os.environ['UID']
@@ -53,3 +53,6 @@ worksheet.add_table(0, 0, max_row, max_col - 1, {'columns': column_settings, 'st
 writer.close()
 print(Fore.GREEN, '\nPLANILHA GERADA!')
 print(' ')
+print(Fore.RED, '\nREAD_EXCEL:')
+print(Fore.BLUE, f"\ndata = pd.read_excel('C:/workspace/cadastro-aton/mordomo/programas/excel/{SHEET_NAME}.xlsx')")
+print(Fore.WHITE,'\n')
