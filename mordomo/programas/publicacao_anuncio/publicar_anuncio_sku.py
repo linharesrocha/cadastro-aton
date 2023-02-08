@@ -54,10 +54,9 @@ if not True in result_check:
     # Adiciona a substring nos SKUS
     comando = f'''
     UPDATE PUBLICA_PRODUTO
-    SET SKU = LEFT(SKU, 30 - 6) + '{acrescimo_sku}'
+    SET SKU = LEFT(SKU, 30 - 8) + '{acrescimo_sku}'
     WHERE DATATH > '{today_format_Y}'
     AND ORIGEM_ID = '{origem_id}'
-    AND AUTOID = '17185'
     '''
     cursor.execute(comando)
     conexao.commit()
@@ -68,12 +67,11 @@ if not True in result_check:
     SET SKU = REPLACE(SKU, ' ', '')
     WHERE DATATH > '{today_format_Y}'
     AND ORIGEM_ID = '{origem_id}'
-    AND AUTOID = '17185'
     '''
 
     cursor.execute(comando)
     conexao.commit()
     print('\nSucesso!')
 else:
-    print('Já existe substring (acrescimo de sku) em algum SKU!')
+    print('\nJá existe substring (acrescimo de sku) em algum SKU!')
 del conexao
