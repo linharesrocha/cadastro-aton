@@ -71,7 +71,7 @@ if not True in result_check:
 
     cursor.execute(comando)
     conexao.commit()
-    print('\nSucesso!')
+    print('\nSucesso!\n')
 else:
-    print('\nJá existe substring (acrescimo de sku) em algum SKU!')
+    print('\nJá existe substring (acrescimo de sku) em algum SKU!\n')
 del conexao
