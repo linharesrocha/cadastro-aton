@@ -18,7 +18,7 @@ print('90 Dias: ' + str(date_90.strftime("%d-%m-%Y")))
 print(Fore.YELLOW, '\nCarregando...')
 warnings.filterwarnings('ignore')
 
-env_path = Path('.') / '.env-sql'
+env_path = Path('.') / 'C:\workspace\cadastro-aton\mordomo\programas\.env-sql'
 load_dotenv(dotenv_path=env_path)
 DATABASE = os.environ['DATABASE']
 UID = os.environ['UID']
@@ -136,5 +136,5 @@ data['SKU'] = data['SKU'].str.strip()
 data_h_30_mktp = data_h[(data_h['DATA'] >= date_30)]
 
 d1 = today.strftime("%d-%m-%Y")
-data.to_excel('excel/Planilha-de-Campanha-'+ str(d1) + '.xls', index=False)
+data.to_excel('C:\workspace\cadastro-aton\mordomo\programas\excel\Planilha-de-Campanha-'+ str(d1) + '.xls', index=False)
 print(Fore.GREEN,'\nRelatório Gerado!')

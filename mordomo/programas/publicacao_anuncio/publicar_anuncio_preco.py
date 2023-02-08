@@ -3,7 +3,6 @@ import pyperclip
 import pyautogui as pg
 
 
-
 data = pd.read_excel('excel/magalu_madz-precos.xlsx')
 
 

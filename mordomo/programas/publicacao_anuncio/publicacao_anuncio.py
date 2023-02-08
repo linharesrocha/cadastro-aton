@@ -1,36 +1,35 @@
 import pyperclip
-from mordomo.main import *
-from mordomo.auxiliar import *
-from mordomo.login import *
+import sys
+sys.path.append('C:\workspace\cadastro-aton\mordomo')
+from auxiliar import *
+from login import *
 
-# matar_ambar()
-# executa_icone_aton()
-# login_aton()
-# menu_integracao()
-# opcao_publicar_anuncio()
-# publicar_anuncio_filtro_verde()
-# publicar_anuncio_seleciona_seta_grupo()
-# publicar_anuncio_seleciona_madz_grupo()
-# publicar_anuncio_seleciona_marketplace_magalu_madz()
-# publicar_anuncio_estoque_positivo()
-# publicar_anuncio_botao_consultar()
-# publicar_anuncio_clica_filtro_existe()
-# publicar_anuncio_aba_produtos_selecionados()
-# publicar_anuncio_aba_produtos_selecionados_asterisco()
-# publicar_anuncio_aba_produtos_selecionados_asterisco_auto_id()
-# publicar_anuncio_produtos_selecionado_remove_filtros_ruins()
-# publicar_anuncio_aba_produtos_selecionados_filtro_auto_id()
+matar_ambar()
+executa_icone_aton()
+login_aton()
+sleep(6)
+menu_integracao()
+opcao_publicar_anuncio()
+publicar_anuncio_filtro_verde()
+publicar_anuncio_seleciona_seta_grupo()
+publicar_anuncio_seleciona_pisste_grupo()
+publicar_anuncio_seleciona_marketplace_magalu_madz()
+publicar_anuncio_estoque_positivo()
+publicar_anuncio_botao_consultar()
+publicar_anuncio_clica_filtro_existe()
+publicar_anuncio_aba_produtos_selecionados()
+publicar_anuncio_aba_produtos_selecionados_asterisco()
+publicar_anuncio_aba_produtos_selecionados_asterisco_auto_id()
+publicar_anuncio_produtos_selecionado_remove_filtros_ruins()
+publicar_anuncio_aba_produtos_selecionados_filtro_auto_id()
 
-# PISSTE 36
-# MADZ 171
-# LEAL 61
 
 stop = 0
-quantidade_cnpj = 81
+quantidade_produtos = 36
 # Preenche nomes
 print('PREENCHENDO NOMES.')
-while stop < quantidade_cnpj:
-    print(str(stop + 1) + '/' + str(quantidade_cnpj))
+while stop < quantidade_produtos:
+    print(str(stop + 1) + '/' + str(quantidade_produtos))
     publicar_anuncio_aba_consulta_produtos()
     publicar_anuncio_aba_produtos_sobe_barra()
     publicar_anuncio_seleciona_resultado_botao_direito()
