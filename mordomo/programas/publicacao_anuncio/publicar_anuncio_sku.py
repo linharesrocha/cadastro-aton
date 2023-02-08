@@ -48,30 +48,35 @@ df_publica_produto = pd.read_sql(comando, conexao)
 listaSKU = df_publica_produto['SKU'].tolist()
 listaSKU = [valor.strip() for valor in listaSKU]
 result_check = [acrescimo_sku in valor for valor in listaSKU]
+result_len = [len(valor) for valor in listaSKU]
+result_len_check = all(i <= 9 for i in result_len)
+
 if not True in result_check:
-    print('correto')
+    if result_len_check == True:
+        # Adiciona a substring nos SKUS
+        comando = f'''
+        UPDATE PUBLICA_PRODUTO
+        SET SKU = LEFT(SKU, 30 - 8) + '{acrescimo_sku}'
+        WHERE DATATH > '{today_format_Y}'
+        AND ORIGEM_ID = '{origem_id}'
+        '''
+        cursor.execute(comando)
+        conexao.commit()
 
-    # Adiciona a substring nos SKUS
-    comando = f'''
-    UPDATE PUBLICA_PRODUTO
-    SET SKU = LEFT(SKU, 30 - 8) + '{acrescimo_sku}'
-    WHERE DATATH > '{today_format_Y}'
-    AND ORIGEM_ID = '{origem_id}'
-    '''
-    cursor.execute(comando)
-    conexao.commit()
+        # Remove os espaços em branco
+        comando = f'''
+        UPDATE PUBLICA_PRODUTO
+        SET SKU = REPLACE(SKU, ' ', '')
+        WHERE DATATH > '{today_format_Y}'
+        AND ORIGEM_ID = '{origem_id}'
+        '''
 
-    # Remove os espaços em branco
-    comando = f'''
-    UPDATE PUBLICA_PRODUTO
-    SET SKU = REPLACE(SKU, ' ', '')
-    WHERE DATATH > '{today_format_Y}'
-    AND ORIGEM_ID = '{origem_id}'
-    '''
-
-    cursor.execute(comando)
-    conexao.commit()
-    print('\nSucesso!\n')
+        cursor.execute(comando)
+        conexao.commit()
+        print('\nSucesso!\n')
+    else:
+        print('\nExiste SKUS igual ou acima com 10 caracteres. Vá verificar!\n')
 else:
     print('\nJá existe substring (acrescimo de sku) em algum SKU!\n')
+
 del conexao
