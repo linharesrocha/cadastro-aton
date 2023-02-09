@@ -9,6 +9,7 @@ import sys
 sys.path.append('C:\workspace\cadastro-aton\mordomo\programas')
 from db.connect_to_database import get_connection
 
+warnings.filterwarnings('ignore')
 os.system('cls')
 connection = get_connection()
 conexao = pyodbc.connect(connection)
@@ -25,7 +26,6 @@ while True:
     today_format_Y = input('\nQual a data que foi inserido as publicações?: ')
     if check_date_format(today_format_Y):
         today_format_Y = today_format_Y + '-2023'
-        print(today_format_Y)
         break
     else:
         print(f'{today_format_Y} não está no formato correto: DIA-MÊS. Por favor, tente novamente.')
@@ -107,7 +107,7 @@ for i in range(len(df_publica_produto_com_titulo)):
     titulo_antigo = df_publica_produto_com_titulo['TITULO_ANTIGO'][i]
     titulo_novo = df_publica_produto_com_titulo['TITULO'][i]
     codid = df_publica_produto_com_titulo['CODID'][i]
-    print(f'{str(i)}/{str(len(df_publica_produto_com_titulo))} - {codid}')
+    print(f'{str(i)}/{str(len(df_publica_produto_com_titulo))} - CODID:{codid}')
     comando = f'''
     UPDATE PUBLICA_PRODUTO
     SET TITULO = REPLACE(TITULO, '{titulo_antigo}', '{titulo_novo}')
