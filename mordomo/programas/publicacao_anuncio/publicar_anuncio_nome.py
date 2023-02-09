@@ -16,7 +16,7 @@ cursor = conexao.cursor()
 
 def check_date_format(date_string):
     try:
-        datetime.datetime.strptime(date_string, '%d-%m-%Y')
+        datetime.datetime.strptime(date_string, '%d-%m')
         return True
     except ValueError:
         return False
@@ -24,9 +24,11 @@ def check_date_format(date_string):
 while True:
     today_format_Y = input('\nQual a data que foi inserido as publicações?: ')
     if check_date_format(today_format_Y):
+        today_format_Y = today_format_Y + '-2023'
+        print(today_format_Y)
         break
     else:
-        print(f'{today_format_Y} não está no formato correto. d/m/Y. Por favor, tente novamente.')
+        print(f'{today_format_Y} não está no formato correto: DIA-MÊS. Por favor, tente novamente.')
     
 # Preenchendo o campo PAI caso seja 0
 comando = '''
@@ -105,8 +107,6 @@ for i in range(len(df_publica_produto_com_titulo)):
     titulo_antigo = df_publica_produto_com_titulo['TITULO_ANTIGO'][i]
     titulo_novo = df_publica_produto_com_titulo['TITULO'][i]
     codid = df_publica_produto_com_titulo['CODID'][i]
-    print(titulo_antigo)
-    print(titulo_novo)
     print(f'{str(i)}/{str(len(df_publica_produto_com_titulo))} - {codid}')
     comando = f'''
     UPDATE PUBLICA_PRODUTO
