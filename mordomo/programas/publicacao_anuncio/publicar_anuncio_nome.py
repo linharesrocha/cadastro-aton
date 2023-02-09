@@ -13,9 +13,21 @@ os.system('cls')
 connection = get_connection()
 conexao = pyodbc.connect(connection)
 cursor = conexao.cursor()
-today = datetime.datetime.today()
-today_format_Y = today.strftime("%d-%m-%Y")
 
+def check_date_format(date_string):
+    try:
+        datetime.datetime.strptime(date_string, '%d-%m-%Y')
+        return True
+    except ValueError:
+        return False
+    
+while True:
+    today_format_Y = input('\nQual a data que foi inserido as publicações?: ')
+    if check_date_format(today_format_Y):
+        break
+    else:
+        print(f'{today_format_Y} não está no formato correto. d/m/Y. Por favor, tente novamente.')
+    
 # Preenchendo o campo PAI caso seja 0
 comando = '''
 SELECT CODID, COD_INTERNO, DESCRICAO, PAI
@@ -74,10 +86,9 @@ while True:
         if num >= 1 and num <= 33:
             break
 
-
 # Obtem CODID
 comando = f'''
-SELECT CODID
+SELECT CODID, TITULO AS TITULO_ANTIGO
 FROM PUBLICA_PRODUTO
 WHERE DATATH > '{today_format_Y}'
 AND ORIGEM_ID = '{origem_id}'
@@ -85,6 +96,25 @@ AND ORIGEM_ID = '{origem_id}'
 
 df_publica_produto = pd.read_sql(comando, conexao)
 
-# Juntando tabela 
+# Juntando tabela publicacao e titulos 
 df_publica_produto_com_titulo = df_publica_produto.merge(df_materiais, on='CODID')
-df_publica_produto_com_titulo.to_excel('test.xlsx', index=False)
+df_publica_produto_com_titulo.drop(['DESCRITIVO', 'DESCRICAO'], axis=1, inplace=True)
+
+# Buscando por cada titulo, usando REPLACE para substituir o titulo da descricao
+for i in range(len(df_publica_produto_com_titulo)):
+    titulo_antigo = df_publica_produto_com_titulo['TITULO_ANTIGO'][i]
+    titulo_novo = df_publica_produto_com_titulo['TITULO'][i]
+    codid = df_publica_produto_com_titulo['CODID'][i]
+    print(titulo_antigo)
+    print(titulo_novo)
+    print(f'{str(i)}/{str(len(df_publica_produto_com_titulo))} - {codid}')
+    comando = f'''
+    UPDATE PUBLICA_PRODUTO
+    SET TITULO = REPLACE(TITULO, '{titulo_antigo}', '{titulo_novo}')
+    WHERE CODID = '{codid}'
+    AND DATATH > {today_format_Y}
+    '''
+    cursor.execute(comando)
+    conexao.commit()
+
+del conexao
