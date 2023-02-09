@@ -21,7 +21,7 @@ def check_date_format(date_string):
         return True
     except ValueError:
         return False
-    
+
 while True:
     today_format_Y = input('\nQual a data que foi inserido as publicações?: ')
     if check_date_format(today_format_Y):
@@ -63,29 +63,22 @@ columns_name = {'PRECO_DE':'AUX', 'PRECO_POR':'PRECO_DE'}
 df_publica_produto_com_precos_novos.rename(columns=columns_name, inplace=True)
 df_publica_produto_com_precos_novos.rename(columns={'AUX':'PRECO_POR'}, inplace=True)
 
-# Alterarando ponto para virgula, para gravação de dados no Banco
-colunas_ponto = ['PRECO_POR', 'PRECO_DE']
-
-for col in colunas_ponto:
-    # Converte o ponto para vírgula e com apenas duas casas decimais
-    df_publica_produto_com_precos_novos[col] = df_publica_produto_com_precos_novos[col].apply(lambda x: "{:,.1f}".format(x))
+df_publica_produto_com_precos_novos['PRECO_DE'] = df_publica_produto_com_precos_novos['PRECO_DE'].apply(lambda x: "{:.2f}".format(x) if x % 1 != 0 else "{:.0f}".format(x))
+df_publica_produto_com_precos_novos['PRECO_POR'] = df_publica_produto_com_precos_novos['PRECO_POR'].apply(lambda x: "{:.2f}".format(x) if x % 1 != 0 else "{:.0f}".format(x))
 
 for i in range(len(df_publica_produto_com_precos_novos)):
     # Coletando as variáveis
-    preco_de_antigo = df_publica_produto_com_precos_novos['PRECO_DE_ANTIGO'][i]
-    preco_por_antigo = df_publica_produto_com_precos_novos['PRECO_POR_ANTIGO'][i]
     preco_de_novo = df_publica_produto_com_precos_novos['PRECO_DE'][i]
     preco_por_novo = df_publica_produto_com_precos_novos['PRECO_POR'][i]
     codid = df_publica_produto_com_precos_novos['CODID'][i]
-    
+
     # Printando informações
-    print(f'\n{str(i)}/{str(len(df_publica_produto_com_precos_novos))} - CODID:{codid}')
-    print(f'Preço De Antigo: {preco_de_antigo}\nPreco De Novo:{preco_de_novo}\n\nPreço Por Antigo:{preco_por_antigo}\nPreco Por Novo:{preco_por_novo}')
+    print(f'\n{str(i)}/{str(len(df_publica_produto_com_precos_novos))} - CODID: {codid}')
     
     # Substitui o PRECO DE
     comando = f'''
     UPDATE PUBLICA_PRODUTO
-    SET VALOR1 = REPLACE(VALOR1, '{preco_de_antigo}', '{preco_de_novo}')
+    SET VALOR1 = {preco_de_novo}
     WHERE CODID = '{codid}'
     AND DATATH > {today_format_Y}
     '''
@@ -95,7 +88,7 @@ for i in range(len(df_publica_produto_com_precos_novos)):
     # Substitui o PRECO POR
     comando = f'''
     UPDATE PUBLICA_PRODUTO
-    SET VALOR2 = REPLACE(VALOR2, '{preco_por_antigo}', '{preco_por_novo}')
+    SET VALOR2 = {preco_por_novo}
     WHERE CODID = '{codid}'
     AND DATATH > {today_format_Y}
     '''
