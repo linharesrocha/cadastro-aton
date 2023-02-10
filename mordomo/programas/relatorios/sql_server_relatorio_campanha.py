@@ -136,6 +136,6 @@ data['SKU'] = data['SKU'].str.strip()
 data_h_30_mktp = data_h[(data_h['DATA'] >= date_30)]
 
 d1 = today.strftime("%d-%m-%Y")
-data.to_excel('C:\workspace\cadastro-aton\mordomo\programas\excel\Planilha-de-Campanha-'+ str(d1) + '.xls', index=False)
-# data.to_csv('C:\workspace\cadastro-aton\mordomo\programas\excel\Planilha-de-Campanha-'+ str(d1) + '.csv', index=False)
+# data.to_excel('C:\workspace\cadastro-aton\mordomo\programas\excel\Planilha-de-Campanha-'+ str(d1) + '.xls', index=False)
+data.to_csv('C:\workspace\cadastro-aton\mordomo\programas\excel\Planilha-de-Campanha-'+ str(d1) + '.csv', index=False, sep=';', decimal=',')
 print(Fore.GREEN,'\nRelatório Gerado!')
