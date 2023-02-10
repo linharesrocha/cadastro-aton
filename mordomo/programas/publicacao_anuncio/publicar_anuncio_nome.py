@@ -90,7 +90,7 @@ while True:
 
 # Obtem CODID
 comando = f'''
-SELECT CODID, TITULO AS TITULO_ANTIGO
+SELECT CODID
 FROM PUBLICA_PRODUTO
 WHERE DATATH > '{today_format_Y}'
 AND ORIGEM_ID = '{origem_id}'
@@ -102,17 +102,16 @@ df_publica_produto = pd.read_sql(comando, conexao)
 df_publica_produto_com_titulo = df_publica_produto.merge(df_materiais, on='CODID')
 df_publica_produto_com_titulo.drop(['DESCRITIVO', 'DESCRICAO'], axis=1, inplace=True)
 
-# Buscando por cada titulo, usando REPLACE para substituir o titulo da descricao
+# Alterando titulos
 for i in range(len(df_publica_produto_com_titulo)):
-    titulo_antigo = df_publica_produto_com_titulo['TITULO_ANTIGO'][i]
     titulo_novo = df_publica_produto_com_titulo['TITULO'][i]
     codid = df_publica_produto_com_titulo['CODID'][i]
     print(f'{str(i)}/{str(len(df_publica_produto_com_titulo))} - CODID:{codid}')
     comando = f'''
     UPDATE PUBLICA_PRODUTO
-    SET TITULO = REPLACE(TITULO, '{titulo_antigo}', '{titulo_novo}')
+    SET TITULO = '{titulo_novo}'
     WHERE CODID = '{codid}'
-    AND DATATH > {today_format_Y}
+    AND DATATH > '{today_format_Y}'
     '''
     cursor.execute(comando)
     conexao.commit()

@@ -78,9 +78,9 @@ for i in range(len(df_publica_produto_com_precos_novos)):
     # Substitui o PRECO DE
     comando = f'''
     UPDATE PUBLICA_PRODUTO
-    SET VALOR1 = {preco_de_novo}
+    SET VALOR1 = '{preco_de_novo}'
     WHERE CODID = '{codid}'
-    AND DATATH > {today_format_Y}
+    AND DATATH > '{today_format_Y}'
     '''
     cursor.execute(comando)
     conexao.commit()
@@ -88,9 +88,9 @@ for i in range(len(df_publica_produto_com_precos_novos)):
     # Substitui o PRECO POR
     comando = f'''
     UPDATE PUBLICA_PRODUTO
-    SET VALOR2 = {preco_por_novo}
+    SET VALOR2 = '{preco_por_novo}'
     WHERE CODID = '{codid}'
-    AND DATATH > {today_format_Y}
+    AND DATATH > '{today_format_Y}'
     '''
     cursor.execute(comando)
     conexao.commit()
