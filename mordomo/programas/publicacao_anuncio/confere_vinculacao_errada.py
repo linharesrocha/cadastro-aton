@@ -5,6 +5,7 @@ import warnings
 import os
 import sys
 from colorama import *
+import unicodedata
 from time import sleep
 import pyautogui as pg
 sys.path.append('C:\workspace\cadastro-aton\mordomo\programas')
@@ -15,7 +16,13 @@ os.system('cls')
 connection = get_connection()
 conexao = pyodbc.connect(connection)
 cursor = conexao.cursor()
+path_excel = f'C:/workspace/cadastro-aton/mordomo/programas/excel/vinculacoes-aton-marketplace.xlsx'
+writer = pd.ExcelWriter(path_excel, engine='xlsxwriter')
 
+
+def remove_acentos(texto):
+    texto_sem_acentos = unicodedata.normalize('NFKD', texto).encode('ASCII', 'ignore').decode('ASCII')
+    return texto_sem_acentos
 
 # Verifica se quer olhar tudo (T para tudo) ou um origem_id especifico
 while True:
@@ -56,13 +63,42 @@ for i in range(len(df_vinculacoes)):
     codid = str(df_vinculacoes['MATERIAL_ID'][i])
     sku = str(df_vinculacoes['SKU'][i])
     autoid = str(df_vinculacoes['AUTOID'][i])
+    descricao = str(df_vinculacoes['DESCRICAO'][i]).lower()
+    titulo = str(df_vinculacoes['TITULO'][i]).lower()
+    descricao = remove_acentos(descricao)
+    titulo = remove_acentos(titulo)
+    descricao1 = descricao.split(' ')[0]
+    titulo1 = titulo.split(' ')[0]
+
+    # ALGORITMO
+    # Verifica se existe CODID no SKU - Compara as duas primeiras palavras do TITULO e DESCRICAO 
     
-    check_list.append('True') if codid in sku else check_list.append('False')
+    if codid in sku:
+        if titulo1 == descricao1:
+            check_list.append('MUITA BAIXA')
+        else:
+            check_list.append('BAIXA') 
+    else:
+        if titulo is None or titulo == None or titulo == 'None' or titulo == 'null' or titulo == 'none' or not titulo or len(titulo) == 0 or titulo.strip() == '':
+            check_list.append('VAZIO') 
+        elif descricao1 == titulo1:
+            check_list.append('MEDIA')
+        elif descricao1 in titulo:
+            check_list.append('MEDIA')
+        else:
+            check_list.append('MUITO ALTA')
+            
         
 
 # Salva o Dataframe com a coluna CHECK
-df_vinculacoes['CHECK'] = check_list
-df_vinculacoes.to_excel('C:/workspace/cadastro-aton/mordomo/programas/excel/check-vinculacoes.xlsx')
+df_vinculacoes['PROBABILIDADE-ERRO'] = check_list
+df_vinculacoes.sort_values(by='MATERIAL_ID', inplace=True)
+df_vinculacoes.to_excel(writer, sheet_name='Planilha1', index=False)
+workbook  = writer.book
+worksheet = writer.sheets['Planilha1']
+(max_row, max_col) = df_vinculacoes.shape
+column_settings = [{'header': column} for column in df_vinculacoes.columns]
+worksheet.autofilter(0, 0, max_row, max_col - 1)
+writer.close()
 
-print('Sucesso!')
-    
+print('\nSucesso!\n')
