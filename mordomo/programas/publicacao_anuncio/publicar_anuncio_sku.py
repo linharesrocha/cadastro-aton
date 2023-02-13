@@ -15,11 +15,12 @@ cursor = conexao.cursor()
 
 now = datetime.datetime.now()
 digit_of_hour = str(now.hour)
+digit_of_minute = str(now.minute)
 today = datetime.datetime.today()
 today_format_Y = today.strftime("%d-%m-%Y")
 today_format_y = str(today.strftime("%d-%m-%y"))
 acrescimo_sku = today_format_y.replace('-','')
-acrescimo_sku = digit_of_hour + acrescimo_sku
+acrescimo_sku = acrescimo_sku + digit_of_hour + digit_of_minute
 
 # Pegando ORIGEM_ID
 comando = f'''
@@ -37,12 +38,15 @@ while True:
         if num >= 1 and num <= 33:
             break
 
+print(f'Data de atualização: {today_format_Y}')
+
 # Verifica se já foi adicionado SKU
 comando = f'''
 SELECT SKU
 FROM PUBLICA_PRODUTO
 WHERE DATATH > '{today_format_Y}'
 AND ORIGEM_ID = '{origem_id}'
+AND FLAG = '-9'
 '''
 df_publica_produto = pd.read_sql(comando, conexao)
 listaSKU = df_publica_produto['SKU'].tolist()
@@ -56,9 +60,10 @@ if not True in result_check:
         # Adiciona a substring nos SKUS
         comando = f'''
         UPDATE PUBLICA_PRODUTO
-        SET SKU = LEFT(SKU, 30 - 8) + '{acrescimo_sku}'
+        SET SKU = LEFT(SKU, 30 - 10) + '{acrescimo_sku}'
         WHERE DATATH > '{today_format_Y}'
         AND ORIGEM_ID = '{origem_id}'
+        AND FLAG = '-9'
         '''
         cursor.execute(comando)
         conexao.commit()
@@ -69,6 +74,7 @@ if not True in result_check:
         SET SKU = REPLACE(SKU, ' ', '')
         WHERE DATATH > '{today_format_Y}'
         AND ORIGEM_ID = '{origem_id}'
+        AND FLAG = '-9'
         '''
 
         cursor.execute(comando)

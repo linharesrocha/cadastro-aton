@@ -81,6 +81,7 @@ for i in range(len(df_publica_produto_com_precos_novos)):
     SET VALOR1 = '{preco_de_novo}'
     WHERE CODID = '{codid}'
     AND DATATH > '{today_format_Y}'
+    AND FLAG = '-9'
     '''
     cursor.execute(comando)
     conexao.commit()
@@ -91,6 +92,7 @@ for i in range(len(df_publica_produto_com_precos_novos)):
     SET VALOR2 = '{preco_por_novo}'
     WHERE CODID = '{codid}'
     AND DATATH > '{today_format_Y}'
+    AND FLAG = '-9'
     '''
     cursor.execute(comando)
     conexao.commit()

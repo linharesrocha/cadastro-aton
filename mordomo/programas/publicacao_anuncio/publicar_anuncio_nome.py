@@ -112,6 +112,7 @@ for i in range(len(df_publica_produto_com_titulo)):
     SET TITULO = '{titulo_novo}'
     WHERE CODID = '{codid}'
     AND DATATH > '{today_format_Y}'
+    AND FLAG = '-9'
     '''
     cursor.execute(comando)
     conexao.commit()
