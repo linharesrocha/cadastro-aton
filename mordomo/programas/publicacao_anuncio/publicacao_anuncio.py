@@ -74,8 +74,8 @@ for i in range(len(df_materiais)):
     descricao = df_materiais['DESCRICAO'][i]
     
     # Código para formar o SKU
-    check_pai = df_materiais['PAI'][i]
-    if check_pai == '0':
+    check_pai = int(df_materiais['PAI'][i])
+    if check_pai == 0:
         sku = 'P' + str(codid)
     else:
         sku = 'F' + str(codid)
@@ -83,7 +83,7 @@ for i in range(len(df_materiais)):
     
     # Inserção de produto
     comando = f'''INSERT INTO PUBLICA_PRODUTO (DATATH, ORIGEM_ID, CODID, SKU, COD_INTERNO, TITULO, ESTOQUE, VALOR1, VALOR2, USR, MAQSYS, STATUSCODE, FLAG, FLAG_VALIDACAO, USR_PUBLICOU, FRETE_GRATIS, OFICIAL_STORE, OFICIAL_STORE_ID, LEVAEAN, CATALOGO_PRODUTO_ID)
-    VALUES (CONVERT(datetime, GETDATE(), 120),'{origem_id}', '{codid}', '{sku}', '{cod_interno}','TITULOTEMPORARIO', '1', '10', '10', '239', 'DAGG-005', '0', '-9', '0', '0', 'N', '', '0','S', '')'''
+    VALUES (CONVERT(datetime, GETDATE(), 120),'{origem_id}', '{codid}', '{sku}', '{cod_interno}','{descricao}', '1', '10', '10', '239', 'DAGG-005', '0', '-9', '0', '0', 'N', '', '0','S', '')'''
     
     cursor.execute(comando)
     conexao.commit()
