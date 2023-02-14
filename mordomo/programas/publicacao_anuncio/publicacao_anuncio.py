@@ -91,7 +91,7 @@ for i in range(len(df_materiais)):
     
     print(f'{str(i + 1)}/{str(len(df_materiais))} - {codid} - {cod_interno} - {descricao}')
 
-print('\nSucesso!\n')
+print('\nProdutos inserido na publicação com sucesso!\n')
 
 print('\nPreenchendo Coluna PAI e AUTOIDPAI\n')
 
@@ -125,7 +125,6 @@ df_pre_publicacao = df_pre_publicacao[df_pre_publicacao['PAI_ATUALIZADO'] != 0]
 
 # Inserindo PAI nas colunas
 for i in range(len(df_pre_publicacao)):
-    print(codid)
     codid = df_pre_publicacao['CODID'].iloc[i]
     pai = df_pre_publicacao['PAI_ATUALIZADO'].iloc[i]    
     
@@ -138,3 +137,38 @@ for i in range(len(df_pre_publicacao)):
     '''
     # cursor.execute(comando)
     # conexao.commit()
+
+print('\nAdicionado código pai nos filhos com sucesso!\n')
+
+# Adicionando AUTOIDPAI nos filhos
+
+# Lendo novamente publicar anúncio após atualização
+comando = f'''
+SELECT *
+FROM PUBLICA_PRODUTO
+WHERE FLAG = '-9'
+AND ORIGEM_ID = '{origem_id}'
+AND USR = '239'
+'''
+df_publicacao_anuncio = pd.read_sql(comando,conexao)
+
+# percorre cada linha do DataFrame
+for index, row in df_publicacao_anuncio.iterrows():
+
+    # verifica se o valor do pai é maior que 0
+    if row["PAI"] > 0:
+
+        # filtra o DataFrame para encontrar a linha correspondente ao valor PAI
+        pai = row["PAI"]
+        filtro = df_publicacao_anuncio[df_publicacao_anuncio["CODID"] == pai]
+
+        # verifica se o filtro retornou alguma linha
+        if not filtro.empty:
+
+            # busca o valor correspondente na coluna AUTOID
+            autoid_pai = filtro["AUTOID"].iloc[0]
+
+            # atualiza a coluna AUTOIDPAI com o valor correspondente do AUTOID
+            df_publicacao_anuncio.at[index, "AUTOIDPAI"] = autoid_pai
+        
+print('\nAdicionado autoidpai nos filhos com sucesso!\n')
