@@ -12,7 +12,7 @@ today = date.today()
 dt = date.today()
 datetime_midnight = datetime.combine(dt, datetime.min.time())
 date_30 = datetime_midnight - timedelta(30)
-print('30 Dias: ' + str(date_30.strftime("%d-%m-%Y")))
+print('\n30 Dias: ' + str(date_30.strftime("%d-%m-%Y")))
 date_90 = datetime_midnight - timedelta(90)
 print('90 Dias: ' + str(date_90.strftime("%d-%m-%Y")))
 print(Fore.YELLOW, '\nCarregando...')
@@ -135,7 +135,10 @@ data['SKU'] = data['SKU'].str.strip()
 
 data_h_30_mktp = data_h[(data_h['DATA'] >= date_30)]
 
-d1 = today.strftime("%d-%m-%Y")
+dia_atual = str(today.strftime("%d-%m-%Y"))
+agora_hora = datetime.now()
+horal_atual = str(agora_hora.strftime("%H:%M:%S")).replace(':','-')
+
 # data.to_excel('C:\workspace\cadastro-aton\mordomo\programas\excel\Planilha-de-Campanha-'+ str(d1) + '.xls', index=False)
-data.to_csv('C:\workspace\cadastro-aton\mordomo\programas\excel\Planilha-de-Campanha-'+ str(d1) + '.csv', index=False, sep=';', decimal=',')
+data.to_csv(f'C:\workspace\cadastro-aton\mordomo\programas\excel\Planilha-de-Campanha-{dia_atual}-{horal_atual}.csv', index=False, sep=';', decimal=',')
 print(Fore.GREEN,'\nRelatório Gerado!')
