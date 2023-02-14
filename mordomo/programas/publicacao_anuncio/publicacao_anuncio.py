@@ -86,14 +86,14 @@ for i in range(len(df_materiais)):
     comando = f'''INSERT INTO PUBLICA_PRODUTO (DATATH, ORIGEM_ID, CODID, SKU, COD_INTERNO, TITULO, ESTOQUE, VLR_CUSTO, VALOR1, VALOR2, USR, MAQSYS, STATUSCODE, FLAG, FLAG_VALIDACAO, USR_PUBLICOU, FRETE_GRATIS, OFICIAL_STORE, OFICIAL_STORE_ID, LEVAEAN, CATALOGO_PRODUTO_ID)
     VALUES (CONVERT(datetime, GETDATE(), 120),'{origem_id}', '{codid}', '{sku}', '{cod_interno}','{descricao}', '1', '{valor_custo}','10', '10', '239', 'DAGG-005', '0', '-9', '0', '0', 'N', '', '0','S', '')'''
     
-    # cursor.execute(comando)
-    # conexao.commit()
+    cursor.execute(comando)
+    conexao.commit()
     
     print(f'{str(i + 1)}/{str(len(df_materiais))} - {codid} - {cod_interno} - {descricao}')
 
 print('\nProdutos inserido na publicação com sucesso!\n')
 
-print('\nPreenchendo Coluna PAI e AUTOIDPAI\n')
+print('\nPreenchendo Coluna PAI e AUTOIDPAI')
 
 # Pegando a tabela PUBLICA_PRODUTO antes da publicação
 comando = f'''
@@ -128,20 +128,21 @@ for i in range(len(df_pre_publicacao)):
     codid = df_pre_publicacao['CODID'].iloc[i]
     pai = df_pre_publicacao['PAI_ATUALIZADO'].iloc[i]    
     
-    # Substitui o PRECO DE
+    # Substitui o PAI
     comando = f'''
     UPDATE PUBLICA_PRODUTO
     SET PAI = '{pai}'
     WHERE CODID = '{codid}'
     AND FLAG = '-9'
     '''
-    # cursor.execute(comando)
-    # conexao.commit()
+    cursor.execute(comando)
+    conexao.commit()
 
-print('\nAdicionado código pai nos filhos com sucesso!\n')
+print('Sucesso!\n')
 
 # Adicionando AUTOIDPAI nos filhos
 
+print('\nAdicionando AUTOIDPAI nos filhos!')
 # Lendo novamente publicar anúncio após atualização
 comando = f'''
 SELECT *
@@ -170,5 +171,25 @@ for index, row in df_publicacao_anuncio.iterrows():
 
             # atualiza a coluna AUTOIDPAI com o valor correspondente do AUTOID
             df_publicacao_anuncio.at[index, "AUTOIDPAI"] = autoid_pai
-        
-print('\nAdicionado autoidpai nos filhos com sucesso!\n')
+
+# Filtrando
+df_publicacao_anuncio = df_publicacao_anuncio[['AUTOIDPAI', 'CODID']]
+df_publicacao_anuncio = df_publicacao_anuncio[df_publicacao_anuncio['AUTOIDPAI'] != 0]
+
+# Atualiza no banco de dados
+for i in range(len(df_publicacao_anuncio)):
+    codid = df_publicacao_anuncio['CODID'].iloc[i]
+    autoidpai = df_publicacao_anuncio['AUTOIDPAI'].iloc[i]
+    
+    # Substitui o AUTOIDPAI
+    comando = f'''
+    UPDATE PUBLICA_PRODUTO
+    SET AUTOIDPAI = '{autoidpai}'
+    WHERE CODID = '{codid}'
+    AND FLAG = '-9'
+    '''
+    
+    cursor.execute(comando)
+    conexao.commit()
+    
+print('Sucesso!\n')
