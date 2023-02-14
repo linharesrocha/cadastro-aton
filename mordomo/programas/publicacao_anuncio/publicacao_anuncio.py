@@ -15,13 +15,13 @@ connection = get_connection()
 conexao = pyodbc.connect(connection)
 cursor = conexao.cursor()
 
+# Perguntar ao usuario o grupo dos produtos
 comando = f'''
 SELECT CODIGO, DESCRICAO 
 FROM GRUPO
 '''
 df_grupo = pd.read_sql(comando, conexao)
 print(df_grupo.to_string(index=False))
-# Perguntar ao usuario o grupo dos produtos
 while True:
     grupo_id = input('\nQual GRUPO de Produtos será adicionado nas publicações?: ')
     if grupo_id.isdigit():
@@ -70,8 +70,9 @@ while True:
 # Comando para criar produto na publicação
 for i in range(len(df_materiais)):
     codid = df_materiais['CODID'][i]
-    cod_interno = df_materiais['COD_INTERNO'][i]
-    descricao = df_materiais['DESCRICAO'][i]
+    cod_interno = str(df_materiais['COD_INTERNO'][i]).strip()
+    descricao = str(df_materiais['DESCRICAO'][i]).strip()
+    valor_custo = str(df_materiais['VLR_CUSTO'][i])
     
     # Código para formar o SKU
     check_pai = int(df_materiais['PAI'][i])
@@ -82,14 +83,58 @@ for i in range(len(df_materiais)):
 
     
     # Inserção de produto
-    comando = f'''INSERT INTO PUBLICA_PRODUTO (DATATH, ORIGEM_ID, CODID, SKU, COD_INTERNO, TITULO, ESTOQUE, VALOR1, VALOR2, USR, MAQSYS, STATUSCODE, FLAG, FLAG_VALIDACAO, USR_PUBLICOU, FRETE_GRATIS, OFICIAL_STORE, OFICIAL_STORE_ID, LEVAEAN, CATALOGO_PRODUTO_ID)
-    VALUES (CONVERT(datetime, GETDATE(), 120),'{origem_id}', '{codid}', '{sku}', '{cod_interno}','{descricao}', '1', '10', '10', '239', 'DAGG-005', '0', '-9', '0', '0', 'N', '', '0','S', '')'''
+    comando = f'''INSERT INTO PUBLICA_PRODUTO (DATATH, ORIGEM_ID, CODID, SKU, COD_INTERNO, TITULO, ESTOQUE, VLR_CUSTO, VALOR1, VALOR2, USR, MAQSYS, STATUSCODE, FLAG, FLAG_VALIDACAO, USR_PUBLICOU, FRETE_GRATIS, OFICIAL_STORE, OFICIAL_STORE_ID, LEVAEAN, CATALOGO_PRODUTO_ID)
+    VALUES (CONVERT(datetime, GETDATE(), 120),'{origem_id}', '{codid}', '{sku}', '{cod_interno}','{descricao}', '1', '{valor_custo}','10', '10', '239', 'DAGG-005', '0', '-9', '0', '0', 'N', '', '0','S', '')'''
     
-    cursor.execute(comando)
-    conexao.commit()
+    # cursor.execute(comando)
+    # conexao.commit()
     
     print(f'{str(i + 1)}/{str(len(df_materiais))} - {codid} - {cod_interno} - {descricao}')
-    if i == 10:
-        break
 
-print('\nSucesso!')
+print('\nSucesso!\n')
+
+print('\nPreenchendo Coluna PAI e AUTOIDPAI\n')
+
+# Pegando a tabela PUBLICA_PRODUTO antes da publicação
+comando = f'''
+SELECT *
+FROM PUBLICA_PRODUTO
+WHERE FLAG = '-9'
+AND ORIGEM_ID = '{origem_id}'
+AND USR = '239'
+'''
+df_pre_publicacao = pd.read_sql(comando, conexao)
+df_pre_publicacao = df_pre_publicacao[['AUTOID', 'AUTOIDPAI', 'CODID', 'PAI']]
+# Pegando outra planilha Materiais
+comando = f'''
+SELECT CODID, PAI
+FROM MATERIAIS
+WHERE INATIVO = 'N'
+AND GRUPO = '{grupo_id}'
+'''
+df_materiais_aux = pd.read_sql(comando, conexao)
+
+# Renomeando colunas
+df_materiais_aux.rename({'CODID':'MATERIAL_ID', 'PAI':'CODID'})
+
+# Mesclando
+df_pre_publicacao = df_pre_publicacao.merge(df_materiais_aux, on='CODID')
+df_pre_publicacao.rename(columns={'PAI_y':'PAI_ATUALIZADO', 'PAI_x':'PAI_ANTIGO'}, inplace=True)
+df_pre_publicacao.drop(['PAI_ANTIGO'], axis=1, inplace=True)
+df_pre_publicacao = df_pre_publicacao[df_pre_publicacao['PAI_ATUALIZADO'] != 0]
+
+# Inserindo PAI nas colunas
+for i in range(len(df_pre_publicacao)):
+    print(codid)
+    codid = df_pre_publicacao['CODID'].iloc[i]
+    pai = df_pre_publicacao['PAI_ATUALIZADO'].iloc[i]    
+    
+    # Substitui o PRECO DE
+    comando = f'''
+    UPDATE PUBLICA_PRODUTO
+    SET PAI = '{pai}'
+    WHERE CODID = '{codid}'
+    AND FLAG = '-9'
+    '''
+    # cursor.execute(comando)
+    # conexao.commit()
