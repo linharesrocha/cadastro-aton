@@ -123,9 +123,11 @@ data_completo['90_ATON'].fillna(0, inplace=True)
 data_completo['30_MKTP'] = 'MANUTENCAO'
 data_completo['90_MKTP'] = 'MANUTENCAO'
 
+data_completo['HORARIO'] = datetime.now()
+
 data = data_completo[['CODID', 'COD_INTERNO', 'PAI_COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
                       'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO', 'PESO',
-                      'ESTOQUE', '30_ATON', '90_ATON', '30_MKTP', '90_MKTP','ORIGEM_NOME', 'CATEGORIAS', 'PRODUTO_TIPO', 'PRECO_DE', 'PRECO_POR']]
+                      'ESTOQUE', '30_ATON', '90_ATON', '30_MKTP', '90_MKTP','ORIGEM_NOME', 'CATEGORIAS', 'PRODUTO_TIPO', 'PRECO_DE', 'PRECO_POR', 'HORARIO']]
 
 # Removendo espaços em branco
 data['COD_INTERNO'] = data['COD_INTERNO'].str.strip()

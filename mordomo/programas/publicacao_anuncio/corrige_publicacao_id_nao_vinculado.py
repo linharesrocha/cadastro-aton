@@ -4,6 +4,7 @@ import pandas as pd
 import warnings
 import os
 import sys
+import datetime
 from colorama import *
 from time import sleep
 import pyautogui as pg
@@ -16,11 +17,27 @@ connection = get_connection()
 conexao = pyodbc.connect(connection)
 cursor = conexao.cursor()
 
+def check_date_format(date_string):
+    try:
+        datetime.datetime.strptime(date_string, '%d-%m')
+        return True
+    except ValueError:
+        return False
+    
+while True:
+    today_format_Y = input('\nQual a data que foi inserido as publicações?: ')
+    if check_date_format(today_format_Y):
+        today_format_Y = today_format_Y + '-2023'
+        break
+    else:
+        print(f'{today_format_Y} não está no formato correto: DIA-MÊS. Por favor, tente novamente.')
+   
+
 # Pega todos os produtos que deram erro 'ID Variação não vinculado ao Produto Pai .'
 comando = f'''
 SELECT AUTOID, AUTOIDPAI, STATUSCODE, RETORNOSTR, SKURETORNO, FLAG, ERRO_API
 FROM PUBLICA_PRODUTO
-WHERE DATATH > '08-02-2023'
+WHERE DATATH > '{today_format_Y}'
 AND ERRO_API LIKE 'ID Vari%'
 AND FLAG = '1'
 '''
@@ -47,7 +64,7 @@ for autoidpai in autoidpai_set:
     comando = f'''
     UPDATE PUBLICA_PRODUTO
     SET FLAG = '0'
-    WHERE DATATH > '08-02-2023'
+    WHERE DATATH > '{today_format_Y}'
     AND ERRO_API LIKE 'ID Vari%'
     AND AUTOIDPAI = '{autoidpai}'
     '''
@@ -101,7 +118,7 @@ for autoid in autoidsimples_list:
     comando = f'''
     UPDATE PUBLICA_PRODUTO
     SET FLAG = '0'
-    WHERE DATATH > '08-02-2023'
+    WHERE DATATH > '{today_format_Y}'
     AND ERRO_API LIKE 'ID Vari%'
     AND AUTOID = '{autoid}'
     '''
