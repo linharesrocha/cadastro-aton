@@ -66,7 +66,7 @@ while True:
         num = int(origem_id)
         if num >= 1 and num <= 33:
             break
-
+print('\n\n')
 # Comando para criar produto na publicação
 for i in range(len(df_materiais)):
     codid = df_materiais['CODID'][i]

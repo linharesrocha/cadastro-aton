@@ -101,12 +101,13 @@ df_publica_produto = pd.read_sql(comando, conexao)
 # Juntando tabela publicacao e titulos 
 df_publica_produto_com_titulo = df_publica_produto.merge(df_materiais, on='CODID')
 df_publica_produto_com_titulo.drop(['DESCRITIVO', 'DESCRICAO'], axis=1, inplace=True)
-
 # Alterando titulos
+erros = []
+null = []
 for i in range(len(df_publica_produto_com_titulo)):
     titulo_novo = df_publica_produto_com_titulo['TITULO'][i]
     codid = df_publica_produto_com_titulo['CODID'][i]
-    print(f'{str(i)}/{str(len(df_publica_produto_com_titulo))} - CODID:{codid}')
+    print(f'{str(i+1)}/{str(len(df_publica_produto_com_titulo))} - CODID:{codid}')
     comando = f'''
     UPDATE PUBLICA_PRODUTO
     SET TITULO = '{titulo_novo}'
@@ -114,7 +115,24 @@ for i in range(len(df_publica_produto_com_titulo)):
     AND DATATH > '{today_format_Y}'
     AND FLAG = '-9'
     '''
-    cursor.execute(comando)
-    conexao.commit()
+    try:
+        cursor.execute(comando)
+        conexao.commit()
+    except:
+        erros.append(codid)
+    
+    # Verificando se o título é NULL
+    if  titulo_novo == 'NULL':
+         null.append(codid)
+         
+print('\nSucesso!\n')
 
+if len(erros) > 0:
+    print(f'Quantidade de erros: {len(erros)}')
+    print(erros)
+
+if len(null) > 0:
+    print(f'\nQuantidade de nulls: {len(null)}')
+    print(null)
+    
 del conexao
