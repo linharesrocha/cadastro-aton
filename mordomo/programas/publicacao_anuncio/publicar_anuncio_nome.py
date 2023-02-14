@@ -134,5 +134,5 @@ if len(erros) > 0:
 if len(null) > 0:
     print(f'\nQuantidade de nulls: {len(null)}')
     print(null)
-    
+print('\n')
 del conexao

@@ -55,13 +55,19 @@ AND ORIGEM_ID = '{origem_id}'
 '''
 
 df_publica_produto = pd.read_sql(comando, conexao)
-df_planilha_precos = pd.read_excel('C:\workspace\cadastro-aton\mordomo\programas\excel\Envios_Magalu_Madz_Pisste_Leal.xlsx')
+while True:
+    file_path = input("\nPor favor, insira o caminho absoluto do arquivo xlsx: ")
+    if os.path.exists(file_path) and file_path.endswith('.xlsx') or file_path.endswith('.xls'):
+        break
+    else:
+        print("O caminho absoluto inserido não é válido ou não é um arquivo xlsx. Tente novamente.")
+df_planilha_precos = pd.read_excel(file_path)
 df_publica_produto_com_precos_novos = df_publica_produto.merge(df_planilha_precos, on='CODID')
 
 # Renomeando DE E POR - BUG
-columns_name = {'PRECO_DE':'AUX', 'PRECO_POR':'PRECO_DE'}
-df_publica_produto_com_precos_novos.rename(columns=columns_name, inplace=True)
-df_publica_produto_com_precos_novos.rename(columns={'AUX':'PRECO_POR'}, inplace=True)
+# columns_name = {'PRECO_DE':'AUX', 'PRECO_POR':'PRECO_DE'}
+# df_publica_produto_com_precos_novos.rename(columns=columns_name, inplace=True)
+# df_publica_produto_com_precos_novos.rename(columns={'AUX':'PRECO_POR'}, inplace=True)
 
 df_publica_produto_com_precos_novos['PRECO_DE'] = df_publica_produto_com_precos_novos['PRECO_DE'].apply(lambda x: "{:.2f}".format(x) if x % 1 != 0 else "{:.0f}".format(x))
 df_publica_produto_com_precos_novos['PRECO_POR'] = df_publica_produto_com_precos_novos['PRECO_POR'].apply(lambda x: "{:.2f}".format(x) if x % 1 != 0 else "{:.0f}".format(x))
@@ -73,7 +79,7 @@ for i in range(len(df_publica_produto_com_precos_novos)):
     codid = df_publica_produto_com_precos_novos['CODID'][i]
 
     # Printando informações
-    print(f'\n{str(i)}/{str(len(df_publica_produto_com_precos_novos))} - CODID: {codid}')
+    print(f'\n{str(i+1)}/{str(len(df_publica_produto_com_precos_novos))} - CODID:{codid}')
     
     # Substitui o PRECO DE
     comando = f'''

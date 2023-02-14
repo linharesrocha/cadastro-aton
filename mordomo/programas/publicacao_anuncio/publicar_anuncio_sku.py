@@ -9,6 +9,7 @@ sys.path.append('C:\workspace\cadastro-aton\mordomo\programas')
 from db.connect_to_database import get_connection
 
 os.system('cls')
+warnings.filterwarnings('ignore')
 connection = get_connection()
 conexao = pyodbc.connect(connection)
 cursor = conexao.cursor()
