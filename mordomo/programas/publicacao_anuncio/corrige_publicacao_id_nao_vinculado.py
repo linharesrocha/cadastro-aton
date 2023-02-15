@@ -67,6 +67,7 @@ while True:
 # Faz a publicação dos produtos com variações primeiro
 print(Fore.LIGHTBLUE_EX, f'\nQuantidades de AUTOIDPAI: {str(len(autoidpai_set))}')
 for indice, autoidpai in enumerate(autoidpai_set):
+    
     # Traz os filhos
     comando = f'''
     UPDATE PUBLICA_PRODUTO
@@ -79,8 +80,9 @@ for indice, autoidpai in enumerate(autoidpai_set):
     cursor.execute(comando)
     conexao.commit()
     
-    # Traz os pais
+    # Traz o pai
     comando = f'''
+    UPDATE PUBLICA_PRODUTO
     SET FLAG = '0'
     WHERE DATATH > '{today_format_Y}'
     AND ERRO_API LIKE '{error_input}'
