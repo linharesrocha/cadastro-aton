@@ -23,7 +23,6 @@ connection = get_connection()
 conexao = pyodbc.connect(connection)
 cursor = conexao.cursor()
 
-path_excel_marketplace = 'C:/workspace/cadastro-aton/mordomo/programas/excel/63e68956ea67b6d5dacd985f.xlsx'
 FLAG = '1'
 STATUSCODE = 200
 USR = '239' # Usuário
@@ -37,13 +36,12 @@ def check_date_format(date_string):
         return False
 
 while True:
-    awnser = input('\nVoce ja passou o path do excel gerado no marketplace? (S): ').lower()
-    if awnser == 's':
+    path_excel_marketplace = input("\nPor favor, insira o caminho absoluto do arquivo xlsx: ")
+    if os.path.exists(path_excel_marketplace) and path_excel_marketplace.endswith('.xlsx') or path_excel_marketplace.endswith('.xls'):
         break
     else:
-        # Para a execução do programa
-        print('Passe o caminho na variável "path_excel_marketplace"')
-        sys.exit()
+        print("O caminho absoluto inserido não é válido ou não é um arquivo xlsx. Tente novamente.")
+        
 
 while True:
     today_format_Y = input('\nQual a data que foi inserido as publicações?: ')
@@ -74,8 +72,14 @@ AND ORIGEM_ID = '{origem_id}'
 AND B.COD_INTERNO NOT LIKE '%PAI'
 '''
 
-# Coleta as publicações com sucesso. Status 200
+# Coleta as publicações
 df_publicacoes = pd.read_sql(comando, conexao)
+df_ok = df_publicacoes[df_publicacoes['STATUSCODE'] <= 399]
+df_error = df_publicacoes[df_publicacoes['STATUSCODE'] > 399]
+
+print(f'\nOs PAIS são retirados da verificação!\nApenas serão verificados as publicações do usuário {USR}')
+print(f'Produtos STATUS <= 399: {len(df_ok)}')
+print(f'Produtos STATUS > 399: {len(df_error)}\n')
 
 # Remover espaços na coluna SKU 
 df_publicacoes['SKU'] = df_publicacoes['SKU'].str.strip()
@@ -84,6 +88,7 @@ df_publicacoes['SKU'] = df_publicacoes['SKU'].str.strip()
 # Removendo linhas desnecessarias caso seja Magazine Luiza
 if int(origem_id) >= 23 and int(origem_id) <= 25:
     df_marketplace = pd.read_excel(path_excel_marketplace, skiprows=[0,1,3])
+    print(Fore.RED,'Foi excluido a primeira, segunda e quarta linha do dataframe.')
 else:
     df_marketplace = pd.read_excel(path_excel_marketplace)
 
@@ -93,5 +98,7 @@ df_faltantes_mktp = df_publicacoes[~df_publicacoes['SKU'].isin(df_marketplace['S
 if len(df_faltantes_mktp) == 0:
     print(f'\nTodos so SKUS da Publicacao ORIGEM {origem_id} da data {today_format_Y} estao na planilha do Marketplace\n')
 else:
-    print(f'\nHá SKUS faltando na planilha de Marketplace!!\nRelatório: "excel/faltantes-no-marketplace"\n')
-    df_faltantes_mktp.to_excel('C:/workspace/cadastro-aton/mordomo/programas/excel/faltantes-no-marketplace.xlsx')
+    print(Fore.RED,f'\nHá SKUS faltantes na planilha de Marketplace!!\nRelatório: "excel/faltantes-no-marketplace"\n')
+    df_faltantes_mktp.to_excel('C:/workspace/cadastro-aton/mordomo/programas/excel/faltantes-no-marketplace.xlsx', index=False)
+
+print(Fore.WHITE)

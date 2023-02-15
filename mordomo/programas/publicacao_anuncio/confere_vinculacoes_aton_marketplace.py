@@ -102,3 +102,9 @@ worksheet.autofilter(0, 0, max_row, max_col - 1)
 writer.close()
 
 print('\nSucesso!\n')
+print('Excel salvo! (excel/vinculacoes-aton-marketplace.xlsx)')
+print('\nProbabilidade:\nMUITO BAIXA: Caso o CODID estiver presente no SKU e a PRIMEIRA PALAVRA DO TITULO do ATON for a PRIMEIRA PALAVRA DO nome para marketplace.\n\
+BAIXA: Caso o CODID estiver presente no SKU e a PRIMEIRA PALAVRA DO TITULO do ATON NÃO for a PRIMEIRA PALAVRA do nome para marketplace.\n\
+MEDIA: Caso o CODID NÃO estiver presente no SKU e a PRIMEIRA PALAVRA DO TITULO DO ATON estiver no TITULO para marketplace em qualquer posição.\n\
+MUITO ALTA: Caso o CODID NÃO estiver presente no SKU e a PRIMEIRA PALAVRA DO TITULO DO ATON NÃO estiver no TITULO para marketplace em qualquer posição.\n\
+VAZIO: Produto não tem descrição.\n')
