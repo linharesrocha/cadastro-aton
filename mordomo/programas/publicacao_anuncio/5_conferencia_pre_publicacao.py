@@ -59,6 +59,7 @@ df_publicacao_anuncio = pd.read_sql(comando, conexao)
 # Confere se tem algúm titulo com caixa alta
 codid_maiusculas = set()
 preco_zerados = set()
+titulos_pequenos = set()
 
 for i in range(len(df_publicacao_anuncio)):
     contador = 0
@@ -71,14 +72,19 @@ for i in range(len(df_publicacao_anuncio)):
     if preco_de == 0 or preco_por == 0:
         preco_zerados.add(codid)
     
-    # Titulo
+    # Titulo Pequeno
+    titulo_sem_espaco = titulo.strip()
+    if len(titulo_sem_espaco) < 80:
+        titulos_pequenos.add(codid)
+    
+    # Titulo Maiuscula
     titulo_splitado = titulo.split(' ')
     for titulo in titulo_splitado:
         if titulo.isupper():
             contador = contador + 1
             if contador == 3:
                 codid_maiusculas.add(codid)
-
+    
 print('\nTÍTULOS EM MAIÚSCULO: \n')
 if len(codid_maiusculas) > 0:
     for codid in codid_maiusculas:
@@ -96,3 +102,10 @@ if len(preco_zerados) > 0:
 else:
     print(f'Erros: 0')
 
+print('\nTITULOS MENORES QUE 80 CARACTERES:\n')
+if len(titulos_pequenos) > 0:
+    for codid in titulos_pequenos:
+        indice = df_publicacao_anuncio['CODID'].index[df_publicacao_anuncio['CODID'] == codid].tolist()[0]
+        print(f'CODID:{codid} - {titulo}')
+else:
+    print(f'Erros: 0')
