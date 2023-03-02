@@ -23,7 +23,7 @@ cursor = conexao.cursor()
 
 today = datetime.date.today()
 first_day_last_month = datetime.date(today.year, today.month-1, 1)
-first_day_last_month_str = first_day_last_month.strftime('%Y-%m-%d')
+first_day_last_month_str = first_day_last_month.strftime('%Y-%d-%m')
 last_month = datetime.date(today.year, today.month-1, 1)
 month_name = last_month.strftime('%B')
 print(f'Verificando produtos que não teve venda entre o periodo {first_day_last_month_str} até hoje.')
@@ -33,17 +33,31 @@ writer = pd.ExcelWriter(path_excel, engine='xlsxwriter')
 
 
 comando = f'''
-SELECT DISTINCT A.CODID, A.COD_INTERNO,A.DESCRICAO
-FROM MATERIAIS A
-LEFT JOIN PEDIDO_MATERIAIS_ITENS_CLIENTE B ON A.CODID = B.CODID
-LEFT JOIN PEDIDO_MATERIAIS_CLIENTE C ON B.PEDIDO = C.PEDIDO
-WHERE C.DATA NOT BETWEEN '{first_day_last_month_str}' AND GETDATE() OR C.DATA IS NULL
-AND A.COD_INTERNO NOT LIKE '%PAI'
-AND A.INATIVO = 'N'
-ORDER BY CODID
+SELECT B.CODID, B.COD_INTERNO, B.DESCRICAOPROD, A.PEDIDO, A.DATA
+FROM PEDIDO_MATERIAIS_CLIENTE A
+LEFT JOIN PEDIDO_MATERIAIS_ITENS_CLIENTE B
+ON A.PEDIDO = B.PEDIDO
+WHERE A.DATA > '2023-01-02'
 '''
 
-data = pd.read_sql(comando, conexao)
+data_vendas = pd.read_sql(comando, conexao)
+
+
+comando = f'''
+SELECT CODID, COD_INTERNO, DESCRICAO, B.ESTOQUE, A.INATIVO
+FROM MATERIAIS A
+LEFT JOIN ESTOQUE_MATERIAIS B ON A.CODID = B.MATERIAL_ID
+WHERE COD_INTERNO NOT LIKE '%PAI'
+AND INATIVO = 'N'
+AND B.ARMAZEM = 1
+'''
+
+data_materiais = pd.read_sql(comando, conexao)
+
+
+
+not_in_data_vendas = ~data_materiais['CODID'].isin(data_vendas['CODID'])
+data = data_materiais.loc[not_in_data_vendas, :]
 data['CHECK'] = np.nan * np.empty(len(data))
 
 data.to_excel(writer, sheet_name='Planilha1', index=False)
