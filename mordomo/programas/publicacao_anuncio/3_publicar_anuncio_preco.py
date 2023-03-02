@@ -100,6 +100,8 @@ for i in range(len(df_publica_produto_com_precos_novos)):
     AND DATATH > '{today_format_Y}'
     AND FLAG = '-9'
     '''
+    print(preco_de_novo)
+    print(preco_por_novo)
     cursor.execute(comando)
     conexao.commit()
     

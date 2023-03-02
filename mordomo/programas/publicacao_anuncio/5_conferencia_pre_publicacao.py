@@ -56,6 +56,9 @@ AND ORIGEM_ID = {origem_id}
 
 df_publicacao_anuncio = pd.read_sql(comando, conexao)
 
+# Limpa Terminal
+os.system('cls')
+
 # Confere se tem algúm titulo com caixa alta
 codid_maiusculas = set()
 preco_zerados = set()

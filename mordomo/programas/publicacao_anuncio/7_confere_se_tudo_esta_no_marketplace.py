@@ -44,7 +44,7 @@ while True:
         
 
 while True:
-    today_format_Y = input('\nQual a data que foi inserido as publicações?: ')
+    today_format_Y = input('\nQual a data que foi inserido as publicações? (DD/MM): ')
     if check_date_format(today_format_Y):
         today_format_Y = today_format_Y + '-2023'
         break

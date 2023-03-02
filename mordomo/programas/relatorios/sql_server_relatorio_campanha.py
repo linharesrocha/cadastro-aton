@@ -36,18 +36,20 @@ cursor = conexao.cursor()
 
 comando = '''
 SELECT 
-A.AUTOID, A.VLR_SITE2, A.VLR_SITE1, A.PRODMKTP_ID, A.SKU, A.SKUVARIACAO_MASTER, A.ATIVO,
-B.INATIVO, B.CODID, B.COD_INTERNO,  B.PAI,B.DESCRICAO, B.VLR_CUSTO, B.PESO,
+A.AUTOID, A.VLR_SITE2, A.VLR_SITE1, A.PRODMKTP_ID, A.SKU, A.SKUVARIACAO_MASTER, A.ATIVO, A.TIPO_ANUNCIO,
+B.INATIVO, B.CODID, B.COD_INTERNO,  B.PAI,B.DESCRICAO, B.VLR_CUSTO, B.PESO, B.COMPRIMENTO, B.LARGURA, B.ALTURA,
 C.ESTOQUE, 
 D.ORIGEM_NOME,
 E.DESCRICAO AS GRUPO,
-F.CATEG_MKTP_DESC AS DESCRICAON02, F.PRODUTO_TIPO, F.API
+F.CATEG_MKTP_DESC AS DESCRICAON02, F.PRODUTO_TIPO, F.API,
+G.CATEG_ID, G.CATEG_NOME
 FROM ECOM_SKU A
 LEFT JOIN MATERIAIS B ON A.MATERIAL_ID = B.CODID
 LEFT JOIN ESTOQUE_MATERIAIS C ON B.CODID = C.MATERIAL_ID
 LEFT JOIN ECOM_ORIGEM D ON A.ORIGEM_ID = D.ORIGEM_ID
 LEFT JOIN GRUPO E ON B.GRUPO = E.CODIGO
 LEFT JOIN CATEGORIAS_MKTP F  ON F.CATEG_ATON = B.ECOM_CATEGORIA AND F.API = D.API
+LEFT JOIN ECOM_CATEGORIAS G ON G.CATEG_ID = B.ECOM_CATEGORIA
 WHERE C.ARMAZEM = 1
 AND B.INATIVO = 'N'
 ORDER BY CODID
@@ -127,7 +129,9 @@ data_completo['HORARIO'] = datetime.now()
 
 data = data_completo[['CODID', 'COD_INTERNO', 'PAI_COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
                       'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO', 'PESO',
-                      'ESTOQUE', '30_ATON', '90_ATON', '30_MKTP', '90_MKTP','ORIGEM_NOME', 'CATEGORIAS', 'PRODUTO_TIPO', 'PRECO_DE', 'PRECO_POR', 'HORARIO']]
+                      'ESTOQUE', '30_ATON', '90_ATON', '30_MKTP', '90_MKTP','ORIGEM_NOME', 'CATEGORIAS', 'PRODUTO_TIPO',
+                      'COMPRIMENTO', 'LARGURA', 'ALTURA', 'TIPO_ANUNCIO', 'CATEG_ID', 'CATEG_NOME',
+                      'PRECO_DE', 'PRECO_POR', 'HORARIO']]
 
 # Removendo espaços em branco
 data['COD_INTERNO'] = data['COD_INTERNO'].str.strip()
@@ -137,10 +141,10 @@ data['SKU'] = data['SKU'].str.strip()
 
 data_h_30_mktp = data_h[(data_h['DATA'] >= date_30)]
 
-dia_atual = str(today.strftime("%d-%m-%Y"))
+dia_atual = str(today.strftime("%Y-%m-%d"))
 agora_hora = datetime.now()
 horal_atual = str(agora_hora.strftime("%H:%M:%S")).replace(':','-')
 
 # data.to_excel('C:\workspace\cadastro-aton\mordomo\programas\excel\Planilha-de-Campanha-'+ str(d1) + '.xls', index=False)
-data.to_csv(f'C:\workspace\cadastro-aton\mordomo\programas\excel\Planilha-de-Campanha-{dia_atual}-{horal_atual}.csv', index=False, sep=';', decimal=',')
+data.to_excel(f'C:\workspace\cadastro-aton\mordomo\programas\excel\Planilha-de-Campanha-{dia_atual}-{horal_atual}.xlsx', index=False, encoding='utf-8')
 print(Fore.GREEN,'\nRelatório Gerado!')
