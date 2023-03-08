@@ -12,8 +12,9 @@ from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 import openpyxl
 from openpyxl.drawing.image import Image
+from time import sleep
 
-pesquisa = 'Tornozeleira'
+pesquisa = input('\nPesquisa NetShoes: ')
 url = f'https://www.netshoes.com.br/busca?nsCat=Natural&q={pesquisa}&sort=best-sellers'
 
 user_agent = {'User-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)' 'Chrome/106.0.0.0 Safari/537.36'}
@@ -53,7 +54,9 @@ for index, link in enumerate(netshoes_links):
     # Para com determinada quantidade de anúncios já coletados.
     anuncios_estipulados = 20
     
-    print(' ')
+    if index == anuncios_estipulados:
+        break
+    
     print(f'{str(index+1)}/{str(anuncios_estipulados)}')
     
     page = requests.get(link, headers=user_agent)
@@ -134,7 +137,7 @@ worksheet = workbook.active
 for r in dataframe_to_rows(df, index=False, header=True):
     worksheet.append(r)
 
-print('Carregando imagens na planilha...\n')
+print('\nCarregando imagens na planilha...\n')
 
 # Percorra a coluna contendo os links de imagem
 for row in worksheet.iter_rows(min_row=2, min_col=7, max_col=7):
@@ -176,9 +179,13 @@ for row in worksheet.rows:
         row_dimensions = worksheet.row_dimensions[row[0].row]
         row_dimensions.height = row_height
     aux = aux + 1
+    
 # Salve as alterações no arquivo Excel
-workbook.save('nome-do-arquivo.xlsx')
+workbook.save(f'pesquisa-netshoes-{pesquisa}.xlsx')
 
-
-
-
+# Aguarde delay
+print('Aguarde o delay.\n')
+for i in range(5):
+    print(str(i+1))
+    sleep(1)
+print('\nFIM!\n')
