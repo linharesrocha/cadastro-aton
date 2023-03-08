@@ -173,6 +173,9 @@ for row in worksheet.iter_rows(min_row=2, min_col=7, max_col=7):
 # Adiicona um filtro na primeira linha
 worksheet.auto_filter.ref = 'A1:H1'
 
+# ajusta a largura da coluna B para o tamanho máximo do conteúdo
+worksheet.column_dimensions['B'].width = 80
+
 # Aumentando o tamanho das linhas
 # itera sobre todas as linhas e define a altura desejada
 aux = 0
@@ -189,7 +192,7 @@ pesquisa = pesquisa.replace(' ', '-')
 workbook.save(f'pesquisa-netshoes-{pesquisa}.xlsx')
 
 # Aguarde delay
-print('Aguarde o delay.\n')
+print('Aguarde o delay de 5 segundos.\n')
 for i in range(5):
     print(str(i+1))
     sleep(1)
