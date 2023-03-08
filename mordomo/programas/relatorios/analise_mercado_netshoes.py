@@ -51,11 +51,10 @@ for i in range(len(netshoes_links)-1, -1, -1):
 for index, link in enumerate(netshoes_links):
     
     # Para com determinada quantidade de anúncios já coletados.
-    if index == 5:
-        print('\nNível de anúncios estipulado atingido.\n')
-        break
+    anuncios_estipulados = 20
     
-    print(f'{str(index+1)}/{str(len(netshoes_links))}')
+    print(' ')
+    print(f'{str(index+1)}/{str(anuncios_estipulados)}')
     
     page = requests.get(link, headers=user_agent)
     site = BeautifulSoup(page.content, "html.parser")
@@ -124,9 +123,6 @@ df['avaliacoes'] = df['avaliacoes'].astype(int)
 # remover substring logo depois da substring '.jpg'
 df['link_fotos'] = df['link_fotos'].str.replace(r'\.jpg.*', '.jpg', regex=True)
 
-# Backup
-df.to_excel('arquivo_original.xlsx', index=False)
-
 
 # Carregue o arquivo Excel
 workbook = openpyxl.Workbook()
@@ -174,6 +170,7 @@ for row in worksheet.iter_rows(min_row=2, min_col=7, max_col=7):
 # itera sobre todas as linhas e define a altura desejada
 aux = 0
 for row in worksheet.rows:
+    # Pula o cabeçalho
     if aux != 0:
         row_height = 97.5
         row_dimensions = worksheet.row_dimensions[row[0].row]
