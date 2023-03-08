@@ -170,7 +170,15 @@ for row in worksheet.iter_rows(min_row=2, min_col=7, max_col=7):
         cell.alignment = Alignment(wrapText=True, vertical='top')
         cell.value = None
 
-
+# Aumentando o tamanho das linhas
+# itera sobre todas as linhas e define a altura desejada
+aux = 0
+for row in worksheet.rows:
+    if aux != 0:
+        row_height = 97.5
+        row_dimensions = worksheet.row_dimensions[row[0].row]
+        row_dimensions.height = row_height
+    aux = aux + 1
 # Salve as alterações no arquivo Excel
 workbook.save('nome-do-arquivo.xlsx')
 
