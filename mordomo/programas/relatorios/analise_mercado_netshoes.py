@@ -163,8 +163,8 @@ for row in worksheet.iter_rows(min_row=2, min_col=7, max_col=7):
         row_height = worksheet.row_dimensions[cell.row].height
         if row_height is None:
             row_height = 20 # Altura padrão de 20 para linhas não definidas
-        image.width = column_width - 2
-        image.height = row_height - 2
+        image.width = 8 * (column_width - 2)
+        image.height = 7 * (row_height - 2)
         # Adicione a imagem à célula e ajuste o estilo da célula
         worksheet.add_image(image, cell.coordinate)
         cell.alignment = Alignment(wrapText=True, vertical='top')
