@@ -79,7 +79,7 @@ data = pd.merge(data, data_categoria_magalu_tmp, on=['DESCRICAON02', 'API'], how
 data.rename(columns = {'DESCRICAON02':'CATEGORIAS'}, inplace=True)
 
 comando = '''
-SELECT A.PEDIDO, A.COD_INTERNO, A.QUANT, A.COD_PEDIDO AS SKU, B.DATA
+SELECT A.PEDIDO, A.COD_INTERNO, A.QUANT, A.COD_PEDIDO AS SKU, A.EDICAO AS SKU2, B.ORIGEM,B.DATA
 FROM PEDIDO_MATERIAIS_ITENS_CLIENTE A
 LEFT JOIN PEDIDO_MATERIAIS_CLIENTE B
 ON A.PEDIDO = B.PEDIDO
@@ -96,12 +96,15 @@ for i in range(len(data_h_aux)):
     cod_interno = data_h_aux['COD_INTERNO'].iloc[i]
     quantidade = int(data_h_aux['QUANT'].iloc[i])
     sku = data_h_aux['SKU'].iloc[i]
+    sku2 = data_h_aux['SKU2'].iloc[i]
+    origem = data_h_aux['ORIGEM'].iloc[i]
     data_venda = data_h_aux['DATA'].iloc[i]
     for j in range(quantidade):
-        row1 = pd.Series([cod_interno, 1, sku, data_venda], index=data_h.columns)
+        row1 = pd.Series([cod_interno, 1, sku, sku2, origem, data_venda], index=data_h.columns)
         data_h = data_h.append(row1, ignore_index=True)
 
 
+# VENDAS ATON (COD INTERNO)
 # Fazendo o Groupby de 90 e 30 dias
 data_h_30 = data_h[(data_h['DATA'] >= date_30)]
 data_h_30 = data_h_30.groupby('COD_INTERNO').count()
@@ -117,8 +120,15 @@ data_h_90.drop(['SKU', 'DATA'], axis=1, inplace=True)
 data_completo = pd.merge(data, data_h_30, on=['COD_INTERNO'], how='left')
 data_completo = pd.merge(data_completo, data_h_90, on=['COD_INTERNO'], how='left')
 
-data_completo = data_completo.rename(
-    columns={'QUANT_x': '30_ATON', 'QUANT_y': '90_ATON', 'VLR_SITE1': 'PRECO_DE', 'VLR_SITE2': 'PRECO_POR'})
+
+# VENDAS MARKETPLACE (SKU ANÚNCIO)
+# Fazendo o Groupby de 90 e 30 dias
+
+
+# Renomeando colunas
+data_completo = data_completo.rename(columns={'QUANT_x': '30_ATON', 'QUANT_y': '90_ATON', 'VLR_SITE1': 'PRECO_DE', 'VLR_SITE2': 'PRECO_POR'})
+
+# Colocando valor Zero para aqueles produtos Aton que não tiveram vendas
 data_completo['30_ATON'].fillna(0, inplace=True)
 data_completo['90_ATON'].fillna(0, inplace=True)
 
@@ -138,8 +148,6 @@ data['COD_INTERNO'] = data['COD_INTERNO'].str.strip()
 data['DESCRICAO'] = data['DESCRICAO'].str.strip()
 data['ORIGEM_NOME'] = data['ORIGEM_NOME'].str.strip()
 data['SKU'] = data['SKU'].str.strip()
-
-data_h_30_mktp = data_h[(data_h['DATA'] >= date_30)]
 
 dia_atual = str(today.strftime("%Y-%m-%d"))
 agora_hora = datetime.now()
