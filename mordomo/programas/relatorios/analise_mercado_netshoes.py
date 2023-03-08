@@ -15,6 +15,7 @@ from openpyxl.drawing.image import Image
 from time import sleep
 
 pesquisa = input('\nPesquisa NetShoes: ')
+print('')
 url = f'https://www.netshoes.com.br/busca?nsCat=Natural&q={pesquisa}&sort=best-sellers'
 
 user_agent = {'User-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)' 'Chrome/106.0.0.0 Safari/537.36'}
@@ -169,6 +170,9 @@ for row in worksheet.iter_rows(min_row=2, min_col=7, max_col=7):
         cell.alignment = Alignment(wrapText=True, vertical='top')
         cell.value = None
 
+# Adiicona um filtro na primeira linha
+worksheet.auto_filter.ref = 'A1:H1'
+
 # Aumentando o tamanho das linhas
 # itera sobre todas as linhas e define a altura desejada
 aux = 0
@@ -179,8 +183,9 @@ for row in worksheet.rows:
         row_dimensions = worksheet.row_dimensions[row[0].row]
         row_dimensions.height = row_height
     aux = aux + 1
-    
+
 # Salve as alterações no arquivo Excel
+pesquisa = pesquisa.replace(' ', '-')
 workbook.save(f'pesquisa-netshoes-{pesquisa}.xlsx')
 
 # Aguarde delay
