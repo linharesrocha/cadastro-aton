@@ -114,6 +114,8 @@ for i in range(len(data_h_aux)):
         row1 = pd.Series([cod_interno, 1, sku, sku2, origem, data_venda], index=data_h.columns)
         data_h = data_h.append(row1, ignore_index=True)
 
+# Colocando todos valores da coluna SKU2 na coluna SKU da Dafiti
+data_h.loc[data_h['ORIGEM_ID'].isin([5,6,7]), 'SKU'] = data_h['SKU2'].fillna(data_h['SKU'])
 
 # VENDAS ATON (COD INTERNO)
 # Fazendo o Groupby de 90 e 30 dias
@@ -131,8 +133,20 @@ data_h_90.drop(['SKU', 'DATA'], axis=1, inplace=True)
 data_completo = pd.merge(data, data_h_30, on=['COD_INTERNO'], how='left')
 data_completo = pd.merge(data_completo, data_h_90, on=['COD_INTERNO'], how='left')
 
-# Colocando todos valores da coluna SKU2 na coluna SKU da Dafiti
-data_h.loc[data_h['ORIGEM_ID'].isin([5,6,7]), 'SKU'] = data_h['SKU2'].fillna(data_h['SKU'])
+# Renomeando colunas
+data_completo.drop(columns=['ORIGEM_ID'], axis=1, inplace=True)
+data_completo = data_completo.rename(columns={'QUANT_x': '30_ATON', 'QUANT_y': '90_ATON', 'VLR_SITE1': 'PRECO_DE', 'VLR_SITE2': 'PRECO_POR', 'ORIGEM_ID_x':'ORIGEM_ID'})
+
+# Colocando valor Zero para aqueles produtos Aton que não tiveram vendas
+data_completo['30_ATON'].fillna(0, inplace=True)
+data_completo['90_ATON'].fillna(0, inplace=True)
+
+# Colocando horário
+data_completo['HORARIO'] = datetime.now()
+
+# Marketplace
+data_completo['30_MKTP'] = 'MANUTENCAO'
+data_completo['90_MKTP'] = 'MANUTENCAO'
 
 # VENDAS MARKETPLACE (SKU ANÚNCIO)
 # Fazendo o Groupby de 90 e 30 dias
@@ -143,26 +157,25 @@ data_h_30_mktp = data_h_30_mktp.groupby(['SKU_MESCLADO','ORIGEM_ID']).count()
 data_h_30_mktp = data_h_30_mktp.reset_index()
 data_h_30_mktp.drop(columns=['COD_INTERNO'], axis=1, inplace=True)
 
-data_h = pd.merge(data_h, data_h_30_mktp[['ORIGEM_ID', 'SKU_MESCLADO', 'QUANT']], on=['ORIGEM_ID', 'SKU_MESCLADO'], how='left')
+data_completo = pd.merge(data_completo, data_h_30_mktp[['ORIGEM_ID', 'SKU_MESCLADO', 'QUANT']], on=['SKU_MESCLADO', 'ORIGEM_ID'], how='left')
 
-# Renomeando colunas
-data_completo = data_completo.rename(columns={'QUANT_x': '30_ATON', 'QUANT_y': '90_ATON', 'VLR_SITE1': 'PRECO_DE', 'VLR_SITE2': 'PRECO_POR'})
-
-# Colocando valor Zero para aqueles produtos Aton que não tiveram vendas
-data_completo['30_ATON'].fillna(0, inplace=True)
-data_completo['90_ATON'].fillna(0, inplace=True)
-
-data_completo['30_MKTP'] = 'MANUTENCAO'
-data_completo['90_MKTP'] = 'MANUTENCAO'
-
-data_completo['HORARIO'] = datetime.now()
+# Preenchendo valores nan por 0
+data_completo['QUANT'].fillna(0, inplace=True)
 
 data = data_completo
-# data = data_completo[['CODID', 'COD_INTERNO', 'PAI_COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
-#                       'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO', 'PESO',
-#                       'ESTOQUE', '30_ATON', '90_ATON', '30_MKTP', '90_MKTP','ORIGEM_NOME', 'CATEGORIAS', 'PRODUTO_TIPO',
-#                       'COMPRIMENTO', 'LARGURA', 'ALTURA', 'TIPO_ANUNCIO', 'CATEG_ID', 'CATEG_NOME',
-#                       'PRECO_DE', 'PRECO_POR', 'HORARIO']]
+data = data_completo[['CODID', 'COD_INTERNO', 'PAI_COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
+                      'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO', 'PESO',
+                      'ESTOQUE', '30_ATON', '90_ATON', '30_MKTP', '90_MKTP','ORIGEM_NOME', 'CATEGORIAS', 'PRODUTO_TIPO',
+                      'COMPRIMENTO', 'LARGURA', 'ALTURA', 'TIPO_ANUNCIO', 'CATEG_ID', 'CATEG_NOME',
+                      'PRECO_DE', 'PRECO_POR', 'HORARIO', 
+                      'QUANT', 'ORIGEM_ID']]
+
+# Obtenha os nomes das colunas de cada DataFrame como conjuntos
+cols1 = set(data_completo.columns)
+cols2 = set(data.columns)
+diff_cols1 = cols1 - cols2
+print(diff_cols1)
+
 
 # Removendo espaços em branco
 data['COD_INTERNO'] = data['COD_INTERNO'].str.strip()
