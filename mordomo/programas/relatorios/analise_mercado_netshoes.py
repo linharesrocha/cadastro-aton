@@ -5,6 +5,7 @@ import os
 from PIL import Image
 from openpyxl import Workbook
 from openpyxl.drawing.image import Image
+import win32com.client as win32
 from openpyxl.styles import Alignment
 import requests
 import io
@@ -14,9 +15,18 @@ import openpyxl
 from openpyxl.drawing.image import Image
 from time import sleep
 
+os.system('cls')
 pesquisa = input('\nPesquisa NetShoes: ')
+while True:
+    quantidade_anuncios = input('Quantidade de anúncios (Max 42): ')
+    if quantidade_anuncios.isdigit():
+        quantidade_anuncios = int(quantidade_anuncios)
+        if quantidade_anuncios <= 42:
+            break
+
 print('')
-url = f'https://www.netshoes.com.br/busca?nsCat=Natural&q={pesquisa}&sort=best-sellers'
+url = f'https://www.netshoes.com.br/busca?nsCat=Natural&q={pesquisa}'
+url_mais_vendidos = f'https://www.netshoes.com.br/busca?nsCat=Natural&q={pesquisa}&sort=best-sellers'
 
 user_agent = {'User-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)' 'Chrome/106.0.0.0 Safari/537.36'}
 
@@ -52,13 +62,10 @@ for i in range(len(netshoes_links)-1, -1, -1):
 # Entrando em cada link (produto)
 for index, link in enumerate(netshoes_links):
     
-    # Para com determinada quantidade de anúncios já coletados.
-    anuncios_estipulados = 20
-    
-    if index == anuncios_estipulados:
+    if index == quantidade_anuncios:
         break
     
-    print(f'{str(index+1)}/{str(anuncios_estipulados)}')
+    print(f'{str(index+1)}/{str(quantidade_anuncios)}')
     
     page = requests.get(link, headers=user_agent)
     site = BeautifulSoup(page.content, "html.parser")
@@ -102,6 +109,10 @@ for index, link in enumerate(netshoes_links):
     link_anuncios_list.append(link)
     link_photos_list.append(link_photo)
     
+    os.system('cls')
+    print(f'\nPesquisa Netshoes: {pesquisa}\n')
+
+    
 
 # Criar o dicionário
 dicionario = {
@@ -138,6 +149,7 @@ worksheet = workbook.active
 for r in dataframe_to_rows(df, index=False, header=True):
     worksheet.append(r)
 
+os.system('cls')
 print('\nCarregando imagens na planilha...\n')
 
 # Percorra a coluna contendo os links de imagem
@@ -189,11 +201,27 @@ for row in worksheet.rows:
 
 # Salve as alterações no arquivo Excel
 pesquisa = pesquisa.replace(' ', '-')
-workbook.save(f'pesquisa-netshoes-{pesquisa}.xlsx')
+workbook.save(f'C:/workspace/cadastro-aton/mordomo/programas/excel/pesquisa-netshoes-{pesquisa}.xlsx')
 
 # Aguarde delay
-print('Aguarde o delay de 5 segundos.\n')
-for i in range(5):
+os.system('cls')
+print('Aguarde o delay de 4 segundos.\n')
+for i in range(4):
     print(str(i+1))
     sleep(1)
+
+os.system('cls')
 print('\nFIM!\n')
+
+# Abrindo excel
+caminho_arquivo = f'C:/workspace/cadastro-aton/mordomo/programas/excel/pesquisa-netshoes-{pesquisa}.xlsx'
+workbook = openpyxl.load_workbook(filename=caminho_arquivo)
+
+# Cria uma instância do aplicativo Excel
+excel = win32.gencache.EnsureDispatch('Excel.Application')
+
+# Abre o arquivo do Excel usando o aplicativo Excel
+excel.Workbooks.Open(caminho_arquivo)
+
+# Exibe o aplicativo do Excel na tela
+excel.Visible = True
