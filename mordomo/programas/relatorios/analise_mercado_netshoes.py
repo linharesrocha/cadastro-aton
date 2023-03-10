@@ -80,6 +80,11 @@ container = site.find(class_="item-list")
 # Coletando todos links href do atributo a
 all_links = [link['href'] for link in container.find_all('a')]
 
+# Verificando quantos anúncios deu
+if len(all_links) < int(quantidade_anuncios):
+    print(f'\nATENÇÃO!\nCom essa busca, retornou apenas {len(all_links)} resultados!\n')
+    sleep(5)
+    
 # Filtrando apenas os links que começam com //www.netshoes.com
 netshoes_links = [link.replace('//','https://') for link in all_links if link.startswith('//www.netshoes.com')]
 
@@ -180,7 +185,7 @@ for r in dataframe_to_rows(df, index=False, header=True):
     worksheet.append(r)
 
 os.system('cls')
-print('\nCarregando imagens na planilha...\n')
+print('\nCarregando os dados da planilha...\n')
 
 # Percorra a coluna contendo os links de imagem
 for row in worksheet.iter_rows(min_row=2, min_col=7, max_col=7):
@@ -257,7 +262,7 @@ if dados_ws.max_row > 1:
     excel.Workbooks.Open(caminho_arquivo)
     excel.Visible = True
     
-    print(f'1. Exclua as linhas dos produtos errados.\n2. Salve as alterações.\n3. Feche o arquivo excel!\n')
+    print(f'A PLANILHA FOI ABERTA! SIGA AS INSTRUÇÕES ABAIXO.\n\n1. Exclua as linhas dos produtos errados.\n2. Salve as alterações.\n3. Feche o arquivo excel!\n')
     while True:
         awnser = input('Digite OK para continuar: ').upper()
         if awnser == 'OK':
@@ -307,4 +312,4 @@ excel.Workbooks.Open(caminho_arquivo)
 excel.Visible = True
 
 os.system('cls')
-print(f'FIM!')
+print(f'Planilha reaberta!\nAba "estatisticas" criada!\n\nFIM!\n')
