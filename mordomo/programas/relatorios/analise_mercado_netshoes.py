@@ -201,20 +201,33 @@ for row in worksheet.rows:
 
 # Salve as alterações no arquivo Excel
 pesquisa = pesquisa.replace(' ', '-')
-workbook.save(f'C:/workspace/cadastro-aton/mordomo/programas/excel/pesquisa-netshoes-{pesquisa}.xlsx')
+nome_arquivo = f'pesquisa-netshoes-{pesquisa}.xlsx'
+pasta_downloads = os.path.expanduser('~\Downloads')
+
+# Verifica se o arquivo já existe na pasta de downloads
+caminho_arquivo = os.path.join(pasta_downloads, nome_arquivo)
+contador = 1
+
+while os.path.exists(caminho_arquivo):
+    # Se o arquivo já existe, acrescenta um número ao nome do arquivo
+    nome_arquivo_modificado = f"{contador}-{nome_arquivo}"
+    caminho_arquivo = os.path.join(pasta_downloads, nome_arquivo_modificado)
+    contador += 1
+
+# Salvando o arquivo
+workbook.save(f'{caminho_arquivo}')
 
 # Aguarde delay
-os.system('cls')
+#os.system('cls')
 print('Aguarde o delay de 4 segundos.\n')
 for i in range(4):
     print(str(i+1))
     sleep(1)
 
-os.system('cls')
+#os.system('cls')
 print('\nFIM!\n')
 
 # Abrindo excel
-caminho_arquivo = f'C:/workspace/cadastro-aton/mordomo/programas/excel/pesquisa-netshoes-{pesquisa}.xlsx'
 workbook = openpyxl.load_workbook(filename=caminho_arquivo)
 
 # Cria uma instância do aplicativo Excel
