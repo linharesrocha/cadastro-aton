@@ -7,6 +7,8 @@ from datetime import datetime, date, timedelta
 from dotenv import load_dotenv
 from colorama import *
 
+os.system('cls')
+
 today = date.today()
 
 dt = date.today()
@@ -174,6 +176,7 @@ data = data_completo[['CODID', 'COD_INTERNO', 'PAI_COD_INTERNO', 'SKU', 'SKUVARI
 cols1 = set(data_completo.columns)
 cols2 = set(data.columns)
 diff_cols1 = cols1 - cols2
+print('Colunas filtradas (não excluidas, apenas filtradas)')
 print(diff_cols1)
 
 

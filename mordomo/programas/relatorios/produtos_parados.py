@@ -50,6 +50,7 @@ LEFT JOIN ESTOQUE_MATERIAIS B ON A.CODID = B.MATERIAL_ID
 WHERE COD_INTERNO NOT LIKE '%PAI'
 AND INATIVO = 'N'
 AND B.ARMAZEM = 1
+AND B.ESTOQUE = 0
 '''
 
 data_materiais = pd.read_sql(comando, conexao)
