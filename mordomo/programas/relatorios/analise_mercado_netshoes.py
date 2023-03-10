@@ -2,30 +2,60 @@ from bs4 import BeautifulSoup
 import pandas as pd
 import requests
 import os
+import re
+import io
 from PIL import Image
+import win32com.client as win32
+from time import sleep
 from openpyxl import Workbook, load_workbook
 from openpyxl.drawing.image import Image
-import win32com.client as win32
 from openpyxl.styles import Alignment
-import requests
-import io
 from openpyxl.utils.dataframe import dataframe_to_rows
-import openpyxl
 from openpyxl.drawing.image import Image
-from time import sleep
 
 os.system('cls')
-pesquisa = input('\nPesquisa NetShoes: ')
+pesquisa = input('\nPesquisa Netshoes: ')
+
+url_mais_populares = f'https://www.netshoes.com.br/busca?nsCat=Natural&q={pesquisa}'
+url_mais_vendidos = f'https://www.netshoes.com.br/busca?nsCat=Natural&q={pesquisa}&sort=best-sellers'
+url_lancamentos = f'https://www.netshoes.com.br/busca?nsCat=Natural&q={pesquisa}&sort=new-releases'
+url_ofertas = f'https://www.netshoes.com.br/busca?nsCat=Natural&q={pesquisa}&sort=offers'
+url_mais_avaliados = f'https://www.netshoes.com.br/busca?nsCat=Natural&q={pesquisa}&sort=review-stars'
+url_maior_preco = f'https://www.netshoes.com.br/busca?nsCat=Natural&q={pesquisa}&sort=highest-first'
+url_menor_preco = f'https://www.netshoes.com.br/busca?nsCat=Natural&q={pesquisa}&sort=lowest-first'
+
+print(f'\nOrdenar por:\n1. Mais Populares\n2. Mais Vendidos\n3. Lançamentos\n4. Ofertas\n5. Melhor Avaliados\n6. Maior Preço\n7. Menor Preço\n')
+
 while True:
-    quantidade_anuncios = input('Quantidade de anúncios (Max 42): ')
+    opcao = str(input('Digite uma opção: '))
+    if re.match('^[1-7]$', opcao):
+        opcao = int(opcao)
+        if opcao >= 1 and opcao <= 7:
+            if opcao == 1:
+                url = url_mais_populares
+            elif opcao == 2:
+                url = url_mais_vendidos
+            elif opcao == 3:
+                url = url_lancamentos
+            elif opcao == 4:
+                url = url_ofertas
+            elif opcao == 5:
+                url = url_mais_avaliados
+            elif opcao == 6:
+                url = url_maior_preco
+            elif opcao == 7:
+                url = url_menor_preco
+            
+            break
+
+print(' ')
+while True:
+    quantidade_anuncios = input('Quantos anúncios? (max 42): ')
     if quantidade_anuncios.isdigit():
         quantidade_anuncios = int(quantidade_anuncios)
         if quantidade_anuncios > 0 and quantidade_anuncios <= 42:
             break
 
-print('')
-url = f'https://www.netshoes.com.br/busca?nsCat=Natural&q={pesquisa}'
-url_mais_vendidos = f'https://www.netshoes.com.br/busca?nsCat=Natural&q={pesquisa}&sort=best-sellers'
 
 user_agent = {'User-agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko)' 'Chrome/106.0.0.0 Safari/537.36'}
 
@@ -59,6 +89,7 @@ for i in range(len(netshoes_links)-1, -1, -1):
         del netshoes_links[i]
 
 # Entrando em cada link (produto)
+os.system('cls')
 for index, link in enumerate(netshoes_links):
     
     if index == quantidade_anuncios:
@@ -109,7 +140,7 @@ for index, link in enumerate(netshoes_links):
     link_photos_list.append(link_photo)
     
     os.system('cls')
-    print(f'\nPesquisa Netshoes: {pesquisa}\n')
+    print(f'\nPesquisando {pesquisa} na Netshoes...\n')
 
     
 
@@ -139,7 +170,7 @@ df['link_fotos'] = df['link_fotos'].str.replace(r'\.jpg.*', '.jpg', regex=True)
 
 
 # Carregue o arquivo Excel
-workbook = openpyxl.Workbook()
+workbook = Workbook()
 
 # Selecione a planilha que contém os dados
 worksheet = workbook.active
