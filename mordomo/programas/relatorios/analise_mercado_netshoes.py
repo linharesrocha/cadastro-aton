@@ -3,13 +3,12 @@ import pandas as pd
 import requests
 import os
 from PIL import Image
-from openpyxl import Workbook
+from openpyxl import Workbook, load_workbook
 from openpyxl.drawing.image import Image
 import win32com.client as win32
 from openpyxl.styles import Alignment
 import requests
 import io
-from openpyxl import Workbook
 from openpyxl.utils.dataframe import dataframe_to_rows
 import openpyxl
 from openpyxl.drawing.image import Image
@@ -215,36 +214,66 @@ while os.path.exists(caminho_arquivo):
     contador += 1
 os.system('cls')
 
-print(f'Calculando estatisticas...')
-# cria uma nova planilha com o nome "estatisticas"
-estatisticas_ws = workbook.create_sheet(title='estatisticas')
-
-# calcule a média da coluna D
 dados_ws = workbook.active
 if dados_ws.max_row > 1:
+    
+    # Salvando o arquivo
+    workbook.save(f'{caminho_arquivo}')
+    sleep(1)
+    
+    # Abre o excel
+    excel = win32.gencache.EnsureDispatch('Excel.Application')
+    excel.Workbooks.Open(caminho_arquivo)
+    excel.Visible = True
+    
+    print(f'1. Exclua as linhas dos produtos errados.\n2. Salve as alterações.\n3. Feche o arquivo excel!\n')
+    while True:
+        awnser = input('Digite OK para continuar: ').upper()
+        if awnser == 'OK':
+            break
+    
+    # Fechando apenas a pasta
+    excel.Workbooks.Close()
+        
+    workbook = load_workbook(filename=caminho_arquivo)
+    
+    os.system('cls')
+    print(f'Calculando estatisticas...\n')
+    
+    # cria uma nova planilha com o nome "estatisticas"
+    estatisticas_ws = workbook.create_sheet(title='estatisticas')
+    
+    media = None
+    moda = None
+    mediana = None
+    maior_preco = None
+    menor_preco = None
+    
     col_d = list(dados_ws.iter_cols(min_row=2, min_col=4, max_col=4, max_row=dados_ws.max_row, values_only=True))[0]
     media = sum(col_d) / len(col_d)
     col_d_sorted = sorted(col_d)
     middle = len(col_d_sorted) // 2
     mediana = (col_d_sorted[middle] + col_d_sorted[-middle-1]) / 2
+    maior_preco = max(col_d)
+    menor_preco = min(col_d)
     
     # insere os valores na planilha "estatisticas"
     estatisticas_ws['A1'] = 'MÉDIA_PRECO'
     estatisticas_ws['A2'] = media
     estatisticas_ws['B1'] = 'MEDIANA_PRECO'
     estatisticas_ws['B2'] = mediana
+    estatisticas_ws['C1'] = 'MENOR_PRECO'
+    estatisticas_ws['C2'] = menor_preco
+    estatisticas_ws['D1'] = 'MAIOR_PRECO'
+    estatisticas_ws['D2'] = maior_preco
 
 # Salvando o arquivo
 workbook.save(f'{caminho_arquivo}')
 
+# Abre o excel
+excel = win32.gencache.EnsureDispatch('Excel.Application')
+excel.Workbooks.Open(caminho_arquivo)
+excel.Visible = True
+
 os.system('cls')
 print(f'FIM!')
-
-# Cria uma instância do aplicativo Excel
-excel = win32.gencache.EnsureDispatch('Excel.Application')
-
-# Abre o arquivo do Excel usando o aplicativo Excel
-excel.Workbooks.Open(caminho_arquivo)
-
-# Exibe o aplicativo do Excel na tela
-excel.Visible = True
