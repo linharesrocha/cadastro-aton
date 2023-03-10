@@ -21,7 +21,7 @@ while True:
     quantidade_anuncios = input('Quantidade de anúncios (Max 42): ')
     if quantidade_anuncios.isdigit():
         quantidade_anuncios = int(quantidade_anuncios)
-        if quantidade_anuncios <= 42:
+        if quantidade_anuncios > 0 and quantidade_anuncios <= 42:
             break
 
 print('')
@@ -213,22 +213,32 @@ while os.path.exists(caminho_arquivo):
     nome_arquivo_modificado = f"{contador}-{nome_arquivo}"
     caminho_arquivo = os.path.join(pasta_downloads, nome_arquivo_modificado)
     contador += 1
+os.system('cls')
+
+print(f'Calculando estatisticas...')
+# cria uma nova planilha com o nome "estatisticas"
+estatisticas_ws = workbook.create_sheet(title='estatisticas')
+
+# calcule a média da coluna D
+dados_ws = workbook.active
+if dados_ws.max_row > 1:
+    col_d = list(dados_ws.iter_cols(min_row=2, min_col=4, max_col=4, max_row=dados_ws.max_row, values_only=True))[0]
+    media = sum(col_d) / len(col_d)
+    col_d_sorted = sorted(col_d)
+    middle = len(col_d_sorted) // 2
+    mediana = (col_d_sorted[middle] + col_d_sorted[-middle-1]) / 2
+    
+    # insere os valores na planilha "estatisticas"
+    estatisticas_ws['A1'] = 'MÉDIA_PRECO'
+    estatisticas_ws['A2'] = media
+    estatisticas_ws['B1'] = 'MEDIANA_PRECO'
+    estatisticas_ws['B2'] = mediana
 
 # Salvando o arquivo
 workbook.save(f'{caminho_arquivo}')
 
-# Aguarde delay
-#os.system('cls')
-print('Aguarde o delay de 4 segundos.\n')
-for i in range(4):
-    print(str(i+1))
-    sleep(1)
-
-#os.system('cls')
-print('\nFIM!\n')
-
-# Abrindo excel
-workbook = openpyxl.load_workbook(filename=caminho_arquivo)
+os.system('cls')
+print(f'FIM!')
 
 # Cria uma instância do aplicativo Excel
 excel = win32.gencache.EnsureDispatch('Excel.Application')
