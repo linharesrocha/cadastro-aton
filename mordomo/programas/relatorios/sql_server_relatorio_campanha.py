@@ -13,8 +13,12 @@ today = date.today()
 
 dt = date.today()
 datetime_midnight = datetime.combine(dt, datetime.min.time())
+date_7 = datetime_midnight - timedelta(7)
+print('\n7 Dias: ' + str(date_7.strftime("%d-%m-%Y")))
+date_14 = datetime_midnight - timedelta(14)
+print('14 Dias: ' + str(date_14.strftime("%d-%m-%Y")))
 date_30 = datetime_midnight - timedelta(30)
-print('\n30 Dias: ' + str(date_30.strftime("%d-%m-%Y")))
+print('30 Dias: ' + str(date_30.strftime("%d-%m-%Y")))
 date_90 = datetime_midnight - timedelta(90)
 print('90 Dias: ' + str(date_90.strftime("%d-%m-%Y")))
 print(Fore.YELLOW, '\nCarregando...')
@@ -146,12 +150,24 @@ data_completo['90_ATON'].fillna(0, inplace=True)
 # Colocando horário
 data_completo['HORARIO'] = datetime.now()
 
-# Marketplace
-data_completo['30_MKTP'] = 'MANUTENCAO'
-data_completo['90_MKTP'] = 'MANUTENCAO'
-
 # VENDAS MARKETPLACE (SKU ANÚNCIO)
-# Fazendo o Groupby de 90 e 30 dias
+# Fazendo o Groupby de 7 dias
+data_h_7_mktp = data_h[(data_h['DATA'] >= date_7)]
+data_h_7_mktp['SKU_MESCLADO'] = data_h_7_mktp.apply(lambda x: x['SKU'] if pd.isnull(x['SKU2']) else x['SKU2'], axis=1)
+data_h_7_mktp.drop(['SKU', 'SKU2', 'DATA'], axis=1, inplace=True)
+data_h_7_mktp = data_h_7_mktp.groupby(['SKU_MESCLADO','ORIGEM_ID']).count()
+data_h_7_mktp = data_h_7_mktp.reset_index()
+data_h_7_mktp.drop(columns=['COD_INTERNO'], axis=1, inplace=True)
+
+# Fazendo o Groupby de 14 dias
+data_h_14_mktp = data_h[(data_h['DATA'] >= date_14)]
+data_h_14_mktp['SKU_MESCLADO'] = data_h_14_mktp.apply(lambda x: x['SKU'] if pd.isnull(x['SKU2']) else x['SKU2'], axis=1)
+data_h_14_mktp.drop(['SKU', 'SKU2', 'DATA'], axis=1, inplace=True)
+data_h_14_mktp = data_h_14_mktp.groupby(['SKU_MESCLADO','ORIGEM_ID']).count()
+data_h_14_mktp = data_h_14_mktp.reset_index()
+data_h_14_mktp.drop(columns=['COD_INTERNO'], axis=1, inplace=True)
+
+# Fazendo o Groupby de 30 dias
 data_h_30_mktp = data_h[(data_h['DATA'] >= date_30)]
 data_h_30_mktp['SKU_MESCLADO'] = data_h_30_mktp.apply(lambda x: x['SKU'] if pd.isnull(x['SKU2']) else x['SKU2'], axis=1)
 data_h_30_mktp.drop(['SKU', 'SKU2', 'DATA'], axis=1, inplace=True)
@@ -159,18 +175,34 @@ data_h_30_mktp = data_h_30_mktp.groupby(['SKU_MESCLADO','ORIGEM_ID']).count()
 data_h_30_mktp = data_h_30_mktp.reset_index()
 data_h_30_mktp.drop(columns=['COD_INTERNO'], axis=1, inplace=True)
 
+# Fazendo o Groupby de 90 dias
+data_h_90_mktp = data_h[(data_h['DATA'] >= date_90)]
+data_h_90_mktp['SKU_MESCLADO'] = data_h_90_mktp.apply(lambda x: x['SKU'] if pd.isnull(x['SKU2']) else x['SKU2'], axis=1)
+data_h_90_mktp.drop(['SKU', 'SKU2', 'DATA'], axis=1, inplace=True)
+data_h_90_mktp = data_h_90_mktp.groupby(['SKU_MESCLADO','ORIGEM_ID']).count()
+data_h_90_mktp = data_h_90_mktp.reset_index()
+data_h_90_mktp.drop(columns=['COD_INTERNO'], axis=1, inplace=True)
+
+# Fazendo Merge
+data_completo = pd.merge(data_completo, data_h_7_mktp[['ORIGEM_ID', 'SKU_MESCLADO', 'QUANT']], on=['SKU_MESCLADO', 'ORIGEM_ID'], how='left')
+data_completo = pd.merge(data_completo, data_h_14_mktp[['ORIGEM_ID', 'SKU_MESCLADO', 'QUANT']], on=['SKU_MESCLADO', 'ORIGEM_ID'], how='left')
+data_completo.rename(columns = {'QUANT_x':'7_MKTP', 'QUANT_y':'14_MKTP'}, inplace=True)
 data_completo = pd.merge(data_completo, data_h_30_mktp[['ORIGEM_ID', 'SKU_MESCLADO', 'QUANT']], on=['SKU_MESCLADO', 'ORIGEM_ID'], how='left')
+data_completo = pd.merge(data_completo, data_h_90_mktp[['ORIGEM_ID', 'SKU_MESCLADO', 'QUANT']], on=['SKU_MESCLADO', 'ORIGEM_ID'], how='left')
+data_completo.rename(columns = {'QUANT_x':'30_MKTP', 'QUANT_y':'90_MKTP'}, inplace=True)
 
 # Preenchendo valores nan por 0
-data_completo['QUANT'].fillna(0, inplace=True)
+data_completo['7_MKTP'].fillna(0, inplace=True)
+data_completo['14_MKTP'].fillna(0, inplace=True)
+data_completo['30_MKTP'].fillna(0, inplace=True)
+data_completo['90_MKTP'].fillna(0, inplace=True)
 
 data = data_completo
 data = data_completo[['CODID', 'COD_INTERNO', 'PAI_COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
                       'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO', 'PESO',
-                      'ESTOQUE', '30_ATON', '90_ATON', '30_MKTP', '90_MKTP','ORIGEM_NOME', 'CATEGORIAS', 'PRODUTO_TIPO',
+                      'ESTOQUE', '30_ATON', '90_ATON', '7_MKTP','14_MKTP','30_MKTP','90_MKTP','ORIGEM_NOME', 'CATEGORIAS', 'PRODUTO_TIPO',
                       'COMPRIMENTO', 'LARGURA', 'ALTURA', 'TIPO_ANUNCIO', 'CATEG_ID', 'CATEG_NOME',
-                      'PRECO_DE', 'PRECO_POR', 'HORARIO', 
-                      'QUANT', 'ORIGEM_ID']]
+                      'PRECO_DE', 'PRECO_POR', 'HORARIO', 'ORIGEM_ID']]
 
 # Obtenha os nomes das colunas de cada DataFrame como conjuntos
 cols1 = set(data_completo.columns)

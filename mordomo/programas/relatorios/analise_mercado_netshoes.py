@@ -12,6 +12,7 @@ from openpyxl.drawing.image import Image
 from openpyxl.styles import Alignment
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.drawing.image import Image
+from collections import Counter
 
 os.system('cls')
 pesquisa = input('\nPesquisa Netshoes: ')
@@ -302,6 +303,24 @@ if dados_ws.max_row > 1:
     estatisticas_ws['C2'] = menor_preco
     estatisticas_ws['D1'] = 'MAIOR_PRECO'
     estatisticas_ws['D2'] = maior_preco
+    
+    # conta as palavras na coluna B
+    palavras = Counter()
+    col_b = list(dados_ws.iter_cols(min_row=2, min_col=2, max_col=2, max_row=dados_ws.max_row, values_only=True))[0]
+    for celula in col_b:
+        lista_palavras = str(celula).split()
+        for palavra in lista_palavras:
+            palavras[palavra] += 1
+
+    # cria uma tabela com as palavras e contagens
+    tabela = [('Palavra', 'Quantidade')] + [(palavra, contagem) for palavra, contagem in palavras.items()]
+    
+    # ordena a tabela em ordem decrescente (do maior para o menor)
+    tabela.sort(key=lambda x: x[1], reverse=True)
+
+    # escreve a tabela na planilha "estatisticas"
+    for linha in tabela:
+        estatisticas_ws.append(linha)
 
 # Salvando o arquivo
 workbook.save(f'{caminho_arquivo}')
