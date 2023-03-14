@@ -95,6 +95,34 @@ data_categoria_magalu_tmp['API'].replace('Integra', 'IntegraCommerce', inplace=T
 data = pd.merge(data, data_categoria_magalu_tmp, on=['DESCRICAON02', 'API'], how='left')
 data.rename(columns = {'DESCRICAON02':'CATEGORIAS'}, inplace=True)
 
+# Junta Entrada de Estoque (30, 60, 90)
+comando = '''
+SELECT DATA, COD_MATERIAL AS CODID, QUANT
+FROM KARDEX
+WHERE ES = 'E'
+AND TIPODOC = 'PEF'
+'''
+
+df_entrada_estoque = pd.read_sql(comando, conexao)
+data['ENTRADA_ESTQ_30'] = pd.to_datetime('today').normalize()
+data['ENTRADA_ESTQ_60'] = pd.to_datetime('today').normalize()
+data['ENTRADA_ESTQ_90'] = pd.to_datetime('today').normalize()
+for index, row in data.iterrows():
+    codid = row['CODID']
+    data_30 = row['ENTRADA_ESTQ_30']
+    data_60 = row['ENTRADA_ESTQ_60']
+    data_90 = row['ENTRADA_ESTQ_90']
+    data_inicio_30 = data_30 - pd.Timedelta(days=30)
+    data_inicio_60 = data_60 - pd.Timedelta(days=60)
+    data_inicio_90 = data_90 - pd.Timedelta(days=90)
+    df_filtered_30 = df_entrada_estoque[(df_entrada_estoque['CODID'] == codid) & (df_entrada_estoque['DATA'] >= data_inicio_30) & (df_entrada_estoque['DATA'] <= data_30)]
+    df_filtered_60 = df_entrada_estoque[(df_entrada_estoque['CODID'] == codid) & (df_entrada_estoque['DATA'] >= data_inicio_60) & (df_entrada_estoque['DATA'] <= data_60)]
+    df_filtered_90 = df_entrada_estoque[(df_entrada_estoque['CODID'] == codid) & (df_entrada_estoque['DATA'] >= data_inicio_90) & (df_entrada_estoque['DATA'] <= data_90)]
+    data.loc[index, 'ENTRADA_ESTQ_30'] = df_filtered_30['QUANT'].sum()
+    data.loc[index, 'ENTRADA_ESTQ_60'] = df_filtered_60['QUANT'].sum()
+    data.loc[index, 'ENTRADA_ESTQ_90'] = df_filtered_90['QUANT'].sum()
+
+# Pedidos
 comando = '''
 SELECT A.PEDIDO, A.COD_INTERNO, A.QUANT, A.COD_PEDIDO AS SKU, A.EDICAO AS SKU2, B.ORIGEM AS ORIGEM_ID, B.DATA
 FROM PEDIDO_MATERIAIS_ITENS_CLIENTE A
@@ -178,6 +206,7 @@ data_h_30_mktp.drop(columns=['COD_INTERNO'], axis=1, inplace=True)
 # Fazendo o Groupby de 90 dias
 data_h_90_mktp = data_h[(data_h['DATA'] >= date_90)]
 data_h_90_mktp['SKU_MESCLADO'] = data_h_90_mktp.apply(lambda x: x['SKU'] if pd.isnull(x['SKU2']) else x['SKU2'], axis=1)
+data_h_90_mktp.to_excel('test2.xlsx', index=False)
 data_h_90_mktp.drop(['SKU', 'SKU2', 'DATA'], axis=1, inplace=True)
 data_h_90_mktp = data_h_90_mktp.groupby(['SKU_MESCLADO','ORIGEM_ID']).count()
 data_h_90_mktp = data_h_90_mktp.reset_index()
@@ -200,9 +229,9 @@ data_completo['90_MKTP'].fillna(0, inplace=True)
 data = data_completo
 data = data_completo[['CODID', 'COD_INTERNO', 'PAI_COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
                       'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO', 'PESO',
-                      'ESTOQUE', '30_ATON', '90_ATON', '7_MKTP','14_MKTP','30_MKTP','90_MKTP','ORIGEM_NOME', 'CATEGORIAS', 'PRODUTO_TIPO',
+                      'ESTOQUE', 'ENTRADA_ESTQ_30', 'ENTRADA_ESTQ_60', 'ENTRADA_ESTQ_90','30_ATON', '90_ATON', '7_MKTP','14_MKTP','30_MKTP','90_MKTP','ORIGEM_NOME', 'CATEGORIAS', 'PRODUTO_TIPO',
                       'COMPRIMENTO', 'LARGURA', 'ALTURA', 'TIPO_ANUNCIO', 'CATEG_ID', 'CATEG_NOME',
-                      'PRECO_DE', 'PRECO_POR', 'HORARIO', 'ORIGEM_ID']]
+                      'PRECO_DE', 'PRECO_POR', 'HORARIO', 'ORIGEM_ID', 'SKU_MESCLADO']]
 
 # Obtenha os nomes das colunas de cada DataFrame como conjuntos
 cols1 = set(data_completo.columns)
