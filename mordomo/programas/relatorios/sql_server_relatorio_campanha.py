@@ -7,134 +7,154 @@ from datetime import datetime, date, timedelta
 from dotenv import load_dotenv
 from colorama import *
 
-os.system('cls')
+def carrega_datas():
+    os.system('cls')
+    today = date.today()
+    dt = date.today()
+    datetime_midnight = datetime.combine(dt, datetime.min.time())
+    date_7 = datetime_midnight - timedelta(7)
+    date_14 = datetime_midnight - timedelta(14)
+    date_30 = datetime_midnight - timedelta(30)
+    date_90 = datetime_midnight - timedelta(90)
+    print('\n7 Dias: ' + str(date_7.strftime("%d-%m-%Y")))
+    print('14 Dias: ' + str(date_14.strftime("%d-%m-%Y")))
+    print('30 Dias: ' + str(date_30.strftime("%d-%m-%Y")))
+    print('90 Dias: ' + str(date_90.strftime("%d-%m-%Y")))
+    print(Fore.YELLOW, '\nCarregando...')
+    
+    return today, date_7, date_14, date_30, date_90
 
-today = date.today()
+def carrega_banco_de_dados():
+    env_path = Path('.') / 'C:\workspace\cadastro-aton\mordomo\programas\.env-sql'
+    load_dotenv(dotenv_path=env_path)
+    DATABASE = os.environ['DATABASE']
+    UID = os.environ['UID']
+    PWD = os.environ['PWD']
+    dados_conexao = ("Driver={SQL Server};"
+                    "Server=erp.ambarxcall.com.br;"
+                    "Database=" + DATABASE + ";"
+                                            "UID=" + UID + ";"
+                                                            "PWD=" + PWD + ";")
 
-dt = date.today()
-datetime_midnight = datetime.combine(dt, datetime.min.time())
-date_7 = datetime_midnight - timedelta(7)
-print('\n7 Dias: ' + str(date_7.strftime("%d-%m-%Y")))
-date_14 = datetime_midnight - timedelta(14)
-print('14 Dias: ' + str(date_14.strftime("%d-%m-%Y")))
-date_30 = datetime_midnight - timedelta(30)
-print('30 Dias: ' + str(date_30.strftime("%d-%m-%Y")))
-date_90 = datetime_midnight - timedelta(90)
-print('90 Dias: ' + str(date_90.strftime("%d-%m-%Y")))
-print(Fore.YELLOW, '\nCarregando...')
-warnings.filterwarnings('ignore')
+    conexao = pyodbc.connect(dados_conexao)
+    cursor = conexao.cursor()
+    return cursor, conexao
 
-env_path = Path('.') / 'C:\workspace\cadastro-aton\mordomo\programas\.env-sql'
-load_dotenv(dotenv_path=env_path)
-DATABASE = os.environ['DATABASE']
-UID = os.environ['UID']
-PWD = os.environ['PWD']
+def carrega_tabela_produtos(conexao):
+    comando = '''
+    SELECT DISTINCT
+    A.AUTOID, A.VLR_SITE2, A.VLR_SITE1, A.PRODMKTP_ID, A.SKU, A.SKUVARIACAO_MASTER, A.ATIVO, A.TIPO_ANUNCIO, A.ORIGEM_ID,
+    B.INATIVO, B.CODID, B.COD_INTERNO,  B.PAI,B.DESCRICAO, B.VLR_CUSTO, B.PESO, B.COMPRIMENTO, B.LARGURA, B.ALTURA,
+    C.ESTOQUE, 
+    D.ORIGEM_NOME,
+    E.DESCRICAO AS GRUPO,
+    F.CATEG_MKTP_DESC AS DESCRICAON02, F.PRODUTO_TIPO, F.API,
+    G.CATEG_ID, G.CATEG_NOME
+    FROM ECOM_SKU A
+    LEFT JOIN MATERIAIS B ON A.MATERIAL_ID = B.CODID
+    LEFT JOIN ESTOQUE_MATERIAIS C ON B.CODID = C.MATERIAL_ID
+    LEFT JOIN ECOM_ORIGEM D ON A.ORIGEM_ID = D.ORIGEM_ID
+    LEFT JOIN GRUPO E ON B.GRUPO = E.CODIGO
+    LEFT JOIN CATEGORIAS_MKTP F  ON F.CATEG_ATON = B.ECOM_CATEGORIA AND F.API = D.API
+    LEFT JOIN ECOM_CATEGORIAS G ON G.CATEG_ID = B.ECOM_CATEGORIA
+    WHERE C.ARMAZEM = 1
+    AND B.INATIVO = 'N'
+    ORDER BY CODID
+    '''
+    data = pd.read_sql(comando, conexao)
 
-dados_conexao = ("Driver={SQL Server};"
-                 "Server=erp.ambarxcall.com.br;"
-                 "Database=" + DATABASE + ";"
-                                          "UID=" + UID + ";"
-                                                         "PWD=" + PWD + ";")
+    return data
 
-conexao = pyodbc.connect(dados_conexao)
-
-cursor = conexao.cursor()
-
-comando = '''
-SELECT DISTINCT
-A.AUTOID, A.VLR_SITE2, A.VLR_SITE1, A.PRODMKTP_ID, A.SKU, A.SKUVARIACAO_MASTER, A.ATIVO, A.TIPO_ANUNCIO, A.ORIGEM_ID,
-B.INATIVO, B.CODID, B.COD_INTERNO,  B.PAI,B.DESCRICAO, B.VLR_CUSTO, B.PESO, B.COMPRIMENTO, B.LARGURA, B.ALTURA,
-C.ESTOQUE, 
-D.ORIGEM_NOME,
-E.DESCRICAO AS GRUPO,
-F.CATEG_MKTP_DESC AS DESCRICAON02, F.PRODUTO_TIPO, F.API,
-G.CATEG_ID, G.CATEG_NOME
-FROM ECOM_SKU A
-LEFT JOIN MATERIAIS B ON A.MATERIAL_ID = B.CODID
-LEFT JOIN ESTOQUE_MATERIAIS C ON B.CODID = C.MATERIAL_ID
-LEFT JOIN ECOM_ORIGEM D ON A.ORIGEM_ID = D.ORIGEM_ID
-LEFT JOIN GRUPO E ON B.GRUPO = E.CODIGO
-LEFT JOIN CATEGORIAS_MKTP F  ON F.CATEG_ATON = B.ECOM_CATEGORIA AND F.API = D.API
-LEFT JOIN ECOM_CATEGORIAS G ON G.CATEG_ID = B.ECOM_CATEGORIA
-WHERE C.ARMAZEM = 1
-AND B.INATIVO = 'N'
-ORDER BY CODID
-'''
-data = pd.read_sql(comando, conexao)
-
-# Cria nova coluca com os valores da coluna SKU
-data['SKU_MESCLADO'] = data['SKU']
-
-# Preenche todos os valores vazios na coluna SKUVARIACAO_MASTER com o valor da mesma linha da coluna SKU
-data['SKUVARIACAO_MASTER'].fillna(data['SKU'], inplace=True)
-linhas_vazias = data.loc[data['SKUVARIACAO_MASTER'] == '']
-data.loc[linhas_vazias.index, 'SKUVARIACAO_MASTER'] = linhas_vazias['SKU']
-
-# Passa para a coluna SKU_MESCLADO os valores de SKUVARIACAO_MASTER (ML, Shopee, B2W, Tray, Decathlon)
-data.loc[data['ORIGEM_ID'].isin([8,9,10,11,12,13,17,18,19,32,33]), 'SKU_MESCLADO'] = data['SKUVARIACAO_MASTER']
-
-# Juntar código pai
-comando = '''
-SELECT COD_INTERNO AS PAI_COD_INTERNO, CODID AS PAI FROM MATERIAIS
-WHERE PAI = '0'
-'''
-data_pai_aux = pd.read_sql(comando, conexao)
-data = pd.merge(data, data_pai_aux, on=['PAI'], how='left')
-data['PAI_COD_INTERNO'].fillna(data['COD_INTERNO'], inplace=True)
-
-# Juntar categoria pai da Magalu
-comando = '''
-SELECT A.IDNIVEL01, B.IDNIVEL02, A.API, A.DESCRICAON01, B.DESCRICAON02
-FROM ECOM_CATEGORIAN01 A
-LEFT JOIN ECOM_CATEGORIAN02 B
-ON A.IDNIVEL01 = B.IDNIVEL01
-'''
-data_categoria_magalu_tmp = pd.read_sql(comando, conexao)
-data_categoria_magalu_tmp['API'] = data_categoria_magalu_tmp['API'].str.strip()
-data_categoria_magalu_tmp['API'].replace('Integra', 'IntegraCommerce', inplace=True)
-data = pd.merge(data, data_categoria_magalu_tmp, on=['DESCRICAON02', 'API'], how='left')
-data.rename(columns = {'DESCRICAON02':'CATEGORIAS'}, inplace=True)
-
-# Junta Entrada de Estoque (30, 60, 90)
-comando = '''
-SELECT DATA, COD_MATERIAL AS CODID, QUANT
-FROM KARDEX
-WHERE ES = 'E'
-AND TIPODOC = 'PEF'
+def carrega_tabela_pedidos(conexao):
+    # Pedidos
+    comando = '''
+    SELECT A.PEDIDO, A.COD_INTERNO, A.QUANT, A.COD_PEDIDO AS SKU, A.EDICAO AS SKU2, B.ORIGEM AS ORIGEM_ID, B.DATA
+    FROM PEDIDO_MATERIAIS_ITENS_CLIENTE A
+    LEFT JOIN PEDIDO_MATERIAIS_CLIENTE B
+    ON A.PEDIDO = B.PEDIDO
+    WHERE B.TIPO = 'PEDIDO'
+    AND B.POSICAO != 'CANCELADO'
 '''
 
-df_entrada_estoque = pd.read_sql(comando, conexao)
-data['ENTRADA_ESTQ_30'] = pd.to_datetime('today').normalize()
-data['ENTRADA_ESTQ_60'] = pd.to_datetime('today').normalize()
-data['ENTRADA_ESTQ_90'] = pd.to_datetime('today').normalize()
-for index, row in data.iterrows():
-    codid = row['CODID']
-    data_30 = row['ENTRADA_ESTQ_30']
-    data_60 = row['ENTRADA_ESTQ_60']
-    data_90 = row['ENTRADA_ESTQ_90']
-    data_inicio_30 = data_30 - pd.Timedelta(days=30)
-    data_inicio_60 = data_60 - pd.Timedelta(days=60)
-    data_inicio_90 = data_90 - pd.Timedelta(days=90)
-    df_filtered_30 = df_entrada_estoque[(df_entrada_estoque['CODID'] == codid) & (df_entrada_estoque['DATA'] >= data_inicio_30) & (df_entrada_estoque['DATA'] <= data_30)]
-    df_filtered_60 = df_entrada_estoque[(df_entrada_estoque['CODID'] == codid) & (df_entrada_estoque['DATA'] >= data_inicio_60) & (df_entrada_estoque['DATA'] <= data_60)]
-    df_filtered_90 = df_entrada_estoque[(df_entrada_estoque['CODID'] == codid) & (df_entrada_estoque['DATA'] >= data_inicio_90) & (df_entrada_estoque['DATA'] <= data_90)]
-    data.loc[index, 'ENTRADA_ESTQ_30'] = df_filtered_30['QUANT'].sum()
-    data.loc[index, 'ENTRADA_ESTQ_60'] = df_filtered_60['QUANT'].sum()
-    data.loc[index, 'ENTRADA_ESTQ_90'] = df_filtered_90['QUANT'].sum()
+    # Preenchendo pedidos
+    data_h = pd.read_sql(comando, conexao)
+    data_h.drop('PEDIDO', axis=1, inplace=True)
+    
+    return data_h
 
-# Pedidos
-comando = '''
-SELECT A.PEDIDO, A.COD_INTERNO, A.QUANT, A.COD_PEDIDO AS SKU, A.EDICAO AS SKU2, B.ORIGEM AS ORIGEM_ID, B.DATA
-FROM PEDIDO_MATERIAIS_ITENS_CLIENTE A
-LEFT JOIN PEDIDO_MATERIAIS_CLIENTE B
-ON A.PEDIDO = B.PEDIDO
-WHERE B.TIPO = 'PEDIDO'
-AND B.POSICAO != 'CANCELADO'
-'''
+def manipula_colunas_sku_e_sku_variacao():
+    # Preenche todos os valores vazios na coluna SKUVARIACAO_MASTER com o valor da mesma linha da coluna SKU
+    data['SKUVARIACAO_MASTER'].fillna(data['SKU'], inplace=True)
+    linhas_vazias = data.loc[data['SKUVARIACAO_MASTER'] == '']
+    data.loc[linhas_vazias.index, 'SKUVARIACAO_MASTER'] = linhas_vazias['SKU']
 
-# Preenchendo pedidos
-data_h = pd.read_sql(comando, conexao)
-data_h.drop('PEDIDO', axis=1, inplace=True)
+    # Cria nova coluna com os valores da coluna SKU
+    data['SKU_MESCLADO'] = data['SKU']
+
+    # Passa para a coluna SKU_MESCLADO os valores de SKUVARIACAO_MASTER (ML, Shopee, B2W, Tray, Decathlon)
+    data.loc[data['ORIGEM_ID'].isin([8,9,10,11,12,13,17,18,19,32,33]), 'SKU_MESCLADO'] = data['SKUVARIACAO_MASTER']
+    
+    return data
+
+def adiciona_coluna_pai(conexao):
+    # Juntar código pai
+    comando = '''
+    SELECT COD_INTERNO AS PAI_COD_INTERNO, CODID AS PAI FROM MATERIAIS
+    WHERE PAI = '0'
+    '''
+    data_pai_aux = pd.read_sql(comando, conexao)
+    data = pd.merge(data, data_pai_aux, on=['PAI'], how='left')
+    data['PAI_COD_INTERNO'].fillna(data['COD_INTERNO'], inplace=True)
+    
+    return data
+
+def adiciona_categoria_pai_magalu(conexao):
+    # Juntar categoria pai da Magalu
+    comando = '''
+    SELECT A.IDNIVEL01, B.IDNIVEL02, A.API, A.DESCRICAON01, B.DESCRICAON02
+    FROM ECOM_CATEGORIAN01 A
+    LEFT JOIN ECOM_CATEGORIAN02 B
+    ON A.IDNIVEL01 = B.IDNIVEL01
+    '''
+    data_categoria_magalu_tmp = pd.read_sql(comando, conexao)
+    data_categoria_magalu_tmp['API'] = data_categoria_magalu_tmp['API'].str.strip()
+    data_categoria_magalu_tmp['API'].replace('Integra', 'IntegraCommerce', inplace=True)
+    data = pd.merge(data, data_categoria_magalu_tmp, on=['DESCRICAON02', 'API'], how='left')
+    data.rename(columns = {'DESCRICAON02':'CATEGORIAS'}, inplace=True)
+    
+    return data
+
+def adiciona_entrada_estoque(conexao):
+    
+    # Junta Entrada de Estoque (30, 60, 90)
+    comando = '''
+    SELECT DATA, COD_MATERIAL AS CODID, QUANT
+    FROM KARDEX
+    WHERE ES = 'E'
+    AND TIPODOC = 'PEF'
+    '''
+
+    df_entrada_estoque = pd.read_sql(comando, conexao)
+    data['ENTRADA_ESTQ_30'] = pd.to_datetime('today').normalize()
+    data['ENTRADA_ESTQ_60'] = pd.to_datetime('today').normalize()
+    data['ENTRADA_ESTQ_90'] = pd.to_datetime('today').normalize()
+    for index, row in data.iterrows():
+        codid = row['CODID']
+        data_30 = row['ENTRADA_ESTQ_30']
+        data_60 = row['ENTRADA_ESTQ_60']
+        data_90 = row['ENTRADA_ESTQ_90']
+        data_inicio_30 = data_30 - pd.Timedelta(days=30)
+        data_inicio_60 = data_60 - pd.Timedelta(days=60)
+        data_inicio_90 = data_90 - pd.Timedelta(days=90)
+        df_filtered_30 = df_entrada_estoque[(df_entrada_estoque['CODID'] == codid) & (df_entrada_estoque['DATA'] >= data_inicio_30) & (df_entrada_estoque['DATA'] <= data_30)]
+        df_filtered_60 = df_entrada_estoque[(df_entrada_estoque['CODID'] == codid) & (df_entrada_estoque['DATA'] >= data_inicio_60) & (df_entrada_estoque['DATA'] <= data_60)]
+        df_filtered_90 = df_entrada_estoque[(df_entrada_estoque['CODID'] == codid) & (df_entrada_estoque['DATA'] >= data_inicio_90) & (df_entrada_estoque['DATA'] <= data_90)]
+        data.loc[index, 'ENTRADA_ESTQ_30'] = df_filtered_30['QUANT'].sum()
+        data.loc[index, 'ENTRADA_ESTQ_60'] = df_filtered_60['QUANT'].sum()
+        data.loc[index, 'ENTRADA_ESTQ_90'] = df_filtered_90['QUANT'].sum()
+
+    return data
+
 data_h_aux = data_h[(data_h['QUANT'] > 1)]
 data_h_aux['QUANT'] = data_h_aux['QUANT'] - 1
 for i in range(len(data_h_aux)):
