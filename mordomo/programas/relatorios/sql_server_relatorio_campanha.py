@@ -30,6 +30,12 @@ def carrega_tabela_produtos(conexao):
     ORDER BY CODID
     '''
     data = pd.read_sql(comando, conexao)
+    
+    # Limpando valores com espaços vazios
+    data['COD_INTERNO'] = data['COD_INTERNO'].str.strip()
+    data['DESCRICAO'] = data['DESCRICAO'].str.strip()
+    data['ORIGEM_NOME'] = data['ORIGEM_NOME'].str.strip()
+    data['SKU'] = data['SKU'].str.strip()
 
     return data
 
@@ -48,6 +54,11 @@ def carrega_tabela_pedidos(conexao):
     data_h = pd.read_sql(comando, conexao)
     data_h.drop('PEDIDO', axis=1, inplace=True)
     
+    # Limpando valores com espaços vazios
+    data_h['COD_INTERNO'] = data_h['COD_INTERNO'].str.strip()
+    data_h['SKU'] = data_h['SKU'].str.strip()
+    data_h['SKU2'] = data_h['SKU2'].str.strip()
+    
     return data_h
 
 def manipula_colunas_sku_e_sku_variacao(data):
@@ -61,7 +72,6 @@ def manipula_colunas_sku_e_sku_variacao(data):
 
     # Passa para a coluna SKU_MESCLADO os valores de SKUVARIACAO_MASTER (ML, Shopee, B2W, Tray, Decathlon)
     data.loc[data['ORIGEM_ID'].isin([8,9,10,11,12,13,17,18,19,32,33]), 'SKU_MESCLADO'] = data['SKUVARIACAO_MASTER']
-    
     return data
 
 def adiciona_coluna_pai(data, conexao):
@@ -206,18 +216,17 @@ def groupby_vendas_marketplace(data_h, data_completo, date_7, date_14, date_30, 
     # Fazendo o Groupby de 90 dias
     data_h_90_mktp = data_h[(data_h['DATA'] >= date_90)]
     data_h_90_mktp.loc[:, 'SKU_MESCLADO'] = data_h_90_mktp.apply(lambda x: x['SKU'] if pd.isnull(x['SKU2']) else x['SKU2'], axis=1).copy()
-    data_h_90_mktp.to_excel('test2.xlsx', index=False)
     data_h_90_mktp =  data_h_90_mktp.drop(['SKU', 'SKU2', 'DATA'], axis=1)
     data_h_90_mktp = data_h_90_mktp.groupby(['SKU_MESCLADO','ORIGEM_ID']).count()
     data_h_90_mktp = data_h_90_mktp.reset_index()
     data_h_90_mktp.drop(columns=['COD_INTERNO'], axis=1, inplace=True)
 
     # Fazendo Merge
-    data_completo = pd.merge(data_completo, data_h_7_mktp[['ORIGEM_ID', 'SKU_MESCLADO', 'QUANT']], on=['SKU_MESCLADO', 'ORIGEM_ID'], how='left')
-    data_completo = pd.merge(data_completo, data_h_14_mktp[['ORIGEM_ID', 'SKU_MESCLADO', 'QUANT']], on=['SKU_MESCLADO', 'ORIGEM_ID'], how='left')
+    data_completo = pd.merge(data_completo, data_h_7_mktp, on=['SKU_MESCLADO', 'ORIGEM_ID'], how='left')
+    data_completo = pd.merge(data_completo, data_h_14_mktp, on=['SKU_MESCLADO', 'ORIGEM_ID'], how='left')
     data_completo.rename(columns = {'QUANT_x':'7_MKTP', 'QUANT_y':'14_MKTP'}, inplace=True)
-    data_completo = pd.merge(data_completo, data_h_30_mktp[['ORIGEM_ID', 'SKU_MESCLADO', 'QUANT']], on=['SKU_MESCLADO', 'ORIGEM_ID'], how='left')
-    data_completo = pd.merge(data_completo, data_h_90_mktp[['ORIGEM_ID', 'SKU_MESCLADO', 'QUANT']], on=['SKU_MESCLADO', 'ORIGEM_ID'], how='left')
+    data_completo = pd.merge(data_completo, data_h_30_mktp, on=['SKU_MESCLADO', 'ORIGEM_ID'], how='left')
+    data_completo = pd.merge(data_completo, data_h_90_mktp, on=['SKU_MESCLADO', 'ORIGEM_ID'], how='left')
     data_completo.rename(columns = {'QUANT_x':'30_MKTP', 'QUANT_y':'90_MKTP'}, inplace=True)
 
     # Preenchendo valores nan por 0
@@ -252,15 +261,6 @@ def obtem_colunas_filtradas(data_completo, data):
     print('Colunas filtradas (não excluidas, apenas filtradas)')
     print(diff_cols1)
 
-def remove_espacos_valores(data):
-    # Removendo espaços em branco
-    data['COD_INTERNO'] = data['COD_INTERNO'].str.strip()
-    data['DESCRICAO'] = data['DESCRICAO'].str.strip()
-    data['ORIGEM_NOME'] = data['ORIGEM_NOME'].str.strip()
-    data['SKU'] = data['SKU'].str.strip()
-
-    return data
-    
 def dataframe_para_excel(data):
     data.to_excel(f'C:\workspace\cadastro-aton\mordomo\programas\excel\Planilha-de-Campanha-{dia_atual}-{horal_atual}.xlsx', index=False, encoding='utf-8')
     print(Fore.GREEN,'\nRelatório Gerado!')
@@ -319,5 +319,4 @@ if __name__ == '__main__':
     data_completo = adiciona_horario(data_completo)
     data = filtra_colunas(data_completo)
     obtem_colunas_filtradas(data_completo, data)
-    data = remove_espacos_valores(data)
     dataframe_para_excel(data)
