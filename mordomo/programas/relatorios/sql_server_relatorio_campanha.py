@@ -64,7 +64,7 @@ def manipula_colunas_sku_e_sku_variacao(data):
     
     return data
 
-def adiciona_coluna_pai(conexao):
+def adiciona_coluna_pai(data, conexao):
     # Juntar código pai
     comando = '''
     SELECT COD_INTERNO AS PAI_COD_INTERNO, CODID AS PAI FROM MATERIAIS
@@ -76,7 +76,7 @@ def adiciona_coluna_pai(conexao):
     
     return data
 
-def adiciona_categoria_pai_magalu(conexao):
+def adiciona_categoria_pai_magalu(data, conexao):
     # Juntar categoria pai da Magalu
     comando = '''
     SELECT A.IDNIVEL01, B.IDNIVEL02, A.API, A.DESCRICAON01, B.DESCRICAON02
@@ -92,7 +92,7 @@ def adiciona_categoria_pai_magalu(conexao):
     
     return data
 
-def adiciona_entrada_estoque(conexao):
+def adiciona_entrada_estoque(data, conexao):
     
     # Junta Entrada de Estoque (30, 60, 90)
     comando = '''
@@ -130,7 +130,7 @@ def adiciona_pedidos(data_h):
     # ficando 3 linhas do mesmo pedido.
     # Servirá para fazer contabilização de pedidos. 
     data_h_aux = data_h[(data_h['QUANT'] > 1)]
-    data_h_aux['QUANT'] = data_h_aux['QUANT'] - 1
+    data_h_aux.loc[:, 'QUANT'] -= 1
     for i in range(len(data_h_aux)):
         cod_interno = data_h_aux['COD_INTERNO'].iloc[i]
         quantidade = int(data_h_aux['QUANT'].iloc[i])
@@ -181,33 +181,33 @@ def groupby_vendas_marketplace(data_h, data_completo, date_7, date_14, date_30, 
     # VENDAS MARKETPLACE (SKU ANÚNCIO)
     # Fazendo o Groupby de 7 dias
     data_h_7_mktp = data_h[(data_h['DATA'] >= date_7)]
-    data_h_7_mktp['SKU_MESCLADO'] = data_h_7_mktp.apply(lambda x: x['SKU'] if pd.isnull(x['SKU2']) else x['SKU2'], axis=1)
-    data_h_7_mktp.drop(['SKU', 'SKU2', 'DATA'], axis=1, inplace=True)
+    data_h_7_mktp.loc[:, 'SKU_MESCLADO'] = data_h_7_mktp.apply(lambda x: x['SKU'] if pd.isnull(x['SKU2']) else x['SKU2'], axis=1).copy()
+    data_h_7_mktp = data_h_7_mktp.drop(['SKU', 'SKU2', 'DATA'], axis=1)
     data_h_7_mktp = data_h_7_mktp.groupby(['SKU_MESCLADO','ORIGEM_ID']).count()
     data_h_7_mktp = data_h_7_mktp.reset_index()
     data_h_7_mktp.drop(columns=['COD_INTERNO'], axis=1, inplace=True)
 
     # Fazendo o Groupby de 14 dias
     data_h_14_mktp = data_h[(data_h['DATA'] >= date_14)]
-    data_h_14_mktp['SKU_MESCLADO'] = data_h_14_mktp.apply(lambda x: x['SKU'] if pd.isnull(x['SKU2']) else x['SKU2'], axis=1)
-    data_h_14_mktp.drop(['SKU', 'SKU2', 'DATA'], axis=1, inplace=True)
+    data_h_14_mktp.loc[:, 'SKU_MESCLADO'] = data_h_14_mktp.apply(lambda x: x['SKU'] if pd.isnull(x['SKU2']) else x['SKU2'], axis=1).copy()
+    data_h_14_mktp = data_h_14_mktp.drop(['SKU', 'SKU2', 'DATA'], axis=1)
     data_h_14_mktp = data_h_14_mktp.groupby(['SKU_MESCLADO','ORIGEM_ID']).count()
     data_h_14_mktp = data_h_14_mktp.reset_index()
     data_h_14_mktp.drop(columns=['COD_INTERNO'], axis=1, inplace=True)
 
     # Fazendo o Groupby de 30 dias
     data_h_30_mktp = data_h[(data_h['DATA'] >= date_30)]
-    data_h_30_mktp['SKU_MESCLADO'] = data_h_30_mktp.apply(lambda x: x['SKU'] if pd.isnull(x['SKU2']) else x['SKU2'], axis=1)
-    data_h_30_mktp.drop(['SKU', 'SKU2', 'DATA'], axis=1, inplace=True)
+    data_h_30_mktp.loc[:, 'SKU_MESCLADO'] = data_h_30_mktp.apply(lambda x: x['SKU'] if pd.isnull(x['SKU2']) else x['SKU2'], axis=1).copy()
+    data_h_30_mktp = data_h_30_mktp.drop(['SKU', 'SKU2', 'DATA'], axis=1)
     data_h_30_mktp = data_h_30_mktp.groupby(['SKU_MESCLADO','ORIGEM_ID']).count()
     data_h_30_mktp = data_h_30_mktp.reset_index()
-    data_h_30_mktp.drop(columns=['COD_INTERNO'], axis=1, inplace=True)
+    data_h_30_mktp = data_h_30_mktp.drop(columns=['COD_INTERNO'], axis=1)
 
     # Fazendo o Groupby de 90 dias
     data_h_90_mktp = data_h[(data_h['DATA'] >= date_90)]
-    data_h_90_mktp['SKU_MESCLADO'] = data_h_90_mktp.apply(lambda x: x['SKU'] if pd.isnull(x['SKU2']) else x['SKU2'], axis=1)
+    data_h_90_mktp.loc[:, 'SKU_MESCLADO'] = data_h_90_mktp.apply(lambda x: x['SKU'] if pd.isnull(x['SKU2']) else x['SKU2'], axis=1).copy()
     data_h_90_mktp.to_excel('test2.xlsx', index=False)
-    data_h_90_mktp.drop(['SKU', 'SKU2', 'DATA'], axis=1, inplace=True)
+    data_h_90_mktp =  data_h_90_mktp.drop(['SKU', 'SKU2', 'DATA'], axis=1)
     data_h_90_mktp = data_h_90_mktp.groupby(['SKU_MESCLADO','ORIGEM_ID']).count()
     data_h_90_mktp = data_h_90_mktp.reset_index()
     data_h_90_mktp.drop(columns=['COD_INTERNO'], axis=1, inplace=True)
@@ -231,6 +231,8 @@ def groupby_vendas_marketplace(data_h, data_completo, date_7, date_14, date_30, 
 def adiciona_horario(data_completo):
     # Colocando horário
     data_completo['HORARIO'] = datetime.now()
+    
+    return data_completo
 
 def filtra_colunas(data_completo):
     data = data_completo
@@ -264,8 +266,11 @@ def dataframe_para_excel(data):
     print(Fore.GREEN,'\nRelatório Gerado!')
 
 if __name__ == '__main__':
-    # Limpanod tela
+    # Limpando tela
     os.system('cls')
+    
+    # Filtrando Warnings
+    warnings.filterwarnings('ignore')
     
     # Banco de Dados
     env_path = Path('.') / 'C:\workspace\cadastro-aton\mordomo\programas\.env-sql'
@@ -303,18 +308,16 @@ if __name__ == '__main__':
 
     data = carrega_tabela_produtos(conexao)
     data_h = carrega_tabela_pedidos(conexao)
-    manipula_colunas_sku_e_sku_variacao()
-    adiciona_coluna_pai()
-    adiciona_categoria_pai_magalu()
-    adiciona_entrada_estoque()
-    adiciona_pedidos()
-    manipula_sku_dafiti_pedidos()
-    groupby_vendas_aton()
-    groupby_vendas_marketplace()
-    adiciona_horario()
-    filtra_colunas()
-    obtem_colunas_filtradas()
-    remove_espacos_valores()
-    dataframe_para_excel()
-    
-    
+    data = manipula_colunas_sku_e_sku_variacao(data)
+    data = adiciona_coluna_pai(data, conexao)
+    data = adiciona_categoria_pai_magalu(data, conexao)
+    data = adiciona_entrada_estoque(data, conexao)
+    adiciona_pedidos(data_h)
+    data_h = manipula_sku_dafiti_pedidos(data_h)
+    data_completo = groupby_vendas_aton(data_h, data, date_30, date_90)
+    data_completo = groupby_vendas_marketplace(data_h, data_completo, date_7, date_14, date_30, date_90)
+    data_completo = adiciona_horario(data_completo)
+    data = filtra_colunas(data_completo)
+    obtem_colunas_filtradas(data_completo, data)
+    data = remove_espacos_valores(data)
+    dataframe_para_excel(data)
