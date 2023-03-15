@@ -7,38 +7,6 @@ from datetime import datetime, date, timedelta
 from dotenv import load_dotenv
 from colorama import *
 
-def carrega_datas():
-    os.system('cls')
-    today = date.today()
-    dt = date.today()
-    datetime_midnight = datetime.combine(dt, datetime.min.time())
-    date_7 = datetime_midnight - timedelta(7)
-    date_14 = datetime_midnight - timedelta(14)
-    date_30 = datetime_midnight - timedelta(30)
-    date_90 = datetime_midnight - timedelta(90)
-    print('\n7 Dias: ' + str(date_7.strftime("%d-%m-%Y")))
-    print('14 Dias: ' + str(date_14.strftime("%d-%m-%Y")))
-    print('30 Dias: ' + str(date_30.strftime("%d-%m-%Y")))
-    print('90 Dias: ' + str(date_90.strftime("%d-%m-%Y")))
-    print(Fore.YELLOW, '\nCarregando...')
-    
-    return today, date_7, date_14, date_30, date_90
-
-def carrega_banco_de_dados():
-    env_path = Path('.') / 'C:\workspace\cadastro-aton\mordomo\programas\.env-sql'
-    load_dotenv(dotenv_path=env_path)
-    DATABASE = os.environ['DATABASE']
-    UID = os.environ['UID']
-    PWD = os.environ['PWD']
-    dados_conexao = ("Driver={SQL Server};"
-                    "Server=erp.ambarxcall.com.br;"
-                    "Database=" + DATABASE + ";"
-                                            "UID=" + UID + ";"
-                                                            "PWD=" + PWD + ";")
-
-    conexao = pyodbc.connect(dados_conexao)
-    cursor = conexao.cursor()
-    return cursor, conexao
 
 def carrega_tabela_produtos(conexao):
     comando = '''
@@ -82,7 +50,7 @@ def carrega_tabela_pedidos(conexao):
     
     return data_h
 
-def manipula_colunas_sku_e_sku_variacao():
+def manipula_colunas_sku_e_sku_variacao(data):
     # Preenche todos os valores vazios na coluna SKUVARIACAO_MASTER com o valor da mesma linha da coluna SKU
     data['SKUVARIACAO_MASTER'].fillna(data['SKU'], inplace=True)
     linhas_vazias = data.loc[data['SKUVARIACAO_MASTER'] == '']
@@ -155,122 +123,198 @@ def adiciona_entrada_estoque(conexao):
 
     return data
 
-data_h_aux = data_h[(data_h['QUANT'] > 1)]
-data_h_aux['QUANT'] = data_h_aux['QUANT'] - 1
-for i in range(len(data_h_aux)):
-    cod_interno = data_h_aux['COD_INTERNO'].iloc[i]
-    quantidade = int(data_h_aux['QUANT'].iloc[i])
-    sku = data_h_aux['SKU'].iloc[i]
-    sku2 = data_h_aux['SKU2'].iloc[i]
-    origem = data_h_aux['ORIGEM_ID'].iloc[i]
-    data_venda = data_h_aux['DATA'].iloc[i]
-    for j in range(quantidade):
-        row1 = pd.Series([cod_interno, 1, sku, sku2, origem, data_venda], index=data_h.columns)
-        data_h = data_h.append(row1, ignore_index=True)
+def adiciona_pedidos(data_h):
+    # A tabela de pedidos contém a coluna QUANT.
+    # Esse código adiciona uma linha para cada número no QUANT, ex:
+    # Se a linha tem o valor 3 na coluna QUANT, ele vai adicionar mais duas linhas com o mesmo número de pedido, 
+    # ficando 3 linhas do mesmo pedido.
+    # Servirá para fazer contabilização de pedidos. 
+    data_h_aux = data_h[(data_h['QUANT'] > 1)]
+    data_h_aux['QUANT'] = data_h_aux['QUANT'] - 1
+    for i in range(len(data_h_aux)):
+        cod_interno = data_h_aux['COD_INTERNO'].iloc[i]
+        quantidade = int(data_h_aux['QUANT'].iloc[i])
+        sku = data_h_aux['SKU'].iloc[i]
+        sku2 = data_h_aux['SKU2'].iloc[i]
+        origem = data_h_aux['ORIGEM_ID'].iloc[i]
+        data_venda = data_h_aux['DATA'].iloc[i]
+        for j in range(quantidade):
+            row1 = pd.Series([cod_interno, 1, sku, sku2, origem, data_venda], index=data_h.columns)
+            data_h = data_h.append(row1, ignore_index=True)
 
-# Colocando todos valores da coluna SKU2 na coluna SKU da Dafiti
-data_h.loc[data_h['ORIGEM_ID'].isin([5,6,7]), 'SKU'] = data_h['SKU2'].fillna(data_h['SKU'])
+    return data_h
 
-# VENDAS ATON (COD INTERNO)
-# Fazendo o Groupby de 90 e 30 dias
-data_h_30 = data_h[(data_h['DATA'] >= date_30)]
-data_h_30 = data_h_30.groupby('COD_INTERNO').count()
-data_h_30 = data_h_30.reset_index()
-data_h_30.drop(['SKU', 'DATA'], axis=1, inplace=True)
+def manipula_sku_dafiti_pedidos(data_h):
+    # Colocando todos valores da coluna SKU2 na coluna SKU da Dafiti
+    data_h.loc[data_h['ORIGEM_ID'].isin([5,6,7]), 'SKU'] = data_h['SKU2'].fillna(data_h['SKU'])
 
-data_h_90 = data_h[(data_h['DATA'] >= date_90)]
-data_h_90 = data_h_90.groupby('COD_INTERNO').count()
-data_h_90 = data_h_90.reset_index()
-data_h_90.drop(['SKU', 'DATA'], axis=1, inplace=True)
+    return data_h
 
-# Fazendo merge
-data_completo = pd.merge(data, data_h_30, on=['COD_INTERNO'], how='left')
-data_completo = pd.merge(data_completo, data_h_90, on=['COD_INTERNO'], how='left')
+def groupby_vendas_aton(data_h, data, date_30, date_90):
+    # VENDAS ATON (COD INTERNO)
+    # Fazendo o Groupby de 90 e 30 dias
+    data_h_30 = data_h[(data_h['DATA'] >= date_30)]
+    data_h_30 = data_h_30.groupby('COD_INTERNO').count()
+    data_h_30 = data_h_30.reset_index()
+    data_h_30.drop(['SKU', 'DATA'], axis=1, inplace=True)
 
-# Renomeando colunas
-data_completo.drop(columns=['ORIGEM_ID'], axis=1, inplace=True)
-data_completo = data_completo.rename(columns={'QUANT_x': '30_ATON', 'QUANT_y': '90_ATON', 'VLR_SITE1': 'PRECO_DE', 'VLR_SITE2': 'PRECO_POR', 'ORIGEM_ID_x':'ORIGEM_ID'})
+    data_h_90 = data_h[(data_h['DATA'] >= date_90)]
+    data_h_90 = data_h_90.groupby('COD_INTERNO').count()
+    data_h_90 = data_h_90.reset_index()
+    data_h_90.drop(['SKU', 'DATA'], axis=1, inplace=True)
 
-# Colocando valor Zero para aqueles produtos Aton que não tiveram vendas
-data_completo['30_ATON'].fillna(0, inplace=True)
-data_completo['90_ATON'].fillna(0, inplace=True)
+    # Fazendo merge
+    data_completo = pd.merge(data, data_h_30, on=['COD_INTERNO'], how='left')
+    data_completo = pd.merge(data_completo, data_h_90, on=['COD_INTERNO'], how='left')
 
-# Colocando horário
-data_completo['HORARIO'] = datetime.now()
+    # Renomeando colunas
+    data_completo.drop(columns=['ORIGEM_ID'], axis=1, inplace=True)
+    data_completo = data_completo.rename(columns={'QUANT_x': '30_ATON', 'QUANT_y': '90_ATON', 'VLR_SITE1': 'PRECO_DE', 'VLR_SITE2': 'PRECO_POR', 'ORIGEM_ID_x':'ORIGEM_ID'})
 
-# VENDAS MARKETPLACE (SKU ANÚNCIO)
-# Fazendo o Groupby de 7 dias
-data_h_7_mktp = data_h[(data_h['DATA'] >= date_7)]
-data_h_7_mktp['SKU_MESCLADO'] = data_h_7_mktp.apply(lambda x: x['SKU'] if pd.isnull(x['SKU2']) else x['SKU2'], axis=1)
-data_h_7_mktp.drop(['SKU', 'SKU2', 'DATA'], axis=1, inplace=True)
-data_h_7_mktp = data_h_7_mktp.groupby(['SKU_MESCLADO','ORIGEM_ID']).count()
-data_h_7_mktp = data_h_7_mktp.reset_index()
-data_h_7_mktp.drop(columns=['COD_INTERNO'], axis=1, inplace=True)
+    # Colocando valor Zero para aqueles produtos Aton que não tiveram vendas
+    data_completo['30_ATON'].fillna(0, inplace=True)
+    data_completo['90_ATON'].fillna(0, inplace=True)
+    
+    return data_completo
 
-# Fazendo o Groupby de 14 dias
-data_h_14_mktp = data_h[(data_h['DATA'] >= date_14)]
-data_h_14_mktp['SKU_MESCLADO'] = data_h_14_mktp.apply(lambda x: x['SKU'] if pd.isnull(x['SKU2']) else x['SKU2'], axis=1)
-data_h_14_mktp.drop(['SKU', 'SKU2', 'DATA'], axis=1, inplace=True)
-data_h_14_mktp = data_h_14_mktp.groupby(['SKU_MESCLADO','ORIGEM_ID']).count()
-data_h_14_mktp = data_h_14_mktp.reset_index()
-data_h_14_mktp.drop(columns=['COD_INTERNO'], axis=1, inplace=True)
+def groupby_vendas_marketplace(data_h, data_completo, date_7, date_14, date_30, date_90):
+    # VENDAS MARKETPLACE (SKU ANÚNCIO)
+    # Fazendo o Groupby de 7 dias
+    data_h_7_mktp = data_h[(data_h['DATA'] >= date_7)]
+    data_h_7_mktp['SKU_MESCLADO'] = data_h_7_mktp.apply(lambda x: x['SKU'] if pd.isnull(x['SKU2']) else x['SKU2'], axis=1)
+    data_h_7_mktp.drop(['SKU', 'SKU2', 'DATA'], axis=1, inplace=True)
+    data_h_7_mktp = data_h_7_mktp.groupby(['SKU_MESCLADO','ORIGEM_ID']).count()
+    data_h_7_mktp = data_h_7_mktp.reset_index()
+    data_h_7_mktp.drop(columns=['COD_INTERNO'], axis=1, inplace=True)
 
-# Fazendo o Groupby de 30 dias
-data_h_30_mktp = data_h[(data_h['DATA'] >= date_30)]
-data_h_30_mktp['SKU_MESCLADO'] = data_h_30_mktp.apply(lambda x: x['SKU'] if pd.isnull(x['SKU2']) else x['SKU2'], axis=1)
-data_h_30_mktp.drop(['SKU', 'SKU2', 'DATA'], axis=1, inplace=True)
-data_h_30_mktp = data_h_30_mktp.groupby(['SKU_MESCLADO','ORIGEM_ID']).count()
-data_h_30_mktp = data_h_30_mktp.reset_index()
-data_h_30_mktp.drop(columns=['COD_INTERNO'], axis=1, inplace=True)
+    # Fazendo o Groupby de 14 dias
+    data_h_14_mktp = data_h[(data_h['DATA'] >= date_14)]
+    data_h_14_mktp['SKU_MESCLADO'] = data_h_14_mktp.apply(lambda x: x['SKU'] if pd.isnull(x['SKU2']) else x['SKU2'], axis=1)
+    data_h_14_mktp.drop(['SKU', 'SKU2', 'DATA'], axis=1, inplace=True)
+    data_h_14_mktp = data_h_14_mktp.groupby(['SKU_MESCLADO','ORIGEM_ID']).count()
+    data_h_14_mktp = data_h_14_mktp.reset_index()
+    data_h_14_mktp.drop(columns=['COD_INTERNO'], axis=1, inplace=True)
 
-# Fazendo o Groupby de 90 dias
-data_h_90_mktp = data_h[(data_h['DATA'] >= date_90)]
-data_h_90_mktp['SKU_MESCLADO'] = data_h_90_mktp.apply(lambda x: x['SKU'] if pd.isnull(x['SKU2']) else x['SKU2'], axis=1)
-data_h_90_mktp.to_excel('test2.xlsx', index=False)
-data_h_90_mktp.drop(['SKU', 'SKU2', 'DATA'], axis=1, inplace=True)
-data_h_90_mktp = data_h_90_mktp.groupby(['SKU_MESCLADO','ORIGEM_ID']).count()
-data_h_90_mktp = data_h_90_mktp.reset_index()
-data_h_90_mktp.drop(columns=['COD_INTERNO'], axis=1, inplace=True)
+    # Fazendo o Groupby de 30 dias
+    data_h_30_mktp = data_h[(data_h['DATA'] >= date_30)]
+    data_h_30_mktp['SKU_MESCLADO'] = data_h_30_mktp.apply(lambda x: x['SKU'] if pd.isnull(x['SKU2']) else x['SKU2'], axis=1)
+    data_h_30_mktp.drop(['SKU', 'SKU2', 'DATA'], axis=1, inplace=True)
+    data_h_30_mktp = data_h_30_mktp.groupby(['SKU_MESCLADO','ORIGEM_ID']).count()
+    data_h_30_mktp = data_h_30_mktp.reset_index()
+    data_h_30_mktp.drop(columns=['COD_INTERNO'], axis=1, inplace=True)
 
-# Fazendo Merge
-data_completo = pd.merge(data_completo, data_h_7_mktp[['ORIGEM_ID', 'SKU_MESCLADO', 'QUANT']], on=['SKU_MESCLADO', 'ORIGEM_ID'], how='left')
-data_completo = pd.merge(data_completo, data_h_14_mktp[['ORIGEM_ID', 'SKU_MESCLADO', 'QUANT']], on=['SKU_MESCLADO', 'ORIGEM_ID'], how='left')
-data_completo.rename(columns = {'QUANT_x':'7_MKTP', 'QUANT_y':'14_MKTP'}, inplace=True)
-data_completo = pd.merge(data_completo, data_h_30_mktp[['ORIGEM_ID', 'SKU_MESCLADO', 'QUANT']], on=['SKU_MESCLADO', 'ORIGEM_ID'], how='left')
-data_completo = pd.merge(data_completo, data_h_90_mktp[['ORIGEM_ID', 'SKU_MESCLADO', 'QUANT']], on=['SKU_MESCLADO', 'ORIGEM_ID'], how='left')
-data_completo.rename(columns = {'QUANT_x':'30_MKTP', 'QUANT_y':'90_MKTP'}, inplace=True)
+    # Fazendo o Groupby de 90 dias
+    data_h_90_mktp = data_h[(data_h['DATA'] >= date_90)]
+    data_h_90_mktp['SKU_MESCLADO'] = data_h_90_mktp.apply(lambda x: x['SKU'] if pd.isnull(x['SKU2']) else x['SKU2'], axis=1)
+    data_h_90_mktp.to_excel('test2.xlsx', index=False)
+    data_h_90_mktp.drop(['SKU', 'SKU2', 'DATA'], axis=1, inplace=True)
+    data_h_90_mktp = data_h_90_mktp.groupby(['SKU_MESCLADO','ORIGEM_ID']).count()
+    data_h_90_mktp = data_h_90_mktp.reset_index()
+    data_h_90_mktp.drop(columns=['COD_INTERNO'], axis=1, inplace=True)
 
-# Preenchendo valores nan por 0
-data_completo['7_MKTP'].fillna(0, inplace=True)
-data_completo['14_MKTP'].fillna(0, inplace=True)
-data_completo['30_MKTP'].fillna(0, inplace=True)
-data_completo['90_MKTP'].fillna(0, inplace=True)
+    # Fazendo Merge
+    data_completo = pd.merge(data_completo, data_h_7_mktp[['ORIGEM_ID', 'SKU_MESCLADO', 'QUANT']], on=['SKU_MESCLADO', 'ORIGEM_ID'], how='left')
+    data_completo = pd.merge(data_completo, data_h_14_mktp[['ORIGEM_ID', 'SKU_MESCLADO', 'QUANT']], on=['SKU_MESCLADO', 'ORIGEM_ID'], how='left')
+    data_completo.rename(columns = {'QUANT_x':'7_MKTP', 'QUANT_y':'14_MKTP'}, inplace=True)
+    data_completo = pd.merge(data_completo, data_h_30_mktp[['ORIGEM_ID', 'SKU_MESCLADO', 'QUANT']], on=['SKU_MESCLADO', 'ORIGEM_ID'], how='left')
+    data_completo = pd.merge(data_completo, data_h_90_mktp[['ORIGEM_ID', 'SKU_MESCLADO', 'QUANT']], on=['SKU_MESCLADO', 'ORIGEM_ID'], how='left')
+    data_completo.rename(columns = {'QUANT_x':'30_MKTP', 'QUANT_y':'90_MKTP'}, inplace=True)
 
-data = data_completo
-data = data_completo[['CODID', 'COD_INTERNO', 'PAI_COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
-                      'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO', 'PESO',
-                      'ESTOQUE', 'ENTRADA_ESTQ_30', 'ENTRADA_ESTQ_60', 'ENTRADA_ESTQ_90','30_ATON', '90_ATON', '7_MKTP','14_MKTP','30_MKTP','90_MKTP','ORIGEM_NOME', 'CATEGORIAS', 'PRODUTO_TIPO',
-                      'COMPRIMENTO', 'LARGURA', 'ALTURA', 'TIPO_ANUNCIO', 'CATEG_ID', 'CATEG_NOME',
-                      'PRECO_DE', 'PRECO_POR', 'HORARIO', 'ORIGEM_ID', 'SKU_MESCLADO']]
+    # Preenchendo valores nan por 0
+    data_completo['7_MKTP'].fillna(0, inplace=True)
+    data_completo['14_MKTP'].fillna(0, inplace=True)
+    data_completo['30_MKTP'].fillna(0, inplace=True)
+    data_completo['90_MKTP'].fillna(0, inplace=True)
+    
+    return data_completo
 
-# Obtenha os nomes das colunas de cada DataFrame como conjuntos
-cols1 = set(data_completo.columns)
-cols2 = set(data.columns)
-diff_cols1 = cols1 - cols2
-print('Colunas filtradas (não excluidas, apenas filtradas)')
-print(diff_cols1)
+def adiciona_horario(data_completo):
+    # Colocando horário
+    data_completo['HORARIO'] = datetime.now()
 
+def filtra_colunas(data_completo):
+    data = data_completo
+    data = data_completo[['CODID', 'COD_INTERNO', 'PAI_COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
+                        'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO', 'PESO',
+                        'ESTOQUE', 'ENTRADA_ESTQ_30', 'ENTRADA_ESTQ_60', 'ENTRADA_ESTQ_90','30_ATON', '90_ATON', '7_MKTP','14_MKTP','30_MKTP','90_MKTP','ORIGEM_NOME', 'CATEGORIAS', 'PRODUTO_TIPO',
+                        'COMPRIMENTO', 'LARGURA', 'ALTURA', 'TIPO_ANUNCIO', 'CATEG_ID', 'CATEG_NOME',
+                        'PRECO_DE', 'PRECO_POR', 'HORARIO', 'ORIGEM_ID', 'SKU_MESCLADO']]
 
-# Removendo espaços em branco
-data['COD_INTERNO'] = data['COD_INTERNO'].str.strip()
-data['DESCRICAO'] = data['DESCRICAO'].str.strip()
-data['ORIGEM_NOME'] = data['ORIGEM_NOME'].str.strip()
-data['SKU'] = data['SKU'].str.strip()
+    return data
 
-dia_atual = str(today.strftime("%Y-%m-%d"))
-agora_hora = datetime.now()
-horal_atual = str(agora_hora.strftime("%H:%M:%S")).replace(':','-')
+def obtem_colunas_filtradas(data_completo, data):
+    # Obtenha os nomes das colunas de cada DataFrame como conjuntos
+    cols1 = set(data_completo.columns)
+    cols2 = set(data.columns)
+    diff_cols1 = cols1 - cols2
+    print('Colunas filtradas (não excluidas, apenas filtradas)')
+    print(diff_cols1)
 
-# data.to_excel('C:\workspace\cadastro-aton\mordomo\programas\excel\Planilha-de-Campanha-'+ str(d1) + '.xls', index=False)
-data.to_excel(f'C:\workspace\cadastro-aton\mordomo\programas\excel\Planilha-de-Campanha-{dia_atual}-{horal_atual}.xlsx', index=False, encoding='utf-8')
-print(Fore.GREEN,'\nRelatório Gerado!')
+def remove_espacos_valores(data):
+    # Removendo espaços em branco
+    data['COD_INTERNO'] = data['COD_INTERNO'].str.strip()
+    data['DESCRICAO'] = data['DESCRICAO'].str.strip()
+    data['ORIGEM_NOME'] = data['ORIGEM_NOME'].str.strip()
+    data['SKU'] = data['SKU'].str.strip()
+
+    return data
+    
+def dataframe_para_excel(data):
+    data.to_excel(f'C:\workspace\cadastro-aton\mordomo\programas\excel\Planilha-de-Campanha-{dia_atual}-{horal_atual}.xlsx', index=False, encoding='utf-8')
+    print(Fore.GREEN,'\nRelatório Gerado!')
+
+if __name__ == '__main__':
+    # Limpanod tela
+    os.system('cls')
+    
+    # Banco de Dados
+    env_path = Path('.') / 'C:\workspace\cadastro-aton\mordomo\programas\.env-sql'
+    load_dotenv(dotenv_path=env_path)
+    DATABASE = os.environ['DATABASE']
+    UID = os.environ['UID']
+    PWD = os.environ['PWD']
+    dados_conexao = ("Driver={SQL Server};"
+                    "Server=erp.ambarxcall.com.br;"
+                    "Database=" + DATABASE + ";"
+                    "UID=" + UID + ";"
+                    "PWD=" + PWD + ";")
+
+    conexao = pyodbc.connect(dados_conexao)
+    cursor = conexao.cursor()
+    
+    # Horário
+    today = date.today()
+    dt = date.today()
+    datetime_midnight = datetime.combine(dt, datetime.min.time())
+    date_7 = datetime_midnight - timedelta(7)
+    date_14 = datetime_midnight - timedelta(14)
+    date_30 = datetime_midnight - timedelta(30)
+    date_90 = datetime_midnight - timedelta(90)
+    dia_atual = str(today.strftime("%Y-%m-%d"))
+    agora_hora = datetime.now()
+    horal_atual = str(agora_hora.strftime("%H:%M:%S")).replace(':','-')
+    
+    print('\n7 Dias: ' + str(date_7.strftime("%d-%m-%Y")))
+    print('14 Dias: ' + str(date_14.strftime("%d-%m-%Y")))
+    print('30 Dias: ' + str(date_30.strftime("%d-%m-%Y")))
+    print('90 Dias: ' + str(date_90.strftime("%d-%m-%Y")))
+    
+    print(Fore.YELLOW, '\nCarregando...')
+
+    data = carrega_tabela_produtos(conexao)
+    data_h = carrega_tabela_pedidos(conexao)
+    manipula_colunas_sku_e_sku_variacao()
+    adiciona_coluna_pai()
+    adiciona_categoria_pai_magalu()
+    adiciona_entrada_estoque()
+    adiciona_pedidos()
+    manipula_sku_dafiti_pedidos()
+    groupby_vendas_aton()
+    groupby_vendas_marketplace()
+    adiciona_horario()
+    filtra_colunas()
+    obtem_colunas_filtradas()
+    remove_espacos_valores()
+    dataframe_para_excel()
+    
+    
