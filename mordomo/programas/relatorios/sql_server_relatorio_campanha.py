@@ -249,7 +249,7 @@ def filtra_colunas(data_completo):
                         'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO', 'PESO',
                         'ESTOQUE', 'ENTRADA_ESTQ_30', 'ENTRADA_ESTQ_60', 'ENTRADA_ESTQ_90','30_ATON', '90_ATON', '7_MKTP','14_MKTP','30_MKTP','90_MKTP','ORIGEM_NOME', 'CATEGORIAS', 'PRODUTO_TIPO',
                         'COMPRIMENTO', 'LARGURA', 'ALTURA', 'TIPO_ANUNCIO', 'CATEG_ID', 'CATEG_NOME',
-                        'PRECO_DE', 'PRECO_POR', 'HORARIO', 'ORIGEM_ID', 'SKU_MESCLADO']]
+                        'PRECO_DE', 'PRECO_POR', 'HORARIO', 'ORIGEM_ID']]
 
     return data
 
@@ -312,7 +312,7 @@ if __name__ == '__main__':
     data = adiciona_coluna_pai(data, conexao)
     data = adiciona_categoria_pai_magalu(data, conexao)
     data = adiciona_entrada_estoque(data, conexao)
-    adiciona_pedidos(data_h)
+    data_h = adiciona_pedidos(data_h)
     data_h = manipula_sku_dafiti_pedidos(data_h)
     data_completo = groupby_vendas_aton(data_h, data, date_30, date_90)
     data_completo = groupby_vendas_marketplace(data_h, data_completo, date_7, date_14, date_30, date_90)
