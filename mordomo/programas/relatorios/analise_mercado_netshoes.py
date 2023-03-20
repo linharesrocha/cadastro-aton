@@ -13,8 +13,18 @@ from openpyxl.styles import Alignment
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl.drawing.image import Image
 from collections import Counter
+import shutil
 
 os.system('cls')
+
+# Removendo path que da erro no win32
+user_name_system = str(os.getlogin())
+delete_dir_path = f'C:\\Users\\{user_name_system}\\AppData\\Local\\Temp\\gen_py'
+try:
+    shutil.rmtree(delete_dir_path)
+except OSError as error:
+    print(error)
+
 pesquisa = input('\nPesquisa Netshoes: ')
 
 url_mais_populares = f'https://www.netshoes.com.br/busca?nsCat=Natural&q={pesquisa}'
@@ -314,7 +324,7 @@ if dados_ws.max_row > 1:
 
     # cria uma tabela com as palavras e contagens
     tabela = [('Palavra', 'Quantidade')] + [(palavra, contagem) for palavra, contagem in palavras.items()]
-    
+    print(type(tabela))
     # ordena a tabela em ordem decrescente (do maior para o menor)
     tabela.sort(key=lambda x: x[1], reverse=True)
 
