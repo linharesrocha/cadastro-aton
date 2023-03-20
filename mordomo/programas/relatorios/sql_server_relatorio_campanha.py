@@ -48,7 +48,7 @@ def carrega_tabela_pedidos(conexao):
     ON A.PEDIDO = B.PEDIDO
     WHERE B.TIPO = 'PEDIDO'
     AND B.POSICAO != 'CANCELADO'
-'''
+    '''
 
     # Preenchendo pedidos
     data_h = pd.read_sql(comando, conexao)
@@ -71,7 +71,7 @@ def manipula_colunas_sku_e_sku_variacao(data):
     data['SKU_MESCLADO'] = data['SKU']
 
     # Passa para a coluna SKU_MESCLADO os valores de SKUVARIACAO_MASTER (ML, Shopee, B2W, Tray, Decathlon)
-    data.loc[data['ORIGEM_ID'].isin([8,9,10,11,12,13,17,18,19,32,33]), 'SKU_MESCLADO'] = data['SKUVARIACAO_MASTER']
+    data.loc[data['ORIGEM_ID'].isin([8,9,10]), 'SKU_MESCLADO'] = data['SKUVARIACAO_MASTER']
     return data
 
 def adiciona_coluna_pai(data, conexao):
@@ -154,10 +154,13 @@ def adiciona_pedidos(data_h):
 
     return data_h
 
-def manipula_sku_dafiti_pedidos(data_h):
+def manipula_sku_pedidos(data_h):
     # Colocando todos valores da coluna SKU2 na coluna SKU da Dafiti
     data_h.loc[data_h['ORIGEM_ID'].isin([5,6,7]), 'SKU'] = data_h['SKU2'].fillna(data_h['SKU'])
 
+    # Coloca todos valroes da coluna SKU na coluna SK2 do Mercado Livre
+    data_h.loc[data_h['ORIGEM_ID'].isin([8,9,10]), 'SKU2'] = data_h['SKU'].fillna(data_h['SKU2'])
+    
     return data_h
 
 def groupby_vendas_aton(data_h, data, date_30, date_90):
@@ -245,11 +248,11 @@ def adiciona_horario(data_completo):
 
 def filtra_colunas(data_completo):
     data = data_completo
-    data = data_completo[['CODID', 'COD_INTERNO', 'PAI_COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER',
+    data = data_completo[['CODID', 'COD_INTERNO', 'PAI_COD_INTERNO', 'SKU', 'SKUVARIACAO_MASTER', 'SKU_MESCLADO',
                         'PRODMKTP_ID', 'DESCRICAO', 'GRUPO', 'VLR_CUSTO', 'PESO',
                         'ESTOQUE', 'ENTRADA_ESTQ_30', 'ENTRADA_ESTQ_60', 'ENTRADA_ESTQ_90','30_ATON', '90_ATON', '7_MKTP','14_MKTP','30_MKTP','90_MKTP','ORIGEM_NOME', 'CATEGORIAS', 'PRODUTO_TIPO',
                         'COMPRIMENTO', 'LARGURA', 'ALTURA', 'TIPO_ANUNCIO', 'CATEG_ID', 'CATEG_NOME',
-                        'PRECO_DE', 'PRECO_POR', 'HORARIO', 'ORIGEM_ID']]
+                        'PRECO_DE', 'PRECO_POR', 'HORARIO']]
 
     return data
 
@@ -313,7 +316,7 @@ if __name__ == '__main__':
     data = adiciona_categoria_pai_magalu(data, conexao)
     data = adiciona_entrada_estoque(data, conexao)
     data_h = adiciona_pedidos(data_h)
-    data_h = manipula_sku_dafiti_pedidos(data_h)
+    data_h = manipula_sku_pedidos(data_h)
     data_completo = groupby_vendas_aton(data_h, data, date_30, date_90)
     data_completo = groupby_vendas_marketplace(data_h, data_completo, date_7, date_14, date_30, date_90)
     data_completo = adiciona_horario(data_completo)
