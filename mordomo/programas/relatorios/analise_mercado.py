@@ -370,13 +370,13 @@ if __name__ == '__main__':
     while True:
         os.system('cls')
         print('\nMarketplaces\n(1) Netshoes\n(2) Magazine Luiza\n')
-        answer = input('Digite o número do marketplace: ')
+        answer_marketplace = input('Digite o número do marketplace: ')
         os.system('cls')
-        if answer.isdigit():
-            if answer == '1':
+        if answer_marketplace.isdigit():
+            if answer_marketplace == '1':
                 df = netshoes(pesquisa=pesquisa)
                 break
-            elif answer == '2':
+            elif answer_marketplace == '2':
                 print('Magazine Luiza')
                 break
         
