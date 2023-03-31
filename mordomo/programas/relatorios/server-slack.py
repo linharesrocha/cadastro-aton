@@ -50,8 +50,12 @@ while True:
                 dt += datetime.timedelta(seconds=1)
                 new_timestamp_str = str(dt.timestamp())
                 
+                # Envia mensagem de aguarde
+                response = client.chat_postMessage(text='AU AU!', channel=channel_id)
+                
                 # Ativa função
                 planilha_campanha()
+
 
         # Espera 5 segundos antes de buscar novas mensagens
         time.sleep(2)

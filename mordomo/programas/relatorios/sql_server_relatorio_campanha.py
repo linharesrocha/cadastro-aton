@@ -6,6 +6,8 @@ import warnings
 from datetime import datetime, date, timedelta
 from dotenv import load_dotenv
 from colorama import *
+from slack_sdk import WebClient
+from slack_sdk.errors import SlackApiError
 
 
 def carrega_tabela_produtos(conexao):
@@ -265,13 +267,37 @@ def obtem_colunas_filtradas(data_completo, data):
     print(diff_cols1)
 
 def dataframe_para_excel(data):
-    data.to_excel(f'C:\workspace\cadastro-aton\mordomo\programas\excel\Planilha-de-Campanha-{dia_atual}-{horal_atual}.xlsx', index=False, encoding='utf-8')
+    nome_planilha = f'Planilha-de-Campanha-{dia_atual}-{horal_atual}.xlsx'
+    data.to_excel(f'C:\workspace\cadastro-aton\mordomo\programas\excel\{nome_planilha}', index=False, encoding='utf-8')
     print(Fore.GREEN,'\nRelatório Gerado!')
-
-if __name__ == '__main__':
-    # Limpando tela
-    os.system('cls')
     
+    return nome_planilha
+
+def envia_planilha_slack(nome_planilha):
+    file_path = f'C:\workspace\cadastro-aton\mordomo\programas\excel\{nome_planilha}'
+
+    try:
+        # Faça o upload do arquivo para o Slack
+        response = client.files_upload(
+            channels=channel_id,
+            file=file_path
+        )
+        print("Arquivo enviado com sucesso!")
+        
+        # Apagando o arquivo
+        os.remove(file_path)
+    except SlackApiError as e:
+        print("Ocorreu um erro no envio do arquivo: {}".format(e))
+
+if __name__ == '__main__': 
+    load_dotenv()
+
+    SLACK_TOKEN=os.getenv('SLACK_TOKEN')
+
+    # Obtenha o token de acesso do bot da variável de ambiente
+    client = WebClient(token=SLACK_TOKEN)
+    channel_id = 'C045HEE4G7L'
+      
     # Filtrando Warnings
     warnings.filterwarnings('ignore')
     
@@ -322,4 +348,5 @@ if __name__ == '__main__':
     data_completo = adiciona_horario(data_completo)
     data = filtra_colunas(data_completo)
     obtem_colunas_filtradas(data_completo, data)
-    dataframe_para_excel(data)
+    nome_planilha = dataframe_para_excel(data)
+    envia_planilha_slack(nome_planilha)
