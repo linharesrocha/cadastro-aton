@@ -4,6 +4,7 @@ from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 import subprocess
 import os
+from sql_server_relatorio_campanha import start_main
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -14,7 +15,8 @@ SLACK_TOKEN=os.getenv('SLACK_TOKEN')
 client = WebClient(token=SLACK_TOKEN)
 
 # ID do canal que você deseja ouvir
-channel_id = "C045HEE4G7L"
+#channel_id = "C030X3UMR3M" # canal comercial
+channel_id = 'C045HEE4G7L' # canal tendencias test
 
 # Armazena o timestamp da última mensagem que o bot imprimiu
 response = client.conversations_history(channel=channel_id, latest=str(time.time()))
@@ -29,8 +31,12 @@ new_timestamp_str = str(dt.timestamp())
 
 def planilha_campanha():
     print('Planilha campanha.')
-    subprocess.run(["python", "C:\\workspace\\cadastro-aton\\mordomo\\programas\\relatorios\\sql_server_relatorio_campanha.py"])
+    start_main()
+    os.system('cls')
+    print('SERVER SLACK STARTADO')
 
+
+print('SERVER SLACK STARTADO')
 
 while True:
     try:
@@ -47,7 +53,7 @@ while True:
 
                 # Adicionando 1 milesimo de segundo
                 dt = datetime.datetime.fromtimestamp(float(latest_timestamp))
-                dt += datetime.timedelta(seconds=1)
+                dt += datetime.timedelta(seconds=5)
                 new_timestamp_str = str(dt.timestamp())
                 
                 # Envia mensagem de aguarde

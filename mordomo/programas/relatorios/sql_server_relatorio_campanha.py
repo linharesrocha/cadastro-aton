@@ -266,14 +266,14 @@ def obtem_colunas_filtradas(data_completo, data):
     print('Colunas filtradas (não excluidas, apenas filtradas)')
     print(diff_cols1)
 
-def dataframe_para_excel(data):
-    nome_planilha = f'Planilha-de-Campanha-{dia_atual}-{horal_atual}.xlsx'
+def dataframe_para_excel(data, dia_atual, hora_atual):
+    nome_planilha = f'Planilha-de-Campanha-{dia_atual}-{hora_atual}.xlsx'
     data.to_excel(f'C:\workspace\cadastro-aton\mordomo\programas\excel\{nome_planilha}', index=False, encoding='utf-8')
     print(Fore.GREEN,'\nRelatório Gerado!')
     
     return nome_planilha
 
-def envia_planilha_slack(nome_planilha):
+def envia_planilha_slack(nome_planilha, client, channel_id):
     file_path = f'C:\workspace\cadastro-aton\mordomo\programas\excel\{nome_planilha}'
 
     try:
@@ -289,14 +289,15 @@ def envia_planilha_slack(nome_planilha):
     except SlackApiError as e:
         print("Ocorreu um erro no envio do arquivo: {}".format(e))
 
-if __name__ == '__main__': 
+def start_main(): 
     load_dotenv()
 
     SLACK_TOKEN=os.getenv('SLACK_TOKEN')
 
     # Obtenha o token de acesso do bot da variável de ambiente
     client = WebClient(token=SLACK_TOKEN)
-    channel_id = 'C045HEE4G7L'
+    #channel_id = "C030X3UMR3M" # canal comercial
+    channel_id = 'C045HEE4G7L' # canal tendencias test
       
     # Filtrando Warnings
     warnings.filterwarnings('ignore')
@@ -326,7 +327,7 @@ if __name__ == '__main__':
     date_90 = datetime_midnight - timedelta(90)
     dia_atual = str(today.strftime("%Y-%m-%d"))
     agora_hora = datetime.now()
-    horal_atual = str(agora_hora.strftime("%H:%M:%S")).replace(':','-')
+    hora_atual = str(agora_hora.strftime("%H:%M:%S")).replace(':','-')
     
     print('\n7 Dias: ' + str(date_7.strftime("%d-%m-%Y")))
     print('14 Dias: ' + str(date_14.strftime("%d-%m-%Y")))
@@ -348,5 +349,5 @@ if __name__ == '__main__':
     data_completo = adiciona_horario(data_completo)
     data = filtra_colunas(data_completo)
     obtem_colunas_filtradas(data_completo, data)
-    nome_planilha = dataframe_para_excel(data)
-    envia_planilha_slack(nome_planilha)
+    nome_planilha = dataframe_para_excel(data, dia_atual, hora_atual)
+    envia_planilha_slack(nome_planilha, client, channel_id)
